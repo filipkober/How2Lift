@@ -1,7 +1,11 @@
-import { Button, Text, View } from "react-native";
+import { Link } from "expo-router";
+import React from "react";
+import { View } from "react-native";
 
-export default function Index() {
-
+export default function Index()
+{
+  const items = ["t1, t2", "t3"];
+  
   return (
     <View
       style={{
@@ -10,8 +14,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text className="text-2xl text-indigo-600">Test &λΨᾛΎώὯϗΔ</Text>
-      <Button title="Go to About" onPress={() => {}} />
+      <Link href="/testPage" className="text-cyan-400">
+        Enter the eternal void of the shadow realm
+      </Link>
     </View>
   );
 }
