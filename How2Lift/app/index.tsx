@@ -10,7 +10,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text className="text-red-500">Edit app/index.tsx to edit this screen.</Text>
+      <Text className="text-2xl text-indigo-600">Test &λΨᾛΎώὯϗΔ</Text>
       <Button title="Go to About" onPress={() => {}} />
     </View>
   );
