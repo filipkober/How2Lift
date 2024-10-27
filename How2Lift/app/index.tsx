@@ -1,22 +1,13 @@
-import { Link } from "expo-router";
-import React from "react";
-import { View } from "react-native";
+import { Link } from 'expo-router'
+import React from 'react'
+import { View } from 'react-native'
 
-export default function Index()
-{
-  const items = ["t1, t2", "t3"];
-  
+const index = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Link href="/testPage" className="text-cyan-400">
-        Enter the eternal void of the shadow realm
-      </Link>
+    <View  className='flex-1 justify-center items-center'>
+      <Link href="/ScanPage">Loading... (kliknij)</Link>
     </View>
-  );
+  )
 }
+
+export default index

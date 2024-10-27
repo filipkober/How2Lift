@@ -1,27 +1,10 @@
-import { Link } from 'expo-router'
 import React from 'react'
-import { Button, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 
-const TestPage = () => {
+const SearchPage = () => {
   return (
-    <View>
-      <Text>Test Page</Text>
-      <Link href="/" className="text-cyan-400"> Fuck go back</Link>
-      <Text className="text-2xl text-indigo-600">Test &λΨᾛΎώὯϗΔ</Text>
-
-      <Button title="Go to About" onPress={() => {}} />
-
-      <Text className="text-cyan-600">
-        Zażółć gęślą jaźń
-      </Text>
-      <Text className="text-cyan-600 font-quicksand">
-        Zażółć gęślą jaźń
-      </Text>
-      <Text className="text-cyan-600 font-quicksand_bold">
-        Zażółć gęślą jaźń
-      </Text>
-
-
+    <View className='flex-1 justify-center items-center'>
+      <Text>Search Page</Text>
       {/* <TouchableOpacity onPress={()=>{}}>
         <Text>Test 2</Text>
       </TouchableOpacity>
@@ -64,4 +47,4 @@ const TestPage = () => {
   )
 }
 
-export default TestPage
+export default SearchPage
