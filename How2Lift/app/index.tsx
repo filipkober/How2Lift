@@ -1,17 +1,13 @@
-import { Button, Text, View } from "react-native";
+import { Link } from 'expo-router'
+import React from 'react'
+import { View } from 'react-native'
 
-export default function Index() {
-
+const index = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text className="text-red-500">Edit app/index.tsx to edit this screen.</Text>
-      <Button title="Go to About" onPress={() => {}} />
+    <View  className='flex-1 justify-center items-center'>
+      <Link href="/ScanPage">Loading... (kliknij)</Link>
     </View>
-  );
+  )
 }
+
+export default index
