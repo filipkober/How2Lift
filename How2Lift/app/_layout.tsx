@@ -1,12 +1,15 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import "../styles/global.css"; //Zakomentuj mnie aby zobaczyć jak paskudnie wygląda aplikacja bez żadnych stylów
+import "../styles/global.css";
+import TabsLayout from './(tabs)/_layout';
+import LoadingPage from './LoadingPage';
 
-
+const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
+
 
 export default function RootLayout() {
     
@@ -21,15 +24,12 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded)
-  {
-    return null;
-  }
+  if (!fontsLoaded) return null;
 
   return (
-    <Stack initialRouteName="(tabs)">
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }}  />
-    </Stack>
+    <Stack.Navigator initialRouteName="(tabs)">
+      <Stack.Screen name="(tabs)" component={TabsLayout} options={{ headerShown: false }} />
+      <Stack.Screen name="LoadingPage" component={LoadingPage} options={{ headerShown: false }} />
+    </Stack.Navigator>
   );
 }

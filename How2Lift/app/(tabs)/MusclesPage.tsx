@@ -6,8 +6,8 @@ const MusclesPage = () => {
   return (
     <View className='flex-1 justify-center items-center'>
       <Text>MusclesPage</Text>
-      <Link href="/" className="text-cyan-400">
-        Enter the eternal void of the shadow realm
+      <Link href="/ScanPage" className="text-cyan-400">
+        Use buttons instead of links
       </Link>
     </View>
   )

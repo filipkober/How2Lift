@@ -12,7 +12,8 @@ import SettingsPage from './SettingsPage';
 
 
 SplashScreen.preventAutoHideAsync();
-const Tab = createBottomTabNavigator();
+const Tabs = createBottomTabNavigator(); //<TabsParamList>
+
 const screenOptions = {
   tabBarShowLabel: false,
   headerShown: false,
@@ -32,7 +33,7 @@ interface ScreenDimensions {
   height: number;
 }
 
-export default function TabLayout()
+export default function TabsLayout()
 {
   //const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
   //const rW = (screenWidth * 25) / 100;
@@ -58,10 +59,10 @@ export default function TabLayout()
 
   return (
     <>
-        <Tab.Navigator
+        <Tabs.Navigator
         screenOptions={screenOptions}
         initialRouteName="Scan">
-          <Tab.Screen
+          <Tabs.Screen
             name='Exercises'
             component={ExercisesPage}
             options={{
@@ -73,7 +74,7 @@ export default function TabLayout()
             )
           }}/>
 
-          <Tab.Screen
+          <Tabs.Screen
             name='Muscles'
             component={MusclesPage}
             options={{
@@ -92,11 +93,11 @@ export default function TabLayout()
           }}
           />
 
-          <Tab.Screen
-            name='Scan'
+          <Tabs.Screen
+            name="Scan"
             component={ScanPage}
             options={{
-            title: 'Scan',
+            title: "Scan",
             tabBarIcon: ({focused})=>(
               <View
               style={{ width: screenDimensions.width/9+35, height: screenDimensions.width/9+35 }} /*losowa funkcja liniowa bo czemu by nie */
@@ -126,7 +127,7 @@ export default function TabLayout()
               </View>
             )
           }}/>
-          <Tab.Screen
+          <Tabs.Screen
             name='Search'
             component={SearchPage}
             options={{
@@ -137,7 +138,7 @@ export default function TabLayout()
               </View>
             )
           }}/>
-                    <Tab.Screen
+                    <Tabs.Screen
             name='Settings'
             component={SettingsPage}
             options={{
@@ -149,7 +150,7 @@ export default function TabLayout()
             )
           }}/>
 
-        </Tab.Navigator>
+        </Tabs.Navigator>
     </>
   );
 }
