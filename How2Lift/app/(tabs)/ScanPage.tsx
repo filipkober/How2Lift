@@ -1,27 +1,39 @@
-import { Link } from 'expo-router'
-import React from 'react'
-import { Button, Text, View } from 'react-native'
+import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
+import { useState } from "react";
+import { Button, Text, TouchableOpacity, View } from "react-native";
 
-const ScanPage = () => {
+const ScanPage = ({ navigation }: any) => {
+  const [facing, setFacing] = useState<CameraType>("back");
+  const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View>
+        <Text>We need your permission to show the camera</Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
+
   return (
-    <View className='flex-1 justify-center items-center'>
-      <Text>ScanPage</Text>
-      <Link href="/" className="text-cyan-400"> Fuck go back</Link>
-      <Text className="text-2xl text-indigo-600">Test &λΨᾛΎώὯϗΔ</Text>
-
-      <Button title="Go to About" onPress={() => {}} />
-
-      <Text className="text-cyan-600">
-        Zażółć gęślą jaźń
-      </Text>
-      <Text className="text-cyan-600 font-quicksand">
-        Zażółć gęślą jaźń
-      </Text>
-      <Text className="text-cyan-600 font-quicksand_bold">
-        Zażółć gęślą jaźń
-      </Text>
+    <View className="flex-1 justify-center">
+      <CameraView facing={facing} className="flex-1">
+        <View className="flex-1 flex-row bg-transparent m-[64px]">
+          <TouchableOpacity onPress={toggleCameraFacing} className="flex-1 flex-row items-center">
+            <Text className="text-[1.5rem] font-bold color-white">F-3-lip camera</Text>
+          </TouchableOpacity>
+        </View>
+      </CameraView>
     </View>
-  )
-}
+  );
+};
 
-export default ScanPage
+export default ScanPage;
