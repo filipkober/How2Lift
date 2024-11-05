@@ -6,5 +6,5 @@ import { type ComponentProps } from 'react';
 
 export function TabBarIcon({ size, style, className, ...rest }: IconProps<ComponentProps<typeof Ionicons>['name']>)
 {
-  return <Ionicons size={size} style={[{ marginBottom: -3 }, style]} className={className} {...rest} />;
+  return <Ionicons size={size} style={[{ marginBottom: 0 }, style]} className={className} {...rest} />;
 }

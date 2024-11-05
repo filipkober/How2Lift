@@ -14,6 +14,7 @@ import SettingsPage from './SettingsPage';
 SplashScreen.preventAutoHideAsync();
 const Tabs = createBottomTabNavigator(); //<TabsParamList>
 
+//stylizuj to olo, jeśli chcesz lepsze tło do navbara
 const screenOptions = {
   tabBarShowLabel: false,
   headerShown: false,
@@ -22,6 +23,8 @@ const screenOptions = {
     bottom: 0,
     right: 0,
     left: 0,
+    borderTopWidth: 0,
+    shadowOpacity: 0,
     elevation: 0,
     height: 60,
     backgroundColor: "#000",
@@ -61,7 +64,8 @@ export default function TabsLayout()
     <>
         <Tabs.Navigator
         screenOptions={screenOptions}
-        initialRouteName="Scan">
+        initialRouteName="Scan"
+        >
           <Tabs.Screen
             name='Exercises'
             component={ExercisesPage}
