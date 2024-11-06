@@ -67,10 +67,10 @@ const ScanPage = ({ navigation }: any) => {
       <ScanIndicator/>
           <TouchableOpacity
             onPress={ResetPhoto}
-            className='w-16 h-16 bg-red-600 rounded-full border-4 border-red-700 shadow-lg flex justify-center items-center'
+            className='w-16 h-16 bg-gray-300 rounded-full border-4 border-gray-400 shadow-lg flex justify-center items-center' //add some styling
             activeOpacity={0.7}
             >
-            <Text className="text-black text-center">Reset</Text>
+            <Text className="text-black text-center">Cancel</Text>
           </TouchableOpacity>
         </ImageBackground>
       </View>
