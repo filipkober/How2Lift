@@ -1,16 +1,29 @@
 import { Link } from 'expo-router'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
+import MuscleDiagram from '@/components/MuscleDiagram'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const MusclesPage = () => {
   return (
-    <View className='flex-1 justify-center items-center'>
+    <SafeAreaView>
       <Text>MusclesPage</Text>
-      <Link href="/ScanPage" className="text-cyan-400">
-        Use buttons instead of links
-      </Link>
-    </View>
+      <View style={styles.diagramContainer}>
+        <MuscleDiagram />
+      </View>
+    </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  diagramContainer: {
+    width: '80%',
+    height: '90%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    overflow: 'visible',
+  },
+});
+
 
 export default MusclesPage
