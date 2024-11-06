@@ -20,4 +20,15 @@ const MusclesPage = () => {
   )
 }
 
+const styles = StyleSheet.create({
+  diagramContainer: {
+    width: '80%',
+    height: '90%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    overflow: 'visible',
+  },
+});
+
+
 export default MusclesPage
