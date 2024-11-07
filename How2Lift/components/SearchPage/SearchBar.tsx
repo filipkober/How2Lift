@@ -1,6 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
 type SearchBarProps = {
   onSearch: (query: string) => void;
@@ -18,18 +17,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search..
   };
 
   return (
-    <View className="flex-row flex w-full items-center bg-white rounded-full px-4 py-2 shadow-sm border border-gray-200">
-      <TextInput
-        className="flex text-gray-700 px-2 mx-4 w-8"
+    <View className="flex flex-row w-[100%] h-auto rounded-3xl bg-white p-8 justify-between m-8 shadow-sm border-solid border-2 border-gray-600">
+      {/* <TextInput
+        className="flex text-gray-700 w-16"
         placeholder={placeholder}
         placeholderTextColor="#B0B0B0"
         value={query}
         onChangeText={setQuery}
         onSubmitEditing={handleSearch}
       />
-      <TouchableOpacity onPress={handleSearch} className="ml-2">
+      <TouchableOpacity onPress={handleSearch} className="ml-2 w-2">
         <Ionicons className='' size={40} name={'search-sharp'} color={'gray'}/>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
