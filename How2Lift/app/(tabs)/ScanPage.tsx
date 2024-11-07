@@ -59,9 +59,9 @@ const ScanPage = ({ navigation }: any) => {
   if (photo != null)
   {
     //Scan phase
-    return (    
+    return (
     <SafeAreaView className="flex justify-center h-full flex-col bg-blue-500"
-      style={{paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}> 
+      style={{paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}>
       <View className="flex w-full h-full flex-col bg-black">
         <ImageBackground
           source={{ uri: photo.uri }}
@@ -86,7 +86,7 @@ const ScanPage = ({ navigation }: any) => {
     //Camera phase
     return (
       <SafeAreaView className="flex justify-center h-full flex-col-reverse" style={{
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}>        
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}>
         <View className="flex bg-green-700 h-[60px] w-full"/>
         <CameraView facing={facing} className="flex h-full w-full bg-indigo-400" ref={cameraRef}>
           <View className="bg-transparent flex flex-col-reverse items-center p-[4rem] h-full">
@@ -100,7 +100,7 @@ const ScanPage = ({ navigation }: any) => {
               </TouchableOpacity>
             </View>
           </View>
-        </CameraView>        
+        </CameraView>
       </SafeAreaView>
     );
   }

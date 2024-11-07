@@ -9,8 +9,14 @@ const SearchPage = () => {
   }
 
   return (
-    <View className='flex-1 justify-center items-center bg-green-600'>
+    <View className='flex justify-center items-center bg-green-600 w-full h-full'>
+      <View className='flex justify-center items-center bg-green-600 w-[60%] h-full'>
+      <SearchBar onSearch={Search} height={50}></SearchBar>
       <SearchBar onSearch={Search}></SearchBar>
+      <SearchBar onSearch={Search} height={30}></SearchBar>
+      <SearchBar onSearch={Search} height={20}></SearchBar>
+
+      </View>
     </View>
   )
 }
