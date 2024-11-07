@@ -60,8 +60,10 @@ const ScanPage = ({ navigation }: any) => {
   {
     //Scan phase
     return (
-    <SafeAreaView className="flex justify-center h-full flex-col bg-blue-500"
-      style={{paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}>
+    <SafeAreaView
+      className="flex justify-center h-full flex-col bg-black w-full"
+      style={{paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}
+    >
       <View className="flex w-full h-full flex-col bg-black">
         <ImageBackground
           source={{ uri: photo.uri }}
@@ -85,22 +87,26 @@ const ScanPage = ({ navigation }: any) => {
   {
     //Camera phase
     return (
-      <SafeAreaView className="flex justify-center h-full flex-col-reverse" style={{
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}}>
-        <View className="flex bg-green-700 h-[60px] w-full"/>
-        <CameraView facing={facing} className="flex h-full w-full bg-indigo-400" ref={cameraRef}>
-          <View className="bg-transparent flex flex-col-reverse items-center p-[4rem] h-full">
-            <View className="flex items-end justify-around space-x-8 flex-row ">
-              <TouchableOpacity
-                onPress={TakePhoto}
-                className='w-16 h-16 bg-white rounded-full border-4 border-gray-500 shadow-lg p-0 flex justify-center items-center'
-                activeOpacity={0.7}
-                >
-                <MaterialCommunityIcons name="biohazard" size={48} color="#f8f8f8" className='w-16 h-16 flex items-center justify-center'/>
-              </TouchableOpacity>
+      <SafeAreaView
+      className=" bg-black w-full flex justify-center h-full flex-col"
+      style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}}
+      >
+        <View className="flex justify-center h-full flex-col-reverse">
+          <View className="flex bg-green-700 h-[60px] w-full"/>
+          <CameraView facing={facing} className="flex h-full w-full bg-indigo-400" ref={cameraRef}>
+            <View className="bg-transparent flex flex-col-reverse items-center p-[4rem] h-full">
+              <View className="flex items-end justify-around space-x-8 flex-row ">
+                <TouchableOpacity
+                  onPress={TakePhoto}
+                  className='w-16 h-16 bg-white rounded-full border-4 border-gray-500 shadow-lg p-0 flex justify-center items-center'
+                  activeOpacity={0.7}
+                  >
+                  <MaterialCommunityIcons name="biohazard" size={48} color="#f8f8f8" className='w-16 h-16 flex items-center justify-center'/>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </CameraView>
+          </CameraView>
+        </View>
       </SafeAreaView>
     );
   }
