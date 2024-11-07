@@ -9,7 +9,6 @@ type SearchBarProps = {
 };
 
 const SearchBar = ({ onSearch, placeholder = "Search...", height = 40 }: SearchBarProps) => {
-
   const [query, setQuery] = useState("");
   const handleSearch = () => {
     if (query.trim().length > 0)
@@ -21,8 +20,8 @@ const SearchBar = ({ onSearch, placeholder = "Search...", height = 40 }: SearchB
   return (
     <View className="flex flex-row w-[100%] px-1 h-auto rounded-[10px] shadow-sm border-solid border-2 border-gray-700 bg-white justify-between items-center">
       <TextInput
-        className={`flex outline-none w-full p-1`} //static
-        style={{ fontSize: height / 2, height: height }} //dynamic
+        className={`flex outline-none p-1 w-[100%] min-w-0 min-h-0`} //I got severe brain damage
+        style={{ fontSize: height / 2, height: height, flex: 1 }} //dynamic
         placeholder={placeholder}
         placeholderTextColor="#B0B0B0"
         value={query}
