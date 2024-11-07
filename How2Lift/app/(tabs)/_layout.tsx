@@ -142,7 +142,7 @@ export default function TabsLayout()
               </View>
             )
           }}/>
-                    <Tabs.Screen
+          <Tabs.Screen
             name='Settings'
             component={SettingsPage}
             options={{
