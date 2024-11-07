@@ -96,10 +96,10 @@ const ScanPage = ({ navigation }: any) => {
           <CameraView facing={facing} className="flex h-full w-full bg-indigo-400" ref={cameraRef}>
             <View className="bg-transparent flex flex-col-reverse items-center p-[4rem] h-full">
               <View className="flex items-end justify-around space-x-8 flex-row ">
-                <TouchableOpacity
-                  onPress={TakePhoto}
-                  className='w-16 h-16 bg-white rounded-full border-4 border-gray-500 shadow-lg p-0 flex justify-center items-center'
-                  activeOpacity={0.7}
+                  <TouchableOpacity
+                    onPress={TakePhoto}
+                    className='w-16 h-16 bg-white rounded-full border-4 border-gray-500 shadow-lg p-0 flex justify-center items-center'
+                    activeOpacity={0.7}
                   >
                   <MaterialCommunityIcons name="biohazard" size={48} color="#f8f8f8" className='w-16 h-16 flex items-center justify-center'/>
                 </TouchableOpacity>
