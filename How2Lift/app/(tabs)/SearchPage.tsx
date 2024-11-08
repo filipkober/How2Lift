@@ -1,3 +1,4 @@
+import MachineListItem from '@/components/SearchPage/MachineListItem'
 import SearchBar from '@/components/SearchPage/SearchBar'
 import React, { useState } from 'react'
 import { Animated, Dimensions, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
@@ -11,6 +12,7 @@ const SearchPage = () => {
   const [underlinePosition] = useState(new Animated.Value(0));
 
   const moveUnderline = (index: number) => {
+    console.log(index)
     Animated.spring(underlinePosition, {
       toValue: index * screenWidth/2,
       useNativeDriver: true,
@@ -52,8 +54,11 @@ const SearchPage = () => {
                 }}
               />
           </View>
-          <View className='w-full h-[50px]  justify-center px-4'>
-            <SearchBar onSearch={Search} height={36} />
+          {/* data container */}
+          <View className='w-full h-full  justify-start px-4 py-2 space-y-2'>
+            <SearchBar onSearch={Search} height={36}/>
+            <MachineListItem/>
+            <MachineListItem/>
           </View>
         </View>
       </SafeAreaView>
