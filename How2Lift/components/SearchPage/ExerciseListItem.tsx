@@ -2,18 +2,17 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type SearchBarProps = {
-  machineName? : string;
+  exerciseName? : string;
   info? : string;
   image? : { uri: string } | null;
 };
 
-const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
+const ExerciseListItem = ({ exerciseName, info, image=null }: SearchBarProps) => {
 
-  //const placeholderImage = {uri: 'https://legacy.reactjs.org/logo-og.png'};
-  const placeholderImage = {uri: '../../assets/images/example1.jpg'};
+  const placeholderImage = {uri: '../../assets/images/example2.jpg'};
 
-  const OpenMachinePage = () => {
-      console.log("opened machine page")
+  const OpenExercisePage = () => {
+      console.log("opened exercise page")
   }
 
   return (
@@ -26,11 +25,11 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
         />
       </View>
       <View className="w-[calc(65vw-64px)] h-[20vw] py-2 translate-x-[-8px] flex flex-col items-start justify-between">
-        <Text className="font-quicksand_bold  text-[5vw]">{machineName? machineName : "Madejowe Łoże"}</Text>
-        <Text className="font-quicksand  text-[3.5vw]">{machineName? machineName : "Mięśnie pleców, kora somatosensoryczna"}</Text>
+        <Text className="font-quicksand_bold  text-[5vw]">{exerciseName? exerciseName : "Biczowanie"}</Text>
+        <Text className="font-quicksand  text-[3.5vw]">{exerciseName? exerciseName : "Mięśnie pleców, kora somatosensoryczna"}</Text>
       </View>
       <TouchableOpacity
-        onPress={OpenMachinePage}
+        onPress={OpenExercisePage}
         className="w-[15vw] h-[20vw] flex justify-center items-center translate-x-[4px]"
       >
         <Image
@@ -43,4 +42,4 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
   );
 };
 
-export default MachineListItem;
+export default ExerciseListItem;
