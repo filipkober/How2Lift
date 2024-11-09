@@ -26,8 +26,8 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
         />
       </View>
       <View className="w-[calc(65vw-64px)] h-[20vw] py-2 translate-x-[-8px] flex flex-col items-start justify-between">
-        <Text className="font-quicksand_bold  text-[5vw]">{machineName? machineName : "Madejowe Łoże"}</Text>
-        <Text className="font-quicksand  text-[3.5vw]">{machineName? machineName : "Mięśnie pleców, kora somatosensoryczna"}</Text>
+        <Text className="font-quicksand_bold  text-[5vw]">{machineName? machineName : "Torture rack"}</Text>
+        <Text className="font-quicksand  text-[3.5vw]">{info? info : "Shoulders, Back, Somatosensory cortex"}</Text>
       </View>
       <TouchableOpacity
         onPress={OpenMachinePage}

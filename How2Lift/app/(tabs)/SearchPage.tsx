@@ -29,34 +29,56 @@ const SearchPage = () => {
   const [animation] = useState(new Animated.Value(0));
   const [selectedList, setSelectedList] = useState<number>(0); //0 - machines 1 - exercises
   const [machines, setMachines] = useState<Machine[]>([
-    { id: 0, name: "test", info: "testus", image: { uri: ""}},
-    { id: 1, name: "test", info: "testus", image: { uri: ""}},
-    { id: 2, name: "test", info: "testus", image: { uri: ""}},
-    { id: 3, name: "test", info: "testus", image: { uri: ""}},
-    { id: 4, name: "test", info: "testus", image: { uri: ""}},
-    { id: 5, name: "test", info: "testus", image: { uri: ""}},
-    { id: 6, name: "test", info: "testus", image: { uri: ""}},
-    { id: 7, name: "test", info: "testus", image: { uri: ""}},
-    { id: 8, name: "test", info: "testus", image: { uri: ""}},
-    { id: 9, name: "", info: "", image: { uri: ""}}
+    { id: 0, name: "Treadmill", info: "Cardio, Legs", image: { uri: "https://images.unsplash.com/photo-1591940765155-0604537032a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dHJlYWRtaWxsfGVufDB8fDB8fHww" }},
+    { id: 1, name: "Leg Press Machine", info: "Quadriceps, Hamstrings, Glutes", image: { uri: "https://media.tenor.com/NDFafSQfq_kAAAAM/leg-press-machine.gif" }},
+    { id: 2, name: "Lat Pulldown Machine", info: "Lats, Biceps, Shoulders", image: { uri: "https://media.tenor.com/VfwPJrw6tTEAAAAM/pulley-puxada-neutra.gif" }},
+    { id: 3, name: "Cable Machine", info: "Chest, Shoulders, Triceps, Back", image: { uri: "https://media.tenor.com/HDD-1xSyxn4AAAAM/workout-time.gif" }},
+    { id: 4, name: "Smith Machine", info: "Full Body, Squats, Presses", image: { uri: "https://media.tenor.com/eCXs6gZigQcAAAAM/incline-smith-bar-press.gif" }},
+    { id: 5, name: "Seated Row Machine", info: "Upper Back, Lats, Biceps", image: { uri: "https://media.tenor.com/ft6FHrqty-8AAAAM/remada-pronada-maquina.gif" }},
+    { id: 6, name: "Leg Curl Machine", info: "Hamstrings", image: { uri: "https://media1.tenor.com/m/veCnXWNXGI4AAAAd/femur-breaker-scp.gif" }},
+    { id: 7, name: "Bench Press Machine", info: "Chest, Shoulders, Triceps", image: { uri: "https://media.tenor.com/vFJSvh8AvhAAAAAM/a1.gif" }},
+    { id: 8, name: "Abdominal Crunch Machine", info: "Abs, Core", image: { uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Trebuchet_Castelnaud.jpg/300px-Trebuchet_Castelnaud.jpg" }},
+    { id: 9, name: "Pec Deck Machine", info: "Chest, Shoulders", image: { uri: "https://media.tenor.com/fUmzZiU_imsAAAAM/6reverse-machine-fly.gif" }},
+    { id: 10, name: "Torture Rack", info: "", image: { uri: ""}}
   ])
-
   const [exercises, setExercises] = useState<Machine[]>([
-    { id: 10, name: "test", info: "testus", image: { uri: "https://legacy.reactjs.org/logo-og.png"}},
-    { id: 11, name: "test", info: "testus", image: { uri: "https://legacy.reactjs.org/logo-og.png"}},
+    { id: 10, name: "test1", info: "testus", image: { uri: "https://legacy.reactjs.org/logo-og.png"}},
+    { id: 11, name: "test2", info: "testus", image: { uri: "https://legacy.reactjs.org/logo-og.png"}},
     { id: 12, name: "", info: "", image: { uri: ""}}
   ])
 
-  const Search = (test: string) => {
-    console.log(test)
+  const [filteredData, setFiltredData] = useState<Machine[] | Exercise[]>(machines.sort((a, b) => a.name.localeCompare(b.name)))
+
+  const Search = (query: string) => {
+    console.log("search query: "+query)
+    var data: Machine[] | Exercise[] = []
+    if(selectedList == 0)
+    {
+      data = machines.filter((item) =>
+        item.name.toLowerCase().includes(query.toLowerCase())
+      )
+      data.sort((a, b) => a.name.localeCompare(b.name))
+    }
+    else
+    {
+      data = exercises.filter((item) =>
+        item.name.toLowerCase().includes(query.toLowerCase())
+      )
+      data.sort((a, b) => a.name.localeCompare(b.name))
+    }
+    setFiltredData(data)
   }
 
   const switchList = (index: number) => {
     console.log(index)
     setSelectedList(index)
+    if(index==1)
+      setFiltredData(exercises.sort((a, b) => a.name.localeCompare(b.name)))
+    else
+      setFiltredData(machines.sort((a, b) => a.name.localeCompare(b.name)))
     Animated.spring(animation, {
       toValue: index * screenWidth/2,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
   };
 
@@ -97,21 +119,21 @@ const SearchPage = () => {
               />
           </View>
           {/* scrollbar */}
-          <View className='w-full h-auto justify-start px-4 py-2 space-y-2 bg-secondary'>
-            <SearchBar onSearch={Search} height={36}/>
+          <View className='w-full h-auto justify-start px-4 py-2 space-y-2 bg-secondary shadow-md'>
+            <SearchBar onSearch={Search} height={36} onChangeText={Search}/>
           </View>
           {/* data container */}
           <ScrollView className='w-full h-full px-4 py-2 space-y-2' contentContainerStyle={{ backgroundColor: "#00000000" }}>
             {
               (selectedList == 0)? (
-                machines.map(m => (
+                filteredData.map(m => (
                   <View className='py-1 w-full h-auto' key={m.id}>
                     <MachineListItem machineName={m.name} image={m.image} info={m.info}/>
                   </View>
                 ))
               ) : (
-                exercises.map(m => (
-                  <View className='py-1 w-full h-auto'>
+                filteredData.map(m => (
+                  <View className='py-1 w-full h-auto' key={m.id}>
                     <ExerciseListItem exerciseName={m.name} image={m.image} info={m.info}/>
                   </View>
                 ))

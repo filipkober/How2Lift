@@ -4,17 +4,23 @@ import { TextInput, TouchableOpacity, View } from "react-native";
 
 type SearchBarProps = {
   onSearch: (query: string) => void;
+  onChangeText: (query: string) => void;
   placeholder?: string;
   height?: number;
 };
 
-const SearchBar = ({ onSearch, placeholder = "Search...", height = 40 }: SearchBarProps) => {
+const SearchBar = ({ onSearch, onChangeText, placeholder = "Search...", height = 40 }: SearchBarProps) => {
   const [query, setQuery] = useState("");
   const handleSearch = () => {
     if (query.trim().length > 0)
     {
       onSearch(query);
     }
+  };
+
+  const handleTextChange = (text: string) => {
+    setQuery(text)
+    onChangeText(text);
   };
 
   return (
@@ -25,7 +31,7 @@ const SearchBar = ({ onSearch, placeholder = "Search...", height = 40 }: SearchB
         placeholder={placeholder}
         placeholderTextColor="#B0B0B0"
         value={query}
-        onChangeText={setQuery}
+        onChangeText={(text) =>{handleTextChange(text)}}
         onSubmitEditing={handleSearch}
       />
       <TouchableOpacity

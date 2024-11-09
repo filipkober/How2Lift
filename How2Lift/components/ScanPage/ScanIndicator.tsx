@@ -14,12 +14,12 @@ const ScanIndicator = () => {
           Animated.timing(translateY, {
             toValue: endPosition, //endPosition
             duration: 2000,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(translateY, {
             toValue: 0,
             duration: 2000,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]),
       ).start();

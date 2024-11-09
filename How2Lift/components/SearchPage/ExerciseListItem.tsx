@@ -25,8 +25,8 @@ const ExerciseListItem = ({ exerciseName, info, image=null }: SearchBarProps) =>
         />
       </View>
       <View className="w-[calc(65vw-64px)] h-[20vw] py-2 translate-x-[-8px] flex flex-col items-start justify-between">
-        <Text className="font-quicksand_bold  text-[5vw]">{exerciseName? exerciseName : "Biczowanie"}</Text>
-        <Text className="font-quicksand  text-[3.5vw]">{exerciseName? exerciseName : "Mięśnie pleców, kora somatosensoryczna"}</Text>
+        <Text className="font-quicksand_bold  text-[5vw]">{exerciseName? exerciseName : "Flagellation"}</Text>
+        <Text className="font-quicksand  text-[3.5vw]">{info? info : "Shoulders, Back, Somatosensory cortex"}</Text>
       </View>
       <TouchableOpacity
         onPress={OpenExercisePage}
