@@ -17,26 +17,45 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
   }
 
   return (
-    <View className="flex flex-row w-[100%] px-1 h-auto rounded-[10px] shadow-sm border-solid border-2 border-gray-700 bg-white justify-between items-center">
-      <View className="w-[20vw] h-[20vw] p-1 translate-x-[-4px]">
+    <View className="overflow-hidden flex flex-row w-full h-auto rounded-[10px] shadow-sm border-2 border-gray-700 bg-white items-center">
+      {/* Left Image - Fixed Width 20vw */}
+      <View className="w-[20vw] h-[20vw] p-1 overflow-hidden">
         <Image
-        source={image?.uri? image : placeholderImage}
-        resizeMode="cover"
-        className={` w-full h-full object-contain justify-center flex-row rounded-[8px]`}
+          source={image?.uri ? image : placeholderImage}
+          resizeMode="cover"
+          className="w-full h-full rounded-md overflow-hidden"
         />
       </View>
-      <View className="w-[calc(65vw-64px)] h-[20vw] py-2 translate-x-[-8px] flex flex-col items-start justify-between">
-        <Text className="font-quicksand_bold  text-[5vw]">{machineName? machineName : "Torture rack"}</Text>
-        <Text className="font-quicksand  text-[3.5vw]">{info? info : "Shoulders, Back, Somatosensory cortex"}</Text>
+
+      {/* Middle Text - Flexible Width */}
+      <View className="flex-1 h-[20vw] px-2 pb-2 flex flex-col justify-between items-start">
+        <Text
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          adjustsFontSizeToFit
+          className="font-quicksand_bold text-[5vw]"
+        >
+          {machineName || "Torture rack"}
+        </Text>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          adjustsFontSizeToFit
+          className="font-quicksand text-[3.5vw] w-full"
+        >
+          {info || "Shoulders, Back, Somatosensory cortex"}
+        </Text>
       </View>
+
+      {/* Right Arrow - Fixed Width 15vw */}
       <TouchableOpacity
         onPress={OpenMachinePage}
-        className="w-[15vw] h-[20vw] flex justify-center items-center translate-x-[4px]"
+        className="w-[15vw] h-[20vw] flex justify-center items-center"
       >
         <Image
-          source={{ uri: "../../assets/images/icons/ar_black.png"}}
+          source={{ uri: "../../assets/images/icons/ar_black.png" }}  //help, expo nie widzi tego na telefonie
           resizeMode="cover"
-          className={`w-full h-full object-contain `}
+          className="w-full h-full object-contain"
         />
       </TouchableOpacity>
     </View>

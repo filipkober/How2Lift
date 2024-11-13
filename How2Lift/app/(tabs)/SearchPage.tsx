@@ -37,7 +37,7 @@ const SearchPage = () => {
     { id: 5, name: "Seated Row Machine", info: "Upper Back, Lats, Biceps", image: { uri: "https://media.tenor.com/ft6FHrqty-8AAAAM/remada-pronada-maquina.gif" }},
     { id: 6, name: "Leg Curl Machine", info: "Hamstrings", image: { uri: "https://media1.tenor.com/m/veCnXWNXGI4AAAAd/femur-breaker-scp.gif" }},
     { id: 7, name: "Bench Press Machine", info: "Chest, Shoulders, Triceps", image: { uri: "https://media.tenor.com/vFJSvh8AvhAAAAAM/a1.gif" }},
-    { id: 8, name: "Abdominal Crunch Machine", info: "Abs, Core", image: { uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Trebuchet_Castelnaud.jpg/300px-Trebuchet_Castelnaud.jpg" }},
+    { id: 8, name: "Abdominal Crunch Machine Pro stuer ultra max", info: "Abs, Core", image: { uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Trebuchet_Castelnaud.jpg/300px-Trebuchet_Castelnaud.jpg" }},
     { id: 9, name: "Pec Deck Machine", info: "Chest, Shoulders", image: { uri: "https://media.tenor.com/fUmzZiU_imsAAAAM/6reverse-machine-fly.gif" }},
     { id: 10, name: "Torture Rack", info: "", image: { uri: ""}}
   ])
