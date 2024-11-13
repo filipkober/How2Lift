@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, View } from 'react-native';
 
 const screenHeight = Dimensions.get('window').height;
-const endPosition = screenHeight - 72;
+const endPosition = screenHeight-60;
 
 const ScanIndicator = () => {
   const translateY = useRef(new Animated.Value(0)).current;
@@ -14,12 +14,12 @@ const ScanIndicator = () => {
           Animated.timing(translateY, {
             toValue: endPosition, //endPosition
             duration: 2000,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(translateY, {
             toValue: 0,
             duration: 2000,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]),
       ).start();
