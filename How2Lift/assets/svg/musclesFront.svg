@@ -104,3 +104,5 @@
 </clipPath>
 </defs>
 </svg>
+
+export default MusclesFront;
