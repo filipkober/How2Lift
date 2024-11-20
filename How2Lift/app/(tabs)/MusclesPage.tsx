@@ -1,8 +1,14 @@
-import { Link } from 'expo-router'
-import React from 'react'
-import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import { Link } from 'expo-router';
+import React from 'react';
+import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native';
 
 const MusclesPage = () => {
+  const [view, setView] = useState<'front' | 'rear'>('front');
+
+  const handleMuscleClick = (muscleName: string) => {
+    Alert.alert(`You clicked on ${muscleName}`);
+  };
+  
   return (
     <SafeAreaView
         className="flex justify-center h-full flex-col bg-black w-full"
@@ -21,14 +27,19 @@ const MusclesPage = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
   diagramContainer: {
     width: '80%',
     height: '90%',
     justifyContent: 'center',
-    alignSelf: 'center',
+    alignItems: 'center',
     overflow: 'visible',
   },
 });
 
-
-export default MusclesPage
+export default MusclesPage;
