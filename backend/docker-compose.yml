@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${PG_DB}
+      - SPRING_DATASOURCE_USERNAME=${DS_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DS_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_AI_OPENAI_API_KEY=${AI_OPENAI_API_KEY}
+      - UPLOAD_PASSWORD=${UPLOAD_PASSWORD}
+      - DOCKER_DB_PORT=${DOCKER_DB_PORT}
+      - DOCKER_APP_PORT=${DOCKER_APP_PORT}
+      - LOCAL_DB_PORT=${LOCAL_DB_PORT}
+      - LOCAL_APP_PORT=${LOCAL_APP_PORT}
+      - MAX_UPLOAD_SIZE=${MAX_UPLOAD_SIZE}
+
+    ports:
+      - "${DOCKER_APP_PORT}:${LOCAL_APP_PORT}"
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}
+    ports:
+      - "${DOCKER_DB_PORT}:${LOCAL_DB_PORT}"
