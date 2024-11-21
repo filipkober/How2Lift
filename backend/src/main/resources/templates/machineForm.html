@@ -1,0 +1,44 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+
+<div th:if="${message}">
+    <h2 th:text="${message}"/>
+</div>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/forms/machines">
+        <table>
+            <tr><td>Machine name:</td><td><input type="text" name="name" /></td></tr>
+            <tr><td>Machine description:</td><td><input type="text" name="description" /></td></tr>
+            <tr><td>Image url:</td><td><input type="text" name="imageUrl" id="imageinput" /></td></tr>
+            <tr><td>Image preview:</td><td><img id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="200" height="200" /></td></tr>
+            <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles">
+                <option th:each="muscle : ${muscles}"
+                        th:value="${muscle.id}"
+                        th:text="${muscle.name}"></option>
+            </select></td></tr>
+            <tr><td>Super secret password </td><td><input type="password" name="password" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
+
+<div>
+    <ul>
+        <li th:each="machine : ${machines}">
+            <span th:text="${machine.getName()}" />
+        </li>
+    </ul>
+</div>
+
+<script>
+    const i = document.querySelector("#imageinput");
+    const p = document.querySelector("#preview");
+
+    i.addEventListener('focusout', () => {
+        p.src = i.value;
+    });
+</script>
+
+</body>
+</html>
