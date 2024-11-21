@@ -5,14 +5,15 @@ type SwitchProps = {
   value? : boolean;
   OnChange? : (val?: boolean) =>{};
   defaulf? : number;
+  activePrimaryColor?: string;
+  activeSecondaryColor?: string;
 };
 
-const ExerciseListItem = ({ value, OnChange, defaulf }: SwitchProps) => {
+const ExerciseListItem = ({ value, OnChange, defaulf, activePrimaryColor = "#00dcff", activeSecondaryColor = "#abf4ff", }: SwitchProps) => {
   const { width: screenWidth } = Dimensions.get("window");
-  const switchWidth = screenWidth * 0.12; // 12vw equivalent in pixels
-  const switchHeight = screenWidth * 0.06; // 6vw equivalent in pixels
+  const switchWidth = screenWidth * 0.12;
   
-  const [animation] = useState(new Animated.Value(-switchHeight/2));
+  const [animation] = useState(new Animated.Value(-switchWidth/4));
   const [enabled, setEnabled] = useState<number>(0);
   
   const switchList = (index?: number) => {
@@ -20,7 +21,7 @@ const ExerciseListItem = ({ value, OnChange, defaulf }: SwitchProps) => {
     setEnabled(index || newstate)
     console.log(newstate)
     Animated.spring(animation, {
-      toValue: newstate * switchHeight + switchHeight/2,
+      toValue: newstate * switchWidth/2 - switchWidth/4,
       useNativeDriver: false,
     }).start();
   };
@@ -28,15 +29,17 @@ const ExerciseListItem = ({ value, OnChange, defaulf }: SwitchProps) => {
   return (
 
     <TouchableOpacity
-      className="flex bg-yellow-400 flex-row w-[12vw] h-[6vw] items-center justify-center"
+      className="flex flex-row w-[12vw] h-[6vw] items-center justify-center"
+      onPressIn={()=>{}}
+      onPressOut={()=>{}}
       onPress={() => switchList()}>
-      <View className="h-[calc(100%-2vw)] w-[calc(100%-2vw)] bg-lime-400 rounded-full"></View>
+      <View className="h-[calc(100%-2vw)] w-[calc(100%-2vw)] rounded-full" style={{backgroundColor: enabled? activeSecondaryColor: "#dedede"}}></View>
       <Animated.View          
         style={{
           position: 'absolute',
           bottom: 0,
           height: "100%",
-          backgroundColor: enabled ? "#00dcff" : "gray",
+          backgroundColor: enabled ? activePrimaryColor : "#bcbcbc",
           width: "50%",
           borderRadius: 9999,
           transform: [
