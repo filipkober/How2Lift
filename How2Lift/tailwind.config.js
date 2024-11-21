@@ -25,7 +25,10 @@ module.exports = {
       fontFamily: {
         quicksand: ["Quicksand-Medium", "sans-serif"],
         quicksand_bold: ["Quicksand-Bold", "sans-serif"],
-      }
+      },
+      boxShadow: {
+        'bottom-md': '0 2px 3px rgba(0, 0, 0, 0.1)', // horizontal, vertical, blur, color
+      },
     },
   },
   plugins: [],

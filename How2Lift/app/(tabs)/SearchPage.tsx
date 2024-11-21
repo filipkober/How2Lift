@@ -119,11 +119,11 @@ const SearchPage = () => {
               />
           </View>
           {/* scrollbar */}
-          <View className='w-full h-auto justify-start px-4 py-2 space-y-2 bg-secondary shadow-md'>
+          <View className='w-full h-auto justify-start z-20 px-4 py-2 space-y-2 bg-secondary shadow-bottom-md'>
             <SearchBar onSearch={Search} height={36} onChangeText={Search}/>
           </View>
           {/* data container */}
-          <ScrollView className='w-full h-full px-4 py-2 space-y-2' contentContainerStyle={{ backgroundColor: "#00000000" }}>
+          <ScrollView className='w-full h-full z-10 px-4 py-2 space-y-2' contentContainerStyle={{ backgroundColor: "#00000000" }}>
             {
               (selectedList == 0)? (
                 filteredData.map(m => (
