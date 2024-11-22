@@ -27,13 +27,21 @@ const SettingsPage = () => {
         </View>
       </View>
       <View className='w-full h-full flex p-2'>
-        <View className='w-full h-auto flex flex-col p-2 bg-white rounded-[10px] items-start space-y-2 shadow-bottom-md'>
+        <View className='w-full h-auto flex flex-col p-3 bg-white rounded-[10px] items-start space-y-3 shadow-bottom-md'>
           <Text className="text-[5vw] font-quicksand_bold w-auto h-auto">General</Text>
-          <View className='h-[1px] bg-gray-200 w-full'></View>
-          <Switch/>
-          <Text className="text-[4vw] font-quicksand w-auto h-auto">Example setting</Text>
-          <Text className="text-[4vw] font-quicksand w-auto h-auto">Example setting</Text>
-          <Text className="text-[4vw] font-quicksand w-auto h-auto">Example setting</Text>
+          <View className='h-[1px] bg-gray-200 w-full'/>
+          <View className='w-full flex flex-row justify-between'>
+            <Text className="text-[100%] font-quicksand w-auto h-auto">Enable vibrations</Text>
+            <Switch/>
+          </View>
+          <View className='w-full flex flex-row justify-between'>
+            <Text className="text-[100%] font-quicksand w-auto h-auto">Super secret setting</Text>
+            <Switch/>
+          </View>
+          <View className='w-full flex flex-row justify-between'>
+            <Text className="text-[100%] font-quicksand w-auto h-auto">Example setting</Text>
+            <Switch/>
+          </View>
         </View>
       </View>
     </View>

@@ -17,7 +17,7 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
   }
 
   return (
-    <View className="overflow-hidden flex flex-row w-full h-auto rounded-[10px] shadow-sm border-2 border-gray-700 bg-white items-center">
+    <View className="overflow-hidden flex flex-row w-full h-auto rounded-[10px] shadow-sm border-0 border-gray-700 bg-white items-center">
       {/* Left Image - Fixed Width 20vw */}
       <View className="w-[20vw] h-[20vw] p-1 overflow-hidden">
         <Image

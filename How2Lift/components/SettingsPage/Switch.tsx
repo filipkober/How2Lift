@@ -17,7 +17,7 @@ const ExerciseListItem = ({ value, OnChange, defaulf, activePrimaryColor = "#00d
   const [enabled, setEnabled] = useState<number>(0);
   
   const switchList = (index?: number) => {
-    var newstate = (enabled+1)%2  
+    var newstate = (enabled+1)%2
     setEnabled(index || newstate)
     console.log(newstate)
     Animated.spring(animation, {
@@ -34,7 +34,7 @@ const ExerciseListItem = ({ value, OnChange, defaulf, activePrimaryColor = "#00d
       onPressOut={()=>{}}
       onPress={() => switchList()}>
       <View className="h-[calc(100%-2vw)] w-[calc(100%-2vw)] rounded-full" style={{backgroundColor: enabled? activeSecondaryColor: "#dedede"}}></View>
-      <Animated.View          
+      <Animated.View
         style={{
           position: 'absolute',
           bottom: 0,
