@@ -28,7 +28,7 @@ public class MachineService {
         return repo.findById(id).orElse(null);
     }
 
-    public Machine createMachine(String name, String description, String imageUrl, Set<Muscle> trainedMuscles, Set<Exercise> exercises) {
+    public void createMachine(String name, String description, String imageUrl, Set<Muscle> trainedMuscles, Set<Exercise> exercises) {
         Machine machine = new Machine();
         machine.setName(name);
         machine.setDescription(description);
@@ -36,6 +36,14 @@ public class MachineService {
         machine.setTrainedMuscles(trainedMuscles);
         machine.setExercises(exercises);
 
-        return repo.save(machine);
+        repo.save(machine);
+    }
+
+    public List<String> getAllMachineNames() {
+        return repo.findDistinctNames();
+    }
+
+    public List<Machine> getMachinesByNames(List<String> names) {
+        return repo.findDistinctByNameIn(names);
     }
 }
