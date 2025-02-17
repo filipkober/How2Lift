@@ -1,0 +1,27 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+
+<div th:if="${message}">
+    <h2 th:text="${message}"/>
+</div>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/forms/muscles">
+        <table>
+            <tr><td>Muscle name:</td><td><input type="text" name="name" /></td></tr>
+            <tr><td>Super secret password </td><td><input type="password" name="password" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
+
+<div>
+    <ul>
+        <li th:each="muscle : ${muscles}">
+            <span th:href="${muscle}" th:text="${muscle}" />
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

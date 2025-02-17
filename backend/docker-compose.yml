@@ -21,6 +21,7 @@ services:
       - DOCKER_APP_PORT=${DOCKER_APP_PORT}
       - LOCAL_DB_PORT=${LOCAL_DB_PORT}
       - LOCAL_APP_PORT=${LOCAL_APP_PORT}
+      - MAX_UPLOAD_SIZE=${MAX_UPLOAD_SIZE}
 
     ports:
       - "${DOCKER_APP_PORT}:${LOCAL_APP_PORT}"
