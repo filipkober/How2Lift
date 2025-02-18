@@ -4,9 +4,11 @@ import com.example.backend.model.Machine;
 import com.example.backend.service.OpenAIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,10 +24,11 @@ public class AIController {
     }
 
     @PostMapping("/ai/machines")
-    public List<Machine> identifyMachines(@RequestParam("file") MultipartFile file) {
+    @ResponseBody
+    public ResponseEntity<List<Machine>> identifyMachines(@RequestParam("file") MultipartFile file) {
 
         Resource resource = file.getResource();
 
-        return openAIService.identifyMachines(resource);
+        return ResponseEntity.ok(openAIService.identifyMachines(resource));
     }
 }

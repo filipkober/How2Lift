@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class MuscleService {
@@ -14,7 +13,7 @@ public class MuscleService {
     private final MuscleRepo repo;
 
     @Autowired
-    public MuscleService(MuscleRepo repo){
+    public MuscleService(MuscleRepo repo) {
         this.repo = repo;
     }
 
@@ -22,11 +21,11 @@ public class MuscleService {
         return repo.findAll();
     }
 
-    public Muscle createMuscle(String name){
+    public void createMuscle(String name){
         Muscle muscle = new Muscle();
         muscle.setName(name);
 
-        return repo.save(muscle);
+        repo.save(muscle);
     }
 
     public List<Muscle> getMusclesByNames(List<String> muscleNames){
