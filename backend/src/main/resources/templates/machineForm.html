@@ -1,13 +1,21 @@
 <html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>Machine Form</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+
 <body>
 
-<div th:if="${message}">
+<h1>Machine Form</h1>
+
+<div th:if="${message}" class="message-container">
     <h2 th:text="${message}"/>
 </div>
 
-<div>
-    <form method="POST" enctype="multipart/form-data" action="/forms/machines">
-        <table>
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data" action="/forms/machines" class="form">
+        <table class="form-table">
             <tr><td>Machine name:</td><td><input type="text" name="name" /></td></tr>
             <tr><td>Machine description:</td><td><input type="text" name="description" /></td></tr>
             <tr><td>Image url:</td><td><input type="text" name="imageUrl" id="imageinput" /></td></tr>
@@ -23,8 +31,9 @@
     </form>
 </div>
 
-<div>
-    <ul>
+<div class="data-list-container">
+    <h2>Existing machines</h2>
+    <ul class="data-list">
         <li th:each="machine : ${machines}">
             <span th:text="${machine.getName()}" />
         </li>

@@ -18,30 +18,39 @@ public class OpenAIService implements AIService {
 
     private final ChatClient chatClient;
     private final MachineService machineService;
+    private final MuscleService muscleService;
 
     @Autowired
-    public OpenAIService(ChatClient.Builder chatClientBuilder, MachineService machineService) {
+    public OpenAIService(ChatClient.Builder chatClientBuilder, MachineService machineService, MuscleService muscleService) {
 
         this.machineService = machineService;
-        var allMachineNames = this.machineService.getAllMachineNames();
-        System.out.println(allMachineNames);
+        this.muscleService = muscleService;
+
         this.chatClient = chatClientBuilder.defaultOptions(
                 OpenAiChatOptions.builder()
                         .withModel(OpenAiApi.ChatModel.GPT_4_TURBO.getValue()).build())
-                .defaultUser(u -> u.text("Identify the exercise machines or equipment in the provided image, according to the following possibilities: {machines}")
-                        .param("machines", allMachineNames)
-                )
                 .build();
     }
 
     @Override
     public List<Machine> identifyMachines(Resource imageResource) {
-
+        var allMachineNames = machineService.getAllMachineNames();
         List<String> identifiedMachineNames = chatClient.prompt()
-                .user(u -> u.media(MimeTypeUtils.IMAGE_PNG, imageResource))
+                .user(u -> u.text("Identify the exercise machines or equipment in the provided image, according to the following possibilities: {machines}")
+                        .param("machines", allMachineNames)
+                        .media(MimeTypeUtils.IMAGE_PNG, imageResource))
                 .call()
                 .entity(new ListOutputConverter(new DefaultConversionService()));
 
         return machineService.getMachinesByNames(identifiedMachineNames);
+    }
+
+    public List<String> suggestNewMuscleNames(){
+        var currentMuscleNames = muscleService.getAllMuscleNames();
+        return chatClient.prompt()
+                .user(u -> u.text("Suggest new muscle names that could be added to the database (it contains commonly trained muscles), the existing ones are: {muscles}")
+                        .param("muscles", currentMuscleNames))
+                .call()
+                .entity(new ListOutputConverter(new DefaultConversionService()));
     }
 }

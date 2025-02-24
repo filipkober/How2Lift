@@ -1,0 +1,228 @@
+/* General Page Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Message Container */
+.message-container {
+    background: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Container */
+.form-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Form Table */
+.form-table {
+    width: 100%;
+    border-spacing: 10px;
+}
+
+.form-table td {
+    padding: 8px;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background: #fafafa;
+}
+
+textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+/* Select Dropdown */
+select {
+    appearance: none;
+    background: white;
+    cursor: pointer;
+}
+
+/* Multi-Select */
+select[multiple] {
+    height: 120px;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    background: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Video Preview */
+video {
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Data List (Previously Muscle List) */
+.data-list-container {
+    background: white;
+    padding: 10px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+.data-list-container h2 {
+    text-align: center;
+}
+
+.data-list {
+    list-style: none;
+    padding: 0;
+}
+
+.data-list li {
+    background: #e3e3e3;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.data-list li:hover {
+    background: #d1d1d1;
+    cursor: pointer;
+}
+
+/* Suggestions Container */
+.suggestions-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Suggestions Input */
+.suggestions-container input[type="password"] {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+}
+
+/* Suggestions Button */
+button#get-muscle-suggestions {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+button#get-muscle-suggestions:hover {
+    background: #218838;
+}
+
+/* Muscle Suggestions List */
+.muscle-suggestions {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.muscle-suggestion {
+    background: #e9ecef;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Add Button for Suggestions */
+.muscle-suggestion button {
+    background: #007BFF;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.muscle-suggestion button:hover {
+    background: #0056b3;
+}
+
+#clear-suggestions {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .form-container, .data-list-container, .suggestions-container {
+        max-width: 90%;
+    }
+
+    video {
+        height: auto;
+    }
+}

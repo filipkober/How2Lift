@@ -1,13 +1,21 @@
 <html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>Exercise Form</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+
 <body>
 
-<div th:if="${message}">
+<h1>Exercise Form</h1>
+
+<div th:if="${message}" class="message-container">
     <h2 th:text="${message}"/>
 </div>
 
-<div>
-    <form method="POST" enctype="multipart/form-data" action="/forms/exercises">
-        <table>
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data" action="/forms/exercises" class="form">
+        <table class="form-table">
             <tr><td>Exercise name:</td><td><input type="text" name="name" /></td></tr>
             <tr><td>Exercise description:</td><td><input type="text" name="description" /></td></tr>
             <tr><td>Steps:</td><td><textarea name="steps"/></td></tr>
@@ -30,8 +38,9 @@
     </form>
 </div>
 
-<div>
-    <ul>
+<div class="data-list-container">
+    <h2>Existing exercises</h2>
+    <ul class="data-list">
         <li th:each="exercise : ${exercises}">
             <span th:text="${exercise.getName()}" />
         </li>

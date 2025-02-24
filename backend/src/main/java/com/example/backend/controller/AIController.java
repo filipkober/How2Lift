@@ -31,4 +31,10 @@ public class AIController {
 
         return ResponseEntity.ok(openAIService.identifyMachines(resource));
     }
+
+    @PostMapping("/ai/suggest/muscles")
+    @ResponseBody
+    public ResponseEntity<List<String>> suggestMuscles() {
+        return ResponseEntity.ok(openAIService.suggestNewMuscleNames());
+    }
 }
