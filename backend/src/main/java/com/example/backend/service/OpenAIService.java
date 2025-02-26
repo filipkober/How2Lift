@@ -1,11 +1,13 @@
 package com.example.backend.service;
 
 import com.example.backend.model.Machine;
+import com.example.backend.record.MachineSuggestion;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -52,5 +54,19 @@ public class OpenAIService implements AIService {
                         .param("muscles", currentMuscleNames))
                 .call()
                 .entity(new ListOutputConverter(new DefaultConversionService()));
+    }
+
+    public List<Machine> suggestNewMachines() {
+        var currentMachineNames = machineService.getAllMachineNames();
+        var allMuscleNames = muscleService.getAllMuscleNames();
+        List<MachineSuggestion> suggestions = chatClient.prompt()
+                .user(u -> u.text("Suggest new machine names that could be added to the database, the existing ones are: {machines}; The muscles available in the database are: {muscles}. Include all applicable")
+                        .param("machines", currentMachineNames)
+                        .param("muscles", allMuscleNames)
+                )
+                .call()
+                .entity(new ParameterizedTypeReference<>() {
+                });
+        return machineService.getMachinesFromSuggestions(suggestions);
     }
 }

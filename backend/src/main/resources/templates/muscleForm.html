@@ -25,7 +25,7 @@
     <h2>Existing muscles</h2>
     <ul class="data-list">
         <li th:each="muscle : ${muscles}">
-            <span th:href="${muscle}" th:text="${muscle}" />
+            <a th:href="${'/muscles/' + muscle.getId()}" th:text="${muscle.getName()}" target="_blank" />
         </li>
     </ul>
 </div>
@@ -67,12 +67,15 @@
                 body: formData
             }).then(response => {
                 if (response.status === 200) {
-                    li.remove();
+                    fetch('/muscles').then(r => r.json().then(data => {
+                        const muscleId = data.find(m => m.name === muscle).id;
 
-                    const muscles = document.querySelector('.data-list');
-                    const newMuscle = document.createElement('li');
-                    newMuscle.innerHTML = `<span>${muscle}</span>`;
-                    muscles.appendChild(newMuscle);
+                        const muscles = document.querySelector('.data-list');
+                        const newMuscle = document.createElement('li');
+                        newMuscle.innerHTML = `<a href="/muscles/${muscleId}" target="_blank">${muscle}</a>`;
+                        muscles.appendChild(newMuscle);
+                        li.remove();
+                    }))
                 }
             })
         });

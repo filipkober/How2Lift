@@ -42,7 +42,7 @@
     <h2>Existing exercises</h2>
     <ul class="data-list">
         <li th:each="exercise : ${exercises}">
-            <span th:text="${exercise.getName()}" />
+            <a th:text="${exercise.getName()}" th:href="${'/exercises/' + exercise.getId()}" target="_blank" />
         </li>
     </ul>
 </div>

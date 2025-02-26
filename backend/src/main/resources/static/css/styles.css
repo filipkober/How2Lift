@@ -135,6 +135,11 @@ video {
     cursor: pointer;
 }
 
+.data-list li a {
+    color: black;
+    text-decoration: none;
+}
+
 /* Suggestions Container */
 .suggestions-container {
     background: white;
@@ -154,7 +159,7 @@ video {
 }
 
 /* Suggestions Button */
-button#get-muscle-suggestions {
+button#get-muscle-suggestions, button#get-machine-suggestions {
     background: #28a745;
     color: white;
     border: none;
@@ -167,12 +172,12 @@ button#get-muscle-suggestions {
     width: 100%;
 }
 
-button#get-muscle-suggestions:hover {
+button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover {
     background: #218838;
 }
 
-/* Muscle Suggestions List */
-.muscle-suggestions {
+/* Suggestions List */
+.muscle-suggestions, .machine-suggestions {
     list-style: none;
     padding: 0;
     margin-top: 15px;
@@ -188,8 +193,32 @@ button#get-muscle-suggestions:hover {
     align-items: center;
 }
 
+.machine-suggestion {
+    background: #e9ecef;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+}
+
+.machine-suggestion-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.machine-suggestion-muscles {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.machine-suggestion ul {
+    margin-bottom: 1rem;
+}
+
 /* Add Button for Suggestions */
-.muscle-suggestion button {
+.muscle-suggestion button, .machine-suggestion button {
     background: #007BFF;
     color: white;
     border: none;
