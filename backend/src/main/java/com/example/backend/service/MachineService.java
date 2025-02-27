@@ -1,8 +1,10 @@
 package com.example.backend.service;
 
+import com.example.backend.mapper.MachineMapper;
 import com.example.backend.model.Exercise;
 import com.example.backend.model.Machine;
 import com.example.backend.model.Muscle;
+import com.example.backend.record.MachineSuggestion;
 import com.example.backend.repo.MachineRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.Set;
 public class MachineService {
 
     private final MachineRepo repo;
+    private final MachineMapper mapper;
 
     @Autowired
-    public MachineService(MachineRepo repo) {
+    public MachineService(MachineRepo repo, MachineMapper mapper) {
         this.repo = repo;
+        this.mapper = mapper;
     }
 
     public List<Machine> getAllMachines() {
@@ -26,6 +30,10 @@ public class MachineService {
 
     public Machine getMachineById(Long id) {
         return repo.findById(id).orElse(null);
+    }
+
+    public Machine getMachineByName(String name) {
+        return repo.findByName(name);
     }
 
     public void createMachine(String name, String description, String imageUrl, Set<Muscle> trainedMuscles, Set<Exercise> exercises) {
@@ -45,5 +53,9 @@ public class MachineService {
 
     public List<Machine> getMachinesByNames(List<String> names) {
         return repo.findDistinctByNameIn(names);
+    }
+
+    public List<Machine> getMachinesFromSuggestions(List<MachineSuggestion> suggestions) {
+        return suggestions.stream().map(mapper::toMachine).toList();
     }
 }

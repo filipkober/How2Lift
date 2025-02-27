@@ -34,4 +34,8 @@ public class MuscleService {
     public List<Muscle> getMusclesByIds(List<Long> muscleIds) {
         return repo.findAllById(muscleIds);
     }
+
+    public List<String> getAllMuscleNames() {
+        return repo.findDistinctNames();
+    }
 }

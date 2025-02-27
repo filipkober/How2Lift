@@ -1,8 +1,10 @@
 package com.example.backend.service;
 
+import com.example.backend.mapper.ExerciseMapper;
 import com.example.backend.model.Exercise;
 import com.example.backend.model.Machine;
 import com.example.backend.model.Muscle;
+import com.example.backend.record.ExerciseSuggestion;
 import com.example.backend.repo.ExerciseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.Set;
 public class ExerciseService {
 
     private final ExerciseRepo repo;
+    private final ExerciseMapper mapper;
 
     @Autowired
-    public ExerciseService(ExerciseRepo repo) {
+    public ExerciseService(ExerciseRepo repo, ExerciseMapper mapper) {
         this.repo = repo;
+        this.mapper = mapper;
     }
 
     public List<Exercise> getAllExercises() {
@@ -39,5 +43,13 @@ public class ExerciseService {
         exercise.setVideoUrl(videoUrl);
 
         return repo.save(exercise);
+    }
+
+    public List<Exercise> getExercisesFromSuggestions(List<ExerciseSuggestion> suggestions) {
+        return suggestions.stream().map(mapper::toExercise).toList();
+    }
+
+    public Object getAllExerciseNames() {
+        return repo.findDistinctNames();
     }
 }
