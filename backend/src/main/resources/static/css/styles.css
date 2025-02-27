@@ -152,14 +152,8 @@ video {
     text-align: center;
 }
 
-/* Suggestions Input */
-.suggestions-container input[type="password"] {
-    width: calc(100% - 20px);
-    margin-top: 10px;
-}
-
 /* Suggestions Button */
-button#get-muscle-suggestions, button#get-machine-suggestions {
+button#get-muscle-suggestions, button#get-machine-suggestions, button#get-exercise-suggestions {
     background: #28a745;
     color: white;
     border: none;
@@ -172,28 +166,18 @@ button#get-muscle-suggestions, button#get-machine-suggestions {
     width: 100%;
 }
 
-button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover {
+button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover, button#get-exercise-suggestions:hover {
     background: #218838;
 }
 
 /* Suggestions List */
-.muscle-suggestions, .machine-suggestions {
+.exercise-suggestions {
     list-style: none;
     padding: 0;
     margin-top: 15px;
 }
 
-.muscle-suggestion {
-    background: #e9ecef;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.machine-suggestion {
+.exercise-suggestion {
     background: #e9ecef;
     padding: 10px;
     margin: 5px 0;
@@ -203,22 +187,22 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover {
     text-align: start;
 }
 
-.machine-suggestion-name {
+.exercise-suggestion-name {
     font-size: 16px;
     font-weight: bold;
 }
 
-.machine-suggestion-muscles {
+.exercise-suggestion-steps {
     font-size: 14px;
     font-style: italic;
 }
 
-.machine-suggestion ul {
+.exercise-suggestion ul {
     margin-bottom: 1rem;
 }
 
 /* Add Button for Suggestions */
-.muscle-suggestion button, .machine-suggestion button {
+.exercise-suggestion button {
     background: #007BFF;
     color: white;
     border: none;
@@ -228,7 +212,7 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover {
     transition: background 0.3s ease;
 }
 
-.muscle-suggestion button:hover {
+.exercise-suggestion button:hover {
     background: #0056b3;
 }
 
@@ -243,15 +227,4 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover {
     transition: background 0.3s ease;
     margin-top: 10px;
     width: 100%;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .form-container, .data-list-container, .suggestions-container {
-        max-width: 90%;
-    }
-
-    video {
-        height: auto;
-    }
 }

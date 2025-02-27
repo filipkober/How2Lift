@@ -1,6 +1,8 @@
 package com.example.backend.service;
 
+import com.example.backend.model.Exercise;
 import com.example.backend.model.Machine;
+import com.example.backend.record.ExerciseSuggestion;
 import com.example.backend.record.MachineSuggestion;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.ListOutputConverter;
@@ -21,12 +23,14 @@ public class OpenAIService implements AIService {
     private final ChatClient chatClient;
     private final MachineService machineService;
     private final MuscleService muscleService;
+    private final ExerciseService exerciseService;
 
     @Autowired
-    public OpenAIService(ChatClient.Builder chatClientBuilder, MachineService machineService, MuscleService muscleService) {
+    public OpenAIService(ChatClient.Builder chatClientBuilder, MachineService machineService, MuscleService muscleService, ExerciseService exerciseService) {
 
         this.machineService = machineService;
         this.muscleService = muscleService;
+        this.exerciseService = exerciseService;
 
         this.chatClient = chatClientBuilder.defaultOptions(
                 OpenAiChatOptions.builder()
@@ -68,5 +72,21 @@ public class OpenAIService implements AIService {
                 .entity(new ParameterizedTypeReference<>() {
                 });
         return machineService.getMachinesFromSuggestions(suggestions);
+    }
+
+    public List<Exercise> suggestNewExercises() {
+        var currentExerciseNames = exerciseService.getAllExerciseNames();
+        var allMuscleNames = muscleService.getAllMuscleNames();
+        var allMachineNames = machineService.getAllMachineNames();
+        List<ExerciseSuggestion> suggestions = chatClient.prompt()
+                .user(u -> u.text("Suggest new exercise names that could be added to the database, the existing ones are: {exercises}; The muscles available in the database are: {muscles}; The machines available in the database are: {machines}. Include all applicable")
+                        .param("exercises", currentExerciseNames)
+                        .param("muscles", allMuscleNames)
+                        .param("machines", allMachineNames)
+                )
+                .call()
+                .entity(new ParameterizedTypeReference<>() {
+                });
+        return exerciseService.getExercisesFromSuggestions(suggestions);
     }
 }

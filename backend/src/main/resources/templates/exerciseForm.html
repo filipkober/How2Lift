@@ -18,9 +18,9 @@
         <table class="form-table">
             <tr><td>Exercise name:</td><td><input type="text" name="name" /></td></tr>
             <tr><td>Exercise description:</td><td><input type="text" name="description" /></td></tr>
-            <tr><td>Steps:</td><td><textarea name="steps"/></td></tr>
+            <tr><td>Steps:</td><td><textarea name="steps"></textarea></td></tr>
             <tr><td>Common Mistakes:</td><td><textarea name="commonMistakes"></textarea></td></tr>
-            <tr><td>Video url:</td><td><input type="text" name="imageUrl" id="imageinput" /></td></tr>
+            <tr><td>Video url:</td><td><input type="text" name="videoUrl" id="videoInput" /></td></tr>
             <tr><td>Video preview:</td><td><video id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="400" height="200" controls /></td></tr>
             <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles">
                 <option th:each="muscle : ${muscles}"
@@ -47,12 +47,106 @@
     </ul>
 </div>
 
+<div class="suggestions-container">
+    <h2>Exercise suggestions</h2>
+    <button id="get-exercise-suggestions">Suggest! ✨</button>
+    <ul class="exercise-suggestions" id="exercise-suggestions"></ul>
+    <button id="clear-suggestions">Clear suggestions</button>
+</div>
+
 <script>
-    const i = document.querySelector("#imageinput");
+    const i = document.querySelector("#videoInput");
     const p = document.querySelector("#preview");
+    const suggestionsList = document.querySelector("#exercise-suggestions");
+
+    let exerciseSuggestions = [];
 
     i.addEventListener('focusout', () => {
         p.src = i.value;
+    });
+
+    const createSuggestion = (exerciseSuggestion) => {
+        const li = document.createElement('li');
+        li.classList.add('exercise-suggestion');
+
+        const nameP = document.createElement('p');
+        nameP.classList.add('exercise-suggestion-name');
+        nameP.innerText = exerciseSuggestion.name;
+
+        const descriptionP = document.createElement('p');
+        descriptionP.innerText = exerciseSuggestion.description;
+
+        const stepsP = document.createElement('p');
+        stepsP.innerText = "Steps: " + exerciseSuggestion.steps;
+
+        const mistakesP = document.createElement('p');
+        mistakesP.innerText = "Common Mistakes: " + exerciseSuggestion.commonMistakes;
+
+        const musclesText = document.createElement('p');
+        musclesText.classList.add('exercise-suggestion-muscles');
+        musclesText.innerText = "Trained muscles: ";
+
+        const musclesList = document.createElement('ul');
+        musclesList.classList.add('exercise-muscles-list');
+        exerciseSuggestion.trainedMuscles.forEach(muscle => {
+            const muscleLi = document.createElement('li');
+            muscleLi.innerText = muscle.name;
+            musclesList.appendChild(muscleLi);
+        });
+
+        const addButton = document.createElement('button');
+        addButton.innerText = 'Add to form';
+        addButton.addEventListener('click', () => {
+            document.querySelector('input[name="name"]').value = exerciseSuggestion.name;
+            document.querySelector('input[name="description"]').value = exerciseSuggestion.description;
+            document.querySelector('textarea[name="steps"]').value = exerciseSuggestion.steps;
+            document.querySelector('textarea[name="commonMistakes"]').value = exerciseSuggestion.commonMistakes;
+            document.querySelector('select[name="machine"]').value = exerciseSuggestion.machine.id;
+
+            // Select trained muscles
+            const muscleSelect = document.querySelector('select[name="selectedMuscles"]');
+            Array.from(muscleSelect.options).forEach(option => {
+                option.selected = exerciseSuggestion.trainedMuscles.some(muscle => muscle.name === option.text);
+            });
+
+            const newLocalStorage = exerciseSuggestions.filter(suggestion => suggestion.name !== exerciseSuggestion.name);
+            localStorage.setItem('exerciseSuggestions', JSON.stringify(newLocalStorage));
+
+            li.remove();
+        });
+
+        li.appendChild(nameP);
+        li.appendChild(descriptionP);
+        li.appendChild(stepsP);
+        li.appendChild(mistakesP);
+        li.appendChild(musclesText);
+        li.appendChild(musclesList);
+        li.appendChild(addButton);
+        suggestionsList.appendChild(li);
+    };
+
+    document.querySelector("#get-exercise-suggestions").addEventListener('click', () => {
+        fetch('/ai/suggest/exercises', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                data.forEach(createSuggestion);
+                exerciseSuggestions = data;
+            });
+    });
+
+    const suggestionsFromLocalStorage = localStorage.getItem('exerciseSuggestions');
+    if (suggestionsFromLocalStorage) {
+        const lSExerciseSuggestions = JSON.parse(suggestionsFromLocalStorage);
+        exerciseSuggestions = lSExerciseSuggestions;
+        lSExerciseSuggestions.forEach(createSuggestion);
+    }
+
+    document.querySelector("#clear-suggestions").addEventListener('click', () => {
+        suggestionsList.innerHTML = '';
     });
 </script>
 

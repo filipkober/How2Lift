@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Exercise;
 import com.example.backend.model.Machine;
 import com.example.backend.record.MachineSuggestion;
 import com.example.backend.service.OpenAIService;
@@ -43,5 +44,11 @@ public class AIController {
     @ResponseBody
     public ResponseEntity<List<Machine>> suggestMachines() {
         return ResponseEntity.ok(openAIService.suggestNewMachines());
+    }
+
+    @PostMapping("/ai/suggest/exercises")
+    @ResponseBody
+    public ResponseEntity<List<Exercise>> suggestExercises() {
+        return ResponseEntity.ok(openAIService.suggestNewExercises());
     }
 }

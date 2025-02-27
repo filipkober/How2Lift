@@ -32,6 +32,10 @@ public class MachineService {
         return repo.findById(id).orElse(null);
     }
 
+    public Machine getMachineByName(String name) {
+        return repo.findByName(name);
+    }
+
     public void createMachine(String name, String description, String imageUrl, Set<Muscle> trainedMuscles, Set<Exercise> exercises) {
         Machine machine = new Machine();
         machine.setName(name);
