@@ -2,45 +2,168 @@
 
 This document outlines the REST API endpoints provided by the How2Lift backend service.
 
-## Base URL (not yet hosted)
+## Base URL
 
 All API endpoints are relative to the base URL:
 
 ```txt
-https://api.how2lift.com/
+https://api.how2lift.com/  # Production (not yet hosted)
+http://localhost:8080/      # Development
 ```
 
-For local development:
+## API Endpoints
+
+### Muscle Endpoints
+
+#### Get All Muscles
 
 ```txt
-http://localhost:8080/
+GET /muscles
 ```
-
-## Equipment Recognition
-
-### Recognize Equipment
-
-```bash
-POST /ai/machines
-```
-
-Request:
-
-- Content-Type: multipart/form-data
-- Form field: `image` (binary image data)
 
 Response:
 
 ```json
 [
-    {
-        "id": 1,
-        "name": "Leg Press",
-        "description": "A simple machine for training quads",
-        "imageUrl": "http://localhost:8080/files/legpress.png"
-    }
+  {
+    "id": 1,
+    "name": "Quadriceps"
+  },
+  {
+    "id": 2,
+    "name": "Hamstrings"
+  }
 ]
 ```
+
+### File Management
+
+#### Get File
+
+```txt
+GET /files/{filename}
+```
+
+Parameters:
+
+- `filename` - Name of the file to retrieve
+
+Response:
+
+- Binary file data with appropriate content type
+
+### AI Features
+
+#### Identify Machines
+
+```txt
+POST /ai/machines
+```
+
+Request:
+
+- Content-Type: `multipart/form-data`
+- Form field: `file` (binary image data)
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Leg Press",
+    "description": "A machine for training leg muscles",
+    "imageUrl": "http://localhost:8080/files/legpress.png",
+    "trainedMuscles": [
+      {
+        "id": 1,
+        "name": "Quadriceps"
+      },
+      {
+        "id": 2,
+        "name": "Hamstrings"
+      }
+    ]
+  }
+]
+```
+
+#### Get AI-Suggested Muscles
+
+```txt
+POST /ai/suggest/muscles
+```
+
+Response:
+
+```json
+[
+  "Latissimus Dorsi",
+  "Deltoids",
+  "Trapezius"
+]
+```
+
+#### Get AI-Suggested Machines
+
+```txt
+POST /ai/suggest/machines
+```
+
+Response:
+
+```json
+[
+  {
+    "id": null,
+    "name": "Chest Press",
+    "description": "Machine for chest development",
+    "imageUrl": null,
+    "trainedMuscles": [
+      {
+        "id": 3,
+        "name": "Pectoralis"
+      }
+    ]
+  }
+]
+```
+
+#### Get AI-Suggested Exercises
+
+```txt
+POST /ai/suggest/exercises
+```
+
+Response:
+
+```json
+[
+  {
+    "id": null,
+    "name": "Seated Row",
+    "description": "Back exercise for mid-back development",
+    "steps": "Sit on the machine with feet on platform...",
+    "commonMistakes": "Rounding the back, using too much momentum...",
+    "videoUrl": "https://example.com/seated-row.mp4",
+    "trainedMuscles": [
+      {
+        "id": 4,
+        "name": "Latissimus Dorsi"
+      }
+    ]
+  }
+]
+```
+
+## Web Forms
+
+These endpoints are for admin use and provide HTML forms:
+
+- `GET /forms/muscles` - Manage muscle groups
+- `GET /forms/machines` - Manage machines
+- `GET /forms/exercises` - Manage exercises
+- `GET /files` - Manage file uploads
 
 ## Error Handling
 
@@ -63,3 +186,7 @@ Error response format:
   "path": "/api/v1/exercises/invalid-id"
 }
 ```
+
+## Authentication
+
+Most endpoints require password authentication for write operations. This is typically provided via a `password` parameter for form submissions.
