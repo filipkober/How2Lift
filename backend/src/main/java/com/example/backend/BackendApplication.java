@@ -16,7 +16,15 @@ public class BackendApplication {
 
         SpringApplication.run(BackendApplication.class, args);
 
-        System.out.println("Hello World");
+        System.out.println("""
+                  _   _               ____  _     _  __ _  \s
+                 | | | | _____      _|___ \\| |   (_)/ _| |_\s
+                 | |_| |/ _ \\ \\ /\\ / / __) | |   | | |_| __|
+                 |  _  | (_) \\ V  V / / __/| |___| |  _| |_\s
+                 |_| |_|\\___/ \\_/\\_/ |_____|_____|_|_|  \\__|
+                                                           \s
+                
+                """);
     }
 
     @Bean

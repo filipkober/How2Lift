@@ -4,11 +4,13 @@ import com.example.backend.model.Muscle;
 import com.example.backend.service.MuscleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MuscleController {
@@ -25,8 +27,8 @@ public class MuscleController {
 
     @GetMapping("/forms/muscles")
     public String viewMuscleUploadForm(Model model) {
-        var muscleNames = muscleService.getAllMuscles().stream().map(Muscle::getName).toArray();
-        model.addAttribute("muscles", muscleNames);
+        var muscles = muscleService.getAllMuscles();
+        model.addAttribute("muscles", muscles);
 
         return "muscleForm";
     }
@@ -38,6 +40,12 @@ public class MuscleController {
 
         muscleService.createMuscle(name);
         return "redirect:/forms/muscles";
+    }
+
+    @GetMapping("/muscles")
+    @ResponseBody
+    public ResponseEntity<Iterable<Muscle>> getMuscles() {
+        return ResponseEntity.ok(muscleService.getAllMuscles());
     }
 
 }
