@@ -14,4 +14,6 @@ public interface MuscleRepo extends JpaRepository<Muscle, Long> {
 
     @Query("SELECT DISTINCT m.name FROM Muscle m")
     List<String> findDistinctNames();
+
+    List<Muscle> findByNameContaining(String query);
 }

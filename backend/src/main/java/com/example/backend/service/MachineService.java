@@ -9,6 +9,7 @@ import com.example.backend.repo.MachineRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,5 +58,14 @@ public class MachineService {
 
     public List<Machine> getMachinesFromSuggestions(List<MachineSuggestion> suggestions) {
         return suggestions.stream().map(mapper::toMachine).toList();
+    }
+
+    public List<Machine> searchMachines(String query) {
+
+        Set<Machine> machineSet = new HashSet<>();
+        machineSet.addAll(repo.findByNameContaining(query));
+        machineSet.addAll(repo.findByDescriptionContaining(query));
+
+        return List.copyOf(machineSet);
     }
 }

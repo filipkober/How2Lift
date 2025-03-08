@@ -9,6 +9,7 @@ import com.example.backend.repo.ExerciseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,5 +52,14 @@ public class ExerciseService {
 
     public Object getAllExerciseNames() {
         return repo.findDistinctNames();
+    }
+
+    public List<Exercise> searchExercises(String query) {
+
+        Set<Exercise> exerciseSet = new HashSet<>();
+        exerciseSet.addAll(repo.findByNameContaining(query));
+        exerciseSet.addAll(repo.findByDescriptionContaining(query));
+
+        return List.copyOf(exerciseSet);
     }
 }

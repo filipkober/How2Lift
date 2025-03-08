@@ -38,4 +38,8 @@ public class MuscleService {
     public List<String> getAllMuscleNames() {
         return repo.findDistinctNames();
     }
+
+    public List<Muscle> searchMuscles(String query) {
+        return repo.findByNameContaining(query);
+    }
 }

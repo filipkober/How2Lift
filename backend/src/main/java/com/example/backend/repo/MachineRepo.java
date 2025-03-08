@@ -16,4 +16,8 @@ public interface MachineRepo extends JpaRepository<Machine, Long> {
     List<Machine> findDistinctByNameIn(Collection<String> names);
 
     Machine findByName(String name);
+
+    List<Machine> findByNameContaining(String query);
+
+    List<Machine> findByDescriptionContaining(String query);
 }
