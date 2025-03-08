@@ -1,7 +1,4 @@
 package com.example.backend.controller;
-
-import com.example.backend.model.Exercise;
-import com.example.backend.model.Muscle;
 import com.example.backend.service.ExerciseService;
 import com.example.backend.service.MachineService;
 import com.example.backend.service.MuscleService;
@@ -46,13 +43,13 @@ public class MachineController {
     }
 
     @PostMapping("/forms/machines")
-    public String handleMachineUpload(@RequestParam("selectedMuscles") List<Long> selectedMuscles, String name, String description, String imageUrl, String[] exercises, String password) {
+    public String handleMachineUpload(@RequestParam("selectedMuscles") List<Long> selectedMuscles, String name, String description, String imageUrl, String password) {
 
         if (!password.equals(uploadPassword))
             return "redirect:/forms/machines";
 
-        var muscleSet = new HashSet<Muscle>(muscleService.getMusclesByIds(selectedMuscles));
-        var exerciseSet = new HashSet<Exercise>(exerciseService.getExercises(new ArrayList<>()));
+        var muscleSet = new HashSet<>(muscleService.getMusclesByIds(selectedMuscles));
+        var exerciseSet = new HashSet<>(exerciseService.getExercises(new ArrayList<>()));
 
         machineService.createMachine(name, description, imageUrl, muscleSet, exerciseSet);
         return "redirect:/forms/machines";
