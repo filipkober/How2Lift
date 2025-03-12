@@ -2,6 +2,7 @@ package com.example.backend.mapper;
 
 import com.example.backend.model.Machine;
 import com.example.backend.model.Muscle;
+import com.example.backend.record.MachineSearchResult;
 import com.example.backend.record.MachineSuggestion;
 import com.example.backend.service.MuscleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,12 @@ public class MachineMapper {
         var machine = new Machine();
         machine.setName(suggestion.name());
         machine.setDescription(suggestion.description());
-        var trainedMuscles = new HashSet<Muscle>(muscleService.getMusclesByNames(suggestion.trainedMuscleNames()));
+        var trainedMuscles = new HashSet<>(muscleService.getMusclesByNames(suggestion.trainedMuscleNames()));
         machine.setTrainedMuscles(trainedMuscles);
         return machine;
+    }
+
+    public MachineSearchResult toMachineSearchResult(Machine machine) {
+        return new MachineSearchResult(machine.getId(), machine.getName(), machine.getImageUrl(), machine.getTrainedMuscles().stream().map(Muscle::getName).toList());
     }
 }

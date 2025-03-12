@@ -4,7 +4,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 type SearchBarProps = {
   machineName? : string;
   info? : string;
-  image? : { uri: string } | null;
+  image? : string | null;
 };
 
 const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
@@ -21,7 +21,7 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
       {/* Left Image - Fixed Width 20vw */}
       <View className="w-[20vw] h-[20vw] p-1 overflow-hidden">
         <Image
-          source={image?.uri ? image : placeholderImage}
+          source={image ? { uri: image } : placeholderImage}
           resizeMode="cover"
           className="w-full h-full rounded-md overflow-hidden"
         />
