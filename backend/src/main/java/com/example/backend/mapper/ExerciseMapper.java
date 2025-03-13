@@ -1,8 +1,11 @@
 package com.example.backend.mapper;
 
 import com.example.backend.model.Exercise;
+import com.example.backend.model.Machine;
 import com.example.backend.model.Muscle;
+import com.example.backend.record.ExerciseSearchResult;
 import com.example.backend.record.ExerciseSuggestion;
+import com.example.backend.record.MachineSearchResult;
 import com.example.backend.service.MachineService;
 import com.example.backend.service.MuscleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,10 @@ public class ExerciseMapper {
         exercise.setSteps(suggestion.exerciseSteps());
         exercise.setCommonMistakes(suggestion.commonMistakes());
         return exercise;
+    }
+
+    public ExerciseSearchResult toExerciseSearchResult(Exercise exercise) {
+        return new ExerciseSearchResult(exercise.getId(), exercise.getName(), exercise.getVideoUrl(), exercise.getTrainedMuscles().stream().map(Muscle::getName).toList());
     }
 
 }
