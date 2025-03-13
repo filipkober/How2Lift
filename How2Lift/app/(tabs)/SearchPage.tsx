@@ -7,6 +7,8 @@ import mockMachines from '@/mocks/machines'
 import mockExercises from '@/mocks/exercises'
 import { MachineSearchResult } from '@/types/machine'
 import { MachineService } from '@/services/machineService'
+import { ExerciseSearchResult } from '@/types/exercise'
+import { ExerciseService } from '@/services/exerciseService'
 
 type Machine = {
   id: number,
@@ -37,47 +39,55 @@ const SearchPage = () => {
   const [animation] = useState(new Animated.Value(0));
   const [selectedList, setSelectedList] = useState<ListType>(ListType.MACHINES); //0 - machines 1 - exercises
   const [machines, setMachines] = useState<MachineSearchResult[]>(mockMachines)
-  const [exercises, setExercises] = useState<Exercise[]>(mockExercises)
+  const [exercises, setExercises] = useState<ExerciseSearchResult[]>(mockExercises)
   const machineService = new MachineService()
+  const exerciseService = new ExerciseService()
 
-  const [filteredData, setFiltredData] = useState<MachineSearchResult[] | Exercise[]>(machines.sort((a, b) => a.name.localeCompare(b.name)))
+  const [filteredMachines, setFilteredMachines] = useState<MachineSearchResult[]>(machines.sort((a, b) => a.name.localeCompare(b.name)))
+  const [filteredExercises, setFilteredExercises] = useState<ExerciseSearchResult[]>(exercises.sort((a, b) => a.name.localeCompare(b.name)))
 
   const Search = (query: string) => {
-    console.log("search query: "+query)
-    var data: MachineSearchResult[] | Exercise[] = []
     if(selectedList == ListType.MACHINES)
     {
-      data = machines.filter((item) =>
+      const data = machines.filter((item) =>
         item.name.toLowerCase().includes(query.toLowerCase())
       )
       data.sort((a, b) => a.name.localeCompare(b.name))
+      
+      setFilteredMachines(data);
     }
     else
     {
-      data = exercises.filter((item) =>
+      const data = exercises.filter((item) =>
         item.name.toLowerCase().includes(query.toLowerCase())
       )
       data.sort((a, b) => a.name.localeCompare(b.name))
+      setExercises(data);
     }
-    setFiltredData(data)
   }
 
   useEffect(() => {
-    machineService.getAllMachines().then((machines) => {
-      setMachines(machines)
-      setFiltredData(machines.sort((a, b) => a.name.localeCompare(b.name)));
+    machineService.getAllMachines().then((ms) => {
+      setMachines(ms)
+      setFilteredMachines(ms.sort((a, b) => a.name.localeCompare(b.name)));
     }).catch(error => {
       console.error("Failed to fetch machines:", error);
+    });
+    exerciseService.getAllExercises().then((es) => {
+      setExercises(es)
+      setFilteredExercises(es.sort((a, b) => a.name.localeCompare(b.name)));
+    }).catch(error => {
+      console.error("Failed to fetch exercises:", error);
     });
   }, [])
 
   const switchList = (listType: ListType) => {
     console.log(listType)
     setSelectedList(listType)
-    if(listType==ListType.EXERCISES)
-      setFiltredData(exercises.sort((a, b) => a.name.localeCompare(b.name)))
+    if(listType == ListType.EXERCISES)
+      setFilteredExercises(exercises.sort((a, b) => a.name.localeCompare(b.name)))
     else
-      setFiltredData(machines.sort((a, b) => a.name.localeCompare(b.name)))
+      setFilteredMachines(machines.sort((a, b) => a.name.localeCompare(b.name))) // corrected to setFilteredMachines
     Animated.spring(animation, {
       toValue: (listType == ListType.EXERCISES ? 1 : 0) * screenWidth / 2,
       useNativeDriver: false,
@@ -128,22 +138,17 @@ const SearchPage = () => {
           <ScrollView className='w-full h-full px-4 py-2 space-y-2' contentContainerStyle={{ backgroundColor: "#00000000" }}>
             {
               (selectedList == ListType.MACHINES)? (
-                filteredData.map(m => {
-                  const machine = m as MachineSearchResult
-                  return(
-                  <View className='py-1 w-full h-auto' key={machine.id}>
-                    <MachineListItem machineName={machine.name} image={machine.imageUrl} info={machine.muscleNames.join(", ")}/>
-                  </View>
-                )})
-                
-              ) : (
-                filteredData.map(m => {
-                  const exercise = m as Exercise
-                 return (
+                filteredMachines.map(m => (
                   <View className='py-1 w-full h-auto' key={m.id}>
-                    <ExerciseListItem exerciseName={exercise.name} image={exercise.image} info={exercise.info}/>
+                    <MachineListItem machineName={m.name} image={m.imageUrl} info={m.muscleNames.join(", ")}/>
                   </View>
-                )})
+                ))
+              ) : (
+                filteredExercises.map(e => (
+                  <View className='py-1 w-full h-auto' key={e.id}>
+                    <ExerciseListItem exerciseName={e.name} image={e.imageUrl} info={e.muscleNames.join(", ")}/>
+                  </View>
+                ))
               )
             }
             <View className='w-full h-[60px] bg-transparent'></View>
