@@ -7,6 +7,7 @@ export type TabsParamList = {
     Scan: undefined;
     Search: undefined;
     Settings: undefined;
+    PrivacyPolicy: undefined;
 };
 
 export type RootParamList = {

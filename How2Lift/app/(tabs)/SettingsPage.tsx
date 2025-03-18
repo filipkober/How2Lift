@@ -35,7 +35,7 @@ const SettingsPage = () => {
       <Divider />
       <Text className='text-3xl text-text ml-4'><span className='font-bold'>Contact email: </span> support@how2lift.com</Text>
       <Text className='text-3xl text-text ml-4 mt-4'><span className='font-bold'>Version: </span> 1.0.0</Text>
-      <NavigationButton screenName='Muscles' text='Privacy Policy' textStyle='text-4xl text-text ml-4 mt-4' className='ml-4 mt-4' />
+      <NavigationButton screenName='PrivacyPolicy' text='Privacy Policy' textStyle='text-4xl text-text ml-4 mt-4' className='ml-4 mt-4' />
       <NavigationButton screenName='Muscles' text='Remove All My Data' textStyle='text-4xl text-text ml-4 mt-4 color-red-600' className='ml-4 mt-4' />
       </View>
     </View>
