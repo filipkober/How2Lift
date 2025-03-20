@@ -228,3 +228,54 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover, butto
     margin-top: 10px;
     width: 100%;
 }
+
+/* List item management (for steps and common mistakes) */
+.list-item {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.list-item input {
+    flex-grow: 1;
+    margin-right: 8px;
+}
+
+.add-item, .remove-item {
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.add-item {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.remove-item {
+    background: #dc3545;
+    padding: 5px 10px;
+    min-width: 30px;
+}
+
+.add-item:hover {
+    background: #0056b3;
+}
+
+.remove-item:hover {
+    background: #bd2130;
+}
+
+.suggestion-steps-list, .suggestion-mistakes-list {
+    margin: 0 0 15px 20px;
+    padding-left: 15px;
+}
+
+.suggestion-steps-list li, .suggestion-mistakes-list li {
+    margin-bottom: 5px;
+}

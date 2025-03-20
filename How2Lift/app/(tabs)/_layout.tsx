@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
@@ -9,10 +10,14 @@ import MusclesPage from './MusclesPage';
 import ScanPage from './ScanPage';
 import SearchPage from './SearchPage';
 import SettingsPage from './SettingsPage';
+import PrivacyPolicyPage from './PrivacyPolicyPage';
+import ResetDataPage from './ResetDataPage';
+import ExercisePage from './ExercisePage';
 
 
 SplashScreen.preventAutoHideAsync();
 const Tabs = createBottomTabNavigator(); //<TabsParamList>
+const Stack = createNativeStackNavigator();
 
 //stylizuj to olo, jeśli chcesz lepsze tło do navbara
 const screenOptions = {
@@ -24,7 +29,6 @@ const screenOptions = {
     right: 0,
     left: 0,
     borderTopWidth: 0,
-    shadowOpacity: 0,
     elevation: 0,
     height: 60,
     backgroundColor: "#000",
@@ -36,7 +40,7 @@ interface ScreenDimensions {
   height: number;
 }
 
-export default function TabsLayout()
+function TabsNavigator()
 {
   //const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
   //const rW = (screenWidth * 25) / 100;
@@ -156,5 +160,16 @@ export default function TabsLayout()
 
         </Tabs.Navigator>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Tabs" component={TabsNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyPage} options={{headerShown: false}}/>
+      <Stack.Screen name="ResetData" component={ResetDataPage} options={{headerShown: false}}/>
+      <Stack.Screen name="Exercise" component={ExercisePage} options={{headerShown: false}} initialParams={{ exerciseId: 0 }}/>
+    </Stack.Navigator>
   );
 }

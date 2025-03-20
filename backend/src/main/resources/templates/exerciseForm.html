@@ -18,11 +18,33 @@
         <table class="form-table">
             <tr><td>Exercise name:</td><td><input type="text" name="name" /></td></tr>
             <tr><td>Exercise description:</td><td><input type="text" name="description" /></td></tr>
-            <tr><td>Steps:</td><td><textarea name="steps"></textarea></td></tr>
-            <tr><td>Common Mistakes:</td><td><textarea name="commonMistakes"></textarea></td></tr>
+            <tr>
+                <td>Steps:</td>
+                <td>
+                    <div id="steps-container">
+                        <div class="list-item">
+                            <input type="text" name="steps[]" placeholder="Enter a step" />
+                            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-item" onclick="addItem('steps-container', 'steps[]')">+ Add Step</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Common Mistakes:</td>
+                <td>
+                    <div id="mistakes-container">
+                        <div class="list-item">
+                            <input type="text" name="commonMistakes[]" placeholder="Enter a common mistake" />
+                            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-item" onclick="addItem('mistakes-container', 'commonMistakes[]')">+ Add Mistake</button>
+                </td>
+            </tr>
             <tr><td>Video url:</td><td><input type="text" name="videoUrl" id="videoInput" /></td></tr>
             <tr><td>Video preview:</td><td><video id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="400" height="200" controls /></td></tr>
-            <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles">
+            <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles[]">
                 <option th:each="muscle : ${muscles}"
                         th:value="${muscle.id}"
                         th:text="${muscle.name}"></option>
@@ -34,6 +56,8 @@
             </select></td></tr>
             <tr><td>Super secret password </td><td><input type="password" name="password" /></td></tr>
             <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+<!--            <input type="hidden" name="steps" id="stepsInput" />-->
+<!--            <input type="hidden" name="commonMistakes" id="mistakesInput" />-->
         </table>
     </form>
 </div>
@@ -55,6 +79,49 @@
 </div>
 
 <script>
+    // Functions to handle dynamic list items
+
+    // function updateHiddenInputs() {
+    //     const stepsContainer = document.getElementById('steps-container');
+    //     const stepsInput = document.getElementById('stepsInput');
+    //     stepsInput.value = Array.from(stepsContainer.children)
+    //         .map(item => item.querySelector('input').value)
+    //         .filter(value => value !== '')
+    //         .join('♢');
+    //
+    //     const mistakesContainer = document.getElementById('mistakes-container');
+    //     const mistakesInput = document.getElementById('mistakesInput');
+    //     mistakesInput.value = Array.from(mistakesContainer.children)
+    //         .map(item => item.querySelector('input').value)
+    //         .filter(value => value !== '')
+    //         .join('♢');
+    // }
+
+    function addItem(containerId, inputName) {
+        const container = document.getElementById(containerId);
+        const newItem = document.createElement('div');
+        newItem.className = 'list-item';
+        newItem.innerHTML = `
+            <input type="text" name="${inputName}" placeholder="${inputName.includes('steps') ? 'Enter a step' : 'Enter a common mistake'}" />
+            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+        `;
+        container.appendChild(newItem);
+        
+        // updateHiddenInputs();
+    }
+
+    function removeItem(button) {
+        const itemDiv = button.parentElement;
+        const container = itemDiv.parentElement;
+        if (container.children.length > 1) {
+            container.removeChild(itemDiv);
+        } else {
+            itemDiv.querySelector('input').value = '';
+        }
+
+        // updateHiddenInputs();
+    }
+
     const i = document.querySelector("#videoInput");
     const p = document.querySelector("#preview");
     const suggestionsList = document.querySelector("#exercise-suggestions");
@@ -76,11 +143,29 @@
         const descriptionP = document.createElement('p');
         descriptionP.innerText = exerciseSuggestion.description;
 
+        // Create steps section with list
         const stepsP = document.createElement('p');
-        stepsP.innerText = "Steps: " + exerciseSuggestion.steps;
+        stepsP.innerText = "Steps:";
+        
+        const stepsList = document.createElement('ul');
+        stepsList.classList.add('suggestion-steps-list');
+        exerciseSuggestion.steps.forEach(step => {
+            const stepLi = document.createElement('li');
+            stepLi.innerText = step;
+            stepsList.appendChild(stepLi);
+        });
 
+        // Create common mistakes section with list
         const mistakesP = document.createElement('p');
-        mistakesP.innerText = "Common Mistakes: " + exerciseSuggestion.commonMistakes;
+        mistakesP.innerText = "Common Mistakes:";
+        
+        const mistakesList = document.createElement('ul');
+        mistakesList.classList.add('suggestion-mistakes-list');
+        exerciseSuggestion.commonMistakes.forEach(mistake => {
+            const mistakeLi = document.createElement('li');
+            mistakeLi.innerText = mistake;
+            mistakesList.appendChild(mistakeLi);
+        });
 
         const musclesText = document.createElement('p');
         musclesText.classList.add('exercise-suggestion-muscles');
@@ -99,12 +184,39 @@
         addButton.addEventListener('click', () => {
             document.querySelector('input[name="name"]').value = exerciseSuggestion.name;
             document.querySelector('input[name="description"]').value = exerciseSuggestion.description;
-            document.querySelector('textarea[name="steps"]').value = exerciseSuggestion.steps;
-            document.querySelector('textarea[name="commonMistakes"]').value = exerciseSuggestion.commonMistakes;
+            
+            // Clear existing steps and add new ones
+            const stepsContainer = document.getElementById('steps-container');
+            stepsContainer.innerHTML = '';
+            exerciseSuggestion.steps.forEach((step, index) => {
+                const stepItem = document.createElement('div');
+                stepItem.className = 'list-item';
+                stepItem.innerHTML = `
+                    <input type="text" name="steps[]" value="${step}" />
+                    <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                `;
+                stepsContainer.appendChild(stepItem);
+            });
+            
+            // Clear existing mistakes and add new ones
+            const mistakesContainer = document.getElementById('mistakes-container');
+            mistakesContainer.innerHTML = '';
+            exerciseSuggestion.commonMistakes.forEach((mistake, index) => {
+                const mistakeItem = document.createElement('div');
+                mistakeItem.className = 'list-item';
+                mistakeItem.innerHTML = `
+                    <input type="text" name="commonMistakes[]" value="${mistake}" />
+                    <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                `;
+                mistakesContainer.appendChild(mistakeItem);
+            });
+            
             document.querySelector('select[name="machine"]').value = exerciseSuggestion.machine.id;
 
+            // updateHiddenInputs();
+
             // Select trained muscles
-            const muscleSelect = document.querySelector('select[name="selectedMuscles"]');
+            const muscleSelect = document.querySelector('select[name="selectedMuscles[]"]');
             Array.from(muscleSelect.options).forEach(option => {
                 option.selected = exerciseSuggestion.trainedMuscles.some(muscle => muscle.name === option.text);
             });
@@ -118,7 +230,9 @@
         li.appendChild(nameP);
         li.appendChild(descriptionP);
         li.appendChild(stepsP);
+        li.appendChild(stepsList);
         li.appendChild(mistakesP);
+        li.appendChild(mistakesList);
         li.appendChild(musclesText);
         li.appendChild(musclesList);
         li.appendChild(addButton);

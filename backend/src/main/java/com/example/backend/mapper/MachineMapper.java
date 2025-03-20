@@ -25,7 +25,7 @@ public class MachineMapper {
         machine.setName(suggestion.name());
         machine.setDescription(suggestion.description());
         var trainedMuscles = new HashSet<>(muscleService.getMusclesByNames(suggestion.trainedMuscleNames()));
-        machine.setTrainedMuscles(trainedMuscles);
+        machine.setTrainedMuscles(trainedMuscles.stream().toList());
         return machine;
     }
 

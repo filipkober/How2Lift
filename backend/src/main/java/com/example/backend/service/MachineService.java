@@ -42,7 +42,7 @@ public class MachineService {
         machine.setName(name);
         machine.setDescription(description);
         machine.setImageUrl(imageUrl);
-        machine.setTrainedMuscles(trainedMuscles);
+        machine.setTrainedMuscles(trainedMuscles.stream().toList());
         machine.setExercises(exercises);
 
         repo.save(machine);
