@@ -1,14 +1,24 @@
 import Checkbox from '@/components/default/Checkbox'
 import Divider from '@/components/default/Divider'
 import NavigationButton from '@/components/default/NavigationButton'
-import { useState } from 'react'
+import { dataService } from '@/services/dataService'
+import { defaultSettings, SettingsType } from '@/types/settings'
+import { useEffect, useState } from 'react'
 import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native'
 
 const SettingsPage = () => {
 
-  const [enableVibrations, setEnableVibrations] = useState(false)
-  const [useLbs, setUseLbs] = useState(false)
-  const [superSecretSettings, setSuperSecretSettings] = useState(false)
+  const [settings, setSettings] = useState(defaultSettings)
+
+  useEffect(() => {
+    dataService.getSettings().then(setSettings);
+  }, []);
+
+  
+  const handleSaveSettings = (newSettings: Partial<SettingsType>) => {
+    dataService.updateSettings(newSettings);
+    setSettings({ ...settings, ...newSettings });
+  };
 
   return (
     <SafeAreaView
@@ -20,15 +30,21 @@ const SettingsPage = () => {
         <Text className='text-4xl text-text ml-4 mb-2'>General</Text>
         <Divider />
         <View className='flex flex-row items-center ml-4'>
-          <Checkbox checked={enableVibrations} setChecked={setEnableVibrations} />
+          <Checkbox checked={settings.vibrations} setChecked={(checked: boolean) => {
+            handleSaveSettings({ vibrations: checked });
+          }} />
           <Text className='text-text text-4xl m-4'>Enable Vibrations</Text>
         </View>
         <View className='flex flex-row items-center ml-4'>
-          <Checkbox checked={useLbs} setChecked={setUseLbs} />
+          <Checkbox checked={settings.useLbs} setChecked={(checked: boolean) => {
+            handleSaveSettings({ useLbs: checked });
+          }} />
           <Text className='text-text text-4xl m-4'>Use Lbs</Text>
         </View>
         <View className='flex flex-row items-center ml-4'>
-          <Checkbox checked={superSecretSettings} setChecked={setSuperSecretSettings} />
+          <Checkbox checked={settings.superSecretSettings} setChecked={(checked: boolean) => {
+            handleSaveSettings({ superSecretSettings: checked });
+          }} />
           <Text className='text-text text-4xl m-4'>Super secret settings</Text>
         </View>
         <Text className='text-4xl text-text ml-4 my-2'>Information</Text>
@@ -36,7 +52,7 @@ const SettingsPage = () => {
       <Text className='text-3xl text-text ml-4'><span className='font-bold'>Contact email: </span> support@how2lift.com</Text>
       <Text className='text-3xl text-text ml-4 mt-4'><span className='font-bold'>Version: </span> 1.0.0</Text>
       <NavigationButton screenName='PrivacyPolicy' text='Privacy Policy' textStyle='text-4xl text-text ml-4 mt-4' className='ml-4 mt-4' />
-      <NavigationButton screenName='Muscles' text='Remove All My Data' textStyle='text-4xl text-text ml-4 mt-4 color-red-600' className='ml-4 mt-4' />
+      <NavigationButton screenName='ResetData' text='Remove All My Data' textStyle='text-4xl text-text ml-4 mt-4 color-red-600' className='ml-4 mt-4' />
       </View>
     </View>
   </SafeAreaView>

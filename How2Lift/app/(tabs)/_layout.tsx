@@ -11,6 +11,7 @@ import ScanPage from './ScanPage';
 import SearchPage from './SearchPage';
 import SettingsPage from './SettingsPage';
 import PrivacyPolicyPage from './PrivacyPolicyPage';
+import ResetDataPage from './ResetDataPage';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -27,7 +28,6 @@ const screenOptions = {
     right: 0,
     left: 0,
     borderTopWidth: 0,
-    shadowOpacity: 0,
     elevation: 0,
     height: 60,
     backgroundColor: "#000",
@@ -167,6 +167,7 @@ export default function App() {
     <Stack.Navigator>
       <Stack.Screen name="Tabs" component={TabsNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyPage} options={{headerShown: false}}/>
+      <Stack.Screen name="ResetData" component={ResetDataPage} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 }
