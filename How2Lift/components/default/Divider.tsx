@@ -1,8 +1,11 @@
 import React from 'react'
 import { View } from 'react-native'
 
-export default function Divider() {
+interface Props {
+  className?: string;
+}
+export default function Divider({ className }: Props) {
   return (
-    <View className='h-1 w-full bg-text' />
+    <View className={`h-1 w-full bg-text ${className}`} />
   )
 }

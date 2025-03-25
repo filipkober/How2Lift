@@ -1,8 +1,10 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -25,7 +27,8 @@ public class Machine {
     @JoinTable(
             name = "machine_muscle",
             joinColumns = @JoinColumn(name = "machine_id"),
-            inverseJoinColumns = @JoinColumn(name = "muscle_id")
+            inverseJoinColumns = @JoinColumn(name = "muscle_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"machine_id", "muscle_id"})
     )
-    private Set<Muscle> trainedMuscles;
+    private List<Muscle> trainedMuscles;
 }

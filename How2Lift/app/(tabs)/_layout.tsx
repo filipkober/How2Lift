@@ -12,6 +12,7 @@ import SearchPage from './SearchPage';
 import SettingsPage from './SettingsPage';
 import PrivacyPolicyPage from './PrivacyPolicyPage';
 import ResetDataPage from './ResetDataPage';
+import ExercisePage from './ExercisePage';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -168,6 +169,7 @@ export default function App() {
       <Stack.Screen name="Tabs" component={TabsNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyPage} options={{headerShown: false}}/>
       <Stack.Screen name="ResetData" component={ResetDataPage} options={{headerShown: false}}/>
+      <Stack.Screen name="Exercise" component={ExercisePage} options={{headerShown: false}} initialParams={{ exerciseId: 0 }}/>
     </Stack.Navigator>
   );
 }

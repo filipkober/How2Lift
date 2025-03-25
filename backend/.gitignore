@@ -35,3 +35,4 @@ build/
 
 ### ENV ###
 .env.example
+!**/src/main/resources/application.properties

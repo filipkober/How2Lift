@@ -1,18 +1,23 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootParamList } from "@/app/navigation/navigationTypes";
 
 type SearchBarProps = {
   exerciseName? : string;
   info? : string;
   image? : string| null;
+  exerciseId : number;
 };
 
-const ExerciseListItem = ({ exerciseName, info, image=null }: SearchBarProps) => {
+const ExerciseListItem = ({ exerciseName, info, image=null, exerciseId }: SearchBarProps) => {
 
   const placeholderImage = {uri: '../../assets/images/example2.jpg'};
+  const navigation = useNavigation<NativeStackNavigationProp<RootParamList>>();
 
   const OpenExercisePage = () => {
-      console.log("opened exercise page")
+      navigation.navigate("Exercise", {exerciseId: exerciseId});
   }
 
   return (

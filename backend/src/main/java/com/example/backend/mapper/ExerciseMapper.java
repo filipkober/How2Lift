@@ -30,7 +30,7 @@ public class ExerciseMapper {
         exercise.setName(suggestion.name());
         exercise.setDescription(suggestion.description());
         exercise.setMachine(machineService.getMachineByName(suggestion.machineName()));
-        exercise.setTrainedMuscles(new HashSet<>(muscleService.getMusclesByNames(suggestion.trainedMuscleNames())));
+        exercise.setTrainedMuscles(muscleService.getMusclesByNames(suggestion.trainedMuscleNames()));
         exercise.setSteps(suggestion.exerciseSteps());
         exercise.setCommonMistakes(suggestion.commonMistakes());
         return exercise;

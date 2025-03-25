@@ -1,8 +1,9 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,8 +18,16 @@ public class Exercise {
     private String name;
     private String description;
     private String videoUrl;
-    private String steps;
-    private String commonMistakes;
+
+    @ElementCollection
+    @CollectionTable(name = "exercise_steps", joinColumns = @JoinColumn(name = "exercise_id"))
+    @Column(name = "step")
+    private List<String> steps;
+
+    @ElementCollection
+    @CollectionTable(name = "exercise_common_mistakes", joinColumns = @JoinColumn(name = "exercise_id"))
+    @Column(name = "mistake")
+    private List<String> commonMistakes;
 
     @ManyToOne
     @JoinColumn(name = "machine_id")
@@ -28,7 +37,8 @@ public class Exercise {
     @JoinTable(
             name = "exercise_muscle",
             joinColumns = @JoinColumn(name = "exercise_id"),
-            inverseJoinColumns = @JoinColumn(name = "muscle_id")
+            inverseJoinColumns = @JoinColumn(name = "muscle_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"exercise_id", "muscle_id"})
     )
-    private Set<Muscle> trainedMuscles;
+    private List<Muscle> trainedMuscles;
 }

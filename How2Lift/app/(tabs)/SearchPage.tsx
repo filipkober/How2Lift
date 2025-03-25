@@ -146,7 +146,7 @@ const SearchPage = () => {
               ) : (
                 filteredExercises.map(e => (
                   <View className='py-1 w-full h-auto' key={e.id}>
-                    <ExerciseListItem exerciseName={e.name} image={e.imageUrl} info={e.muscleNames.join(", ")}/>
+                    <ExerciseListItem exerciseName={e.name} image={e.imageUrl} info={e.muscleNames.join(", ")} exerciseId={e.id} />
                   </View>
                 ))
               )

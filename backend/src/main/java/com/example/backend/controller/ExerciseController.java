@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.mapper.ExerciseMapper;
+import com.example.backend.model.Exercise;
 import com.example.backend.record.ExerciseSearchResult;
 import com.example.backend.record.MachineSearchResult;
 import com.example.backend.service.ExerciseService;
@@ -11,11 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -53,12 +52,17 @@ public class ExerciseController {
     }
 
     @PostMapping("/forms/exercises")
-    public String handleExerciseUpload(String name, String description, String videoUrl, String steps, String commonMistakes, @RequestParam("selectedMuscles") List<Long> selectedMuscles, Long machine, String password) {
+    public String handleExerciseUpload(String name, String description, String videoUrl, @RequestParam("steps") List<String> steps, @RequestParam("commonMistakes") List<String> commonMistakes, @RequestParam("selectedMuscles") List<Long> selectedMuscles, Long machine, String password) {
 
         if (!password.equals(uploadPassword))
             return "redirect:/forms/exercises";
 
+        System.out.println(selectedMuscles);
+
         var trainedMuscles = new HashSet<>(muscleService.getMusclesByIds(selectedMuscles));
+
+        System.out.println(trainedMuscles);
+
         var usedInMachine = machineService.getMachineById(machine);
 
         exerciseService.createExercise(name, description, steps, commonMistakes, videoUrl, trainedMuscles, usedInMachine);
@@ -69,5 +73,11 @@ public class ExerciseController {
     @ResponseBody
     public ResponseEntity<List<ExerciseSearchResult>> getExercises() {
         return ResponseEntity.ok(exerciseService.getAllExercises().stream().map(exerciseMapper::toExerciseSearchResult).toList());
+    }
+
+    @GetMapping("/exercises/{id}")
+    @ResponseBody
+    public ResponseEntity<Exercise> getExercise(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(exerciseService.getExerciseById(id));
     }
 }

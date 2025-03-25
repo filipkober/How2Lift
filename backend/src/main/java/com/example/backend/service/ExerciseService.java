@@ -33,11 +33,11 @@ public class ExerciseService {
         return repo.findByNameIn(exerciseNames);
     }
 
-    public Exercise createExercise(String name, String description, String steps, String commonMistakes, String videoUrl, Set<Muscle> trainedMuscles, Machine machine) {
+    public Exercise createExercise(String name, String description, List<String> steps, List<String> commonMistakes, String videoUrl, Set<Muscle> trainedMuscles, Machine machine) {
         Exercise exercise = new Exercise();
         exercise.setName(name);
         exercise.setDescription(description);
-        exercise.setTrainedMuscles(trainedMuscles);
+        exercise.setTrainedMuscles(trainedMuscles.stream().toList());
         exercise.setMachine(machine);
         exercise.setSteps(steps);
         exercise.setCommonMistakes(commonMistakes);
@@ -61,5 +61,9 @@ public class ExerciseService {
         exerciseSet.addAll(repo.findByDescriptionContaining(query));
 
         return List.copyOf(exerciseSet);
+    }
+
+    public Exercise getExerciseById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 }

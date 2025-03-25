@@ -1,6 +1,6 @@
 import { MachineSearchResult } from "@/types/machine";
 import { requestService } from "./requestService";
-import { ExerciseSearchResult } from "@/types/exercise";
+import { Exercise, ExerciseSearchResult } from "@/types/exercise";
 import { videoToImage } from "@/util/videoToImage";
 
 type GetAllType = Omit<MachineSearchResult, 'imageUrl'> & { videoUrl: string };
@@ -16,7 +16,6 @@ export class ExerciseService {
             },
             body: null
         });
-        console.log(response)
         // Convert all exercise data with Promise.all to properly handle async operations
         const responseAdapted: ExerciseSearchResult[] = await Promise.all(
             response.map(async (element) => {
@@ -24,7 +23,6 @@ export class ExerciseService {
                 if(element.videoUrl) {
                     const imageFile = await videoToImage(element.videoUrl);
                     imageUrl = URL.createObjectURL(imageFile);
-                    console.log(imageFile);
                 }
                 return {
                     id: element.id,
@@ -36,5 +34,20 @@ export class ExerciseService {
         );
         
         return responseAdapted;
+    }
+    public async getExerciseById(id: number): Promise<Exercise | null> {
+        const response: Exercise = await requestService.handleRequest({
+            url: `/exercises/${id}`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: null
+        });
+        if (response) {
+            return response as Exercise;
+        }
+        return null;
     }
 }
