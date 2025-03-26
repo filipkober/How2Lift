@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Exercise;
-import com.example.backend.model.Machine;
-import com.example.backend.model.Muscle;
+import com.example.backend.record.ExerciseDTO;
+import com.example.backend.record.MachineDTO;
+import com.example.backend.record.MuscleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +22,15 @@ public class SearchService {
         this.machineService = machineService;
     }
 
-    public List<Muscle> searchMuscles(String query) {
+    public List<MuscleDTO> searchMuscles(String query) {
         return muscleService.searchMuscles(query);
     }
 
-    public List<Exercise> searchExercises(String query) {
+    public List<ExerciseDTO> searchExercises(String query) {
         return exerciseService.searchExercises(query);
     }
 
-    public List<Machine> searchMachines(String query) {
+    public List<MachineDTO> searchMachines(String query) {
         return machineService.searchMachines(query);
     }
 }

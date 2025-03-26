@@ -1,4 +1,4 @@
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 
 <head>
     <title>Machine Form</title>
@@ -19,7 +19,7 @@
             <tr><td>Machine name:</td><td><input type="text" name="name" /></td></tr>
             <tr><td>Machine description:</td><td><input type="text" name="description" /></td></tr>
             <tr><td>Image url:</td><td><input type="text" name="imageUrl" id="imageinput" /></td></tr>
-            <tr><td>Image preview:</td><td><img id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="200" height="200" /></td></tr>
+            <tr><td>Image preview:</td><td><img id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="200" height="200"  alt="image preview"/></td></tr>
             <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles">
                 <option th:each="muscle : ${muscles}"
                         th:value="${muscle.id}"
@@ -76,9 +76,9 @@
         musclesText.innerText = "Trained muscles: ";
         const musclesList = document.createElement('ul');
         musclesList.classList.add('machine-muscles-list');
-        machineSuggestion.trainedMuscles.forEach(muscle => {
+        machineSuggestion.trainedMuscleIds.forEach(muscleId => {
             const muscleLi = document.createElement('li');
-            muscleLi.innerText = muscle.name;
+            muscleLi.innerText = document.querySelector("option[value='" + muscleId + "']").innerText;
             musclesList.appendChild(muscleLi);
         });
         li.appendChild(nameP);
@@ -100,7 +100,7 @@
 
             const musclesSelectOptions = musclesSelect.querySelectorAll('option');
             musclesSelectOptions.forEach(option => {
-                if (machineSuggestion.trainedMuscles.some(muscle => String(muscle.id) === String(option.value))) {
+                if (machineSuggestion.trainedMuscleIds.includes(parseInt(option.value))) {
                     option.selected = true;
                 }
             });
@@ -135,17 +135,9 @@
             }
         }).then(response => response.json())
             .then(data => {
-                const suggestions = data.map(s => ({
-                    name: s.name,
-                    description: s.description,
-                    trainedMuscles: s.trainedMuscles.map(m => ({
-                        name: m.name,
-                        id: m.id
-                    }))
-                }))
-                machineSuggestions = suggestions;
-                localStorage.setItem('machineSuggestions', JSON.stringify(suggestions));
-                suggestions.forEach(createSuggestion);
+                machineSuggestions = data;
+                localStorage.setItem('machineSuggestions', JSON.stringify(data));
+                data.forEach(createSuggestion);
             });
     });
 

@@ -1,11 +1,9 @@
 package com.example.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,9 +17,9 @@ public class Muscle {
 
     @ManyToMany(mappedBy = "trainedMuscles")
     @JsonIgnore
-    private List<Machine> machines;
+    private Set<Machine> machines;
 
     @ManyToMany(mappedBy = "trainedMuscles")
     @JsonIgnore
-    private List<Exercise> exercises;
+    private Set<Exercise> exercises;
 }

@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Exercise;
-import com.example.backend.model.Machine;
+import com.example.backend.record.ExerciseDTO;
 import com.example.backend.record.ExerciseSuggestion;
+import com.example.backend.record.MachineDTO;
 import com.example.backend.record.MachineSuggestion;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.ListOutputConverter;
@@ -39,7 +39,7 @@ public class OpenAIService implements AIService {
     }
 
     @Override
-    public List<Machine> identifyMachines(Resource imageResource) {
+    public List<MachineDTO> identifyMachines(Resource imageResource) {
         var allMachineNames = machineService.getAllMachineNames();
         List<String> identifiedMachineNames = chatClient.prompt()
                 .user(u -> u.text("Identify the exercise machines or equipment in the provided image, according to the following possibilities: {machines}")
@@ -48,7 +48,7 @@ public class OpenAIService implements AIService {
                 .call()
                 .entity(new ListOutputConverter(new DefaultConversionService()));
 
-        return machineService.getMachinesByNames(identifiedMachineNames);
+        return machineService.getMachinesDTOByNames(identifiedMachineNames);
     }
 
     public List<String> suggestNewMuscleNames(){
@@ -60,7 +60,7 @@ public class OpenAIService implements AIService {
                 .entity(new ListOutputConverter(new DefaultConversionService()));
     }
 
-    public List<Machine> suggestNewMachines() {
+    public List<MachineDTO> suggestNewMachines() {
         var currentMachineNames = machineService.getAllMachineNames();
         var allMuscleNames = muscleService.getAllMuscleNames();
         List<MachineSuggestion> suggestions = chatClient.prompt()
@@ -74,7 +74,7 @@ public class OpenAIService implements AIService {
         return machineService.getMachinesFromSuggestions(suggestions);
     }
 
-    public List<Exercise> suggestNewExercises() {
+    public List<ExerciseDTO> suggestNewExercises() {
         var currentExerciseNames = exerciseService.getAllExerciseNames();
         var allMuscleNames = muscleService.getAllMuscleNames();
         var allMachineNames = machineService.getAllMachineNames();

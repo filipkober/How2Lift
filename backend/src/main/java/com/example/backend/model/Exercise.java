@@ -1,6 +1,5 @@
 package com.example.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
@@ -18,6 +17,7 @@ public class Exercise {
     private String name;
     private String description;
     private String videoUrl;
+    private RepType repType;
 
     @ElementCollection
     @CollectionTable(name = "exercise_steps", joinColumns = @JoinColumn(name = "exercise_id"))
@@ -37,8 +37,7 @@ public class Exercise {
     @JoinTable(
             name = "exercise_muscle",
             joinColumns = @JoinColumn(name = "exercise_id"),
-            inverseJoinColumns = @JoinColumn(name = "muscle_id"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"exercise_id", "muscle_id"})
+            inverseJoinColumns = @JoinColumn(name = "muscle_id")
     )
-    private List<Muscle> trainedMuscles;
+    private Set<Muscle> trainedMuscles;
 }

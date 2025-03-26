@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Exercise;
-import com.example.backend.model.Machine;
+import com.example.backend.record.ExerciseDTO;
+import com.example.backend.record.MachineDTO;
 import com.example.backend.service.OpenAIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -23,7 +23,7 @@ public class AIController {
     }
 
     @PostMapping("/machines")
-    public ResponseEntity<List<Machine>> identifyMachines(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<MachineDTO>> identifyMachines(@RequestParam("file") MultipartFile file) {
 
         Resource resource = file.getResource();
 
@@ -36,12 +36,12 @@ public class AIController {
     }
 
     @PostMapping("/suggest/machines")
-    public ResponseEntity<List<Machine>> suggestMachines() {
+    public ResponseEntity<List<MachineDTO>> suggestMachines() {
         return ResponseEntity.ok(openAIService.suggestNewMachines());
     }
 
     @PostMapping("/suggest/exercises")
-    public ResponseEntity<List<Exercise>> suggestExercises() {
+    public ResponseEntity<List<ExerciseDTO>> suggestExercises() {
         return ResponseEntity.ok(openAIService.suggestNewExercises());
     }
 }
