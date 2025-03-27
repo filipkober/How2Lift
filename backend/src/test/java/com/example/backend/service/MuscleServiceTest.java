@@ -10,7 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,11 +73,13 @@ public class MuscleServiceTest {
     void getMusclesByNames_ReturnsMusclesWithMatchingNames() {
         // Arrange
         List<String> muscleNames = Arrays.asList("Biceps", "Triceps");
-        List<Muscle> muscles = Arrays.asList(biceps, triceps);
+        Set<Muscle> muscles = new HashSet<>();
+        muscles.add(biceps);
+        muscles.add(triceps);
         when(muscleRepo.findByNameIn(muscleNames)).thenReturn(muscles);
 
         // Act
-        List<Muscle> result = muscleService.getMusclesByNames(muscleNames);
+        List<Muscle> result = muscleService.getMusclesByNames(muscleNames).stream().toList();
 
         // Assert
         assertEquals(2, result.size());

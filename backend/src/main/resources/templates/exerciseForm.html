@@ -1,4 +1,4 @@
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 
 <head>
     <title>Exercise Form</title>
@@ -43,7 +43,7 @@
                 </td>
             </tr>
             <tr><td>Video url:</td><td><input type="text" name="videoUrl" id="videoInput" /></td></tr>
-            <tr><td>Video preview:</td><td><video id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="400" height="200" controls /></td></tr>
+            <tr><td>Video preview:</td><td><video id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="400" height="200" controls></video></td></tr>
             <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles[]">
                 <option th:each="muscle : ${muscles}"
                         th:value="${muscle.id}"
@@ -53,6 +53,11 @@
                 <option th:each="machine : ${machines}"
                         th:value="${machine.getId()}"
                         th:text="${machine.getName()}"></option>
+            </select></td></tr>
+            <tr><td>Rep type:</td><td><select name="repType">
+                <option value="WEIGHT">Weight</option>
+                <option value="TIME">Time</option>
+                <option value="BODYWEIGHT">Body weight</option>
             </select></td></tr>
             <tr><td>Super secret password </td><td><input type="password" name="password" /></td></tr>
             <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
@@ -79,24 +84,6 @@
 </div>
 
 <script>
-    // Functions to handle dynamic list items
-
-    // function updateHiddenInputs() {
-    //     const stepsContainer = document.getElementById('steps-container');
-    //     const stepsInput = document.getElementById('stepsInput');
-    //     stepsInput.value = Array.from(stepsContainer.children)
-    //         .map(item => item.querySelector('input').value)
-    //         .filter(value => value !== '')
-    //         .join('♢');
-    //
-    //     const mistakesContainer = document.getElementById('mistakes-container');
-    //     const mistakesInput = document.getElementById('mistakesInput');
-    //     mistakesInput.value = Array.from(mistakesContainer.children)
-    //         .map(item => item.querySelector('input').value)
-    //         .filter(value => value !== '')
-    //         .join('♢');
-    // }
-
     function addItem(containerId, inputName) {
         const container = document.getElementById(containerId);
         const newItem = document.createElement('div');
@@ -118,8 +105,6 @@
         } else {
             itemDiv.querySelector('input').value = '';
         }
-
-        // updateHiddenInputs();
     }
 
     const i = document.querySelector("#videoInput");
@@ -173,22 +158,26 @@
 
         const musclesList = document.createElement('ul');
         musclesList.classList.add('exercise-muscles-list');
-        exerciseSuggestion.trainedMuscles.forEach(muscle => {
+        exerciseSuggestion.trainedMuscleIds.forEach(muscleId => {
             const muscleLi = document.createElement('li');
-            muscleLi.innerText = muscle.name;
+            muscleLi.innerText = document.querySelector('option[value="' + muscleId + '"]').innerText;
             musclesList.appendChild(muscleLi);
         });
+
+        const repTypeP = document.createElement('p');
+        repTypeP.innerText = `Rep type: ${exerciseSuggestion.repType}`;
 
         const addButton = document.createElement('button');
         addButton.innerText = 'Add to form';
         addButton.addEventListener('click', () => {
             document.querySelector('input[name="name"]').value = exerciseSuggestion.name;
             document.querySelector('input[name="description"]').value = exerciseSuggestion.description;
+            document.querySelector('select[name="repType"]').value = exerciseSuggestion.repType;
             
             // Clear existing steps and add new ones
             const stepsContainer = document.getElementById('steps-container');
             stepsContainer.innerHTML = '';
-            exerciseSuggestion.steps.forEach((step, index) => {
+            exerciseSuggestion.steps.forEach((step) => {
                 const stepItem = document.createElement('div');
                 stepItem.className = 'list-item';
                 stepItem.innerHTML = `
@@ -201,7 +190,7 @@
             // Clear existing mistakes and add new ones
             const mistakesContainer = document.getElementById('mistakes-container');
             mistakesContainer.innerHTML = '';
-            exerciseSuggestion.commonMistakes.forEach((mistake, index) => {
+            exerciseSuggestion.commonMistakes.forEach((mistake) => {
                 const mistakeItem = document.createElement('div');
                 mistakeItem.className = 'list-item';
                 mistakeItem.innerHTML = `
@@ -211,14 +200,12 @@
                 mistakesContainer.appendChild(mistakeItem);
             });
             
-            document.querySelector('select[name="machine"]').value = exerciseSuggestion.machine.id;
-
-            // updateHiddenInputs();
+            document.querySelector('select[name="machine"]').value = exerciseSuggestion.machineId
 
             // Select trained muscles
             const muscleSelect = document.querySelector('select[name="selectedMuscles[]"]');
             Array.from(muscleSelect.options).forEach(option => {
-                option.selected = exerciseSuggestion.trainedMuscles.some(muscle => muscle.name === option.text);
+                option.selected = exerciseSuggestion.trainedMuscleIds.includes(parseInt(option.value));
             });
 
             const newLocalStorage = exerciseSuggestions.filter(suggestion => suggestion.name !== exerciseSuggestion.name);
@@ -235,6 +222,7 @@
         li.appendChild(mistakesList);
         li.appendChild(musclesText);
         li.appendChild(musclesList);
+        li.appendChild(repTypeP);
         li.appendChild(addButton);
         suggestionsList.appendChild(li);
     };

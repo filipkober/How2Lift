@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
+import com.example.backend.mapper.MuscleMapper;
 import com.example.backend.model.Muscle;
-import com.example.backend.record.SearchResults;
 import com.example.backend.service.SearchService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,11 +26,11 @@ public class SearchControllerTest {
 
     @InjectMocks
     private SearchController searchController;
+    @InjectMocks
+    private MuscleMapper muscleMapper;
 
     private MockMvc mockMvc;
 
-    private SearchResults searchResults;
-    private SearchResults emptySearchResults;
     private List<Muscle> muscles;
 
     @BeforeEach
@@ -46,16 +46,13 @@ public class SearchControllerTest {
         triceps.setName("Triceps");
 
         muscles = List.of(biceps, triceps);
-
-        searchResults = new SearchResults(muscles, List.of(), List.of());
-        emptySearchResults = new SearchResults(List.of(), List.of(), List.of());
     }
 
     @Test
     void search_ReturnsSearchResults() throws Exception {
         // Arrange
 
-        when(searchService.searchMuscles("biceps")).thenReturn(muscles);
+        when(searchService.searchMuscles("biceps")).thenReturn(muscles.stream().map(muscleMapper::toMuscleDTO).toList());
         when(searchService.searchExercises("biceps")).thenReturn(List.of());
         when(searchService.searchMachines("biceps")).thenReturn(List.of());
 

@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Muscle;
+import com.example.backend.record.MuscleDTO;
 import com.example.backend.service.MuscleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,8 +41,8 @@ public class MuscleController {
 
     @GetMapping("/muscles")
     @ResponseBody
-    public ResponseEntity<Iterable<Muscle>> getMuscles() {
-        return ResponseEntity.ok(muscleService.getAllMuscles());
+    public ResponseEntity<Iterable<MuscleDTO>> getMuscles() {
+        return ResponseEntity.ok(muscleService.getAllMusclesDTO());
     }
 
 }

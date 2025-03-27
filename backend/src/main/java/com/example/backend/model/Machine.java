@@ -1,13 +1,15 @@
 package com.example.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Table(name = "machine")
 @Entity
 public class Machine {
@@ -21,14 +23,16 @@ public class Machine {
     private String imageUrl;
 
     @OneToMany(mappedBy = "machine")
+    @JsonIgnore
     private Set<Exercise> exercises;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "machine_muscle",
             joinColumns = @JoinColumn(name = "machine_id"),
-            inverseJoinColumns = @JoinColumn(name = "muscle_id"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"machine_id", "muscle_id"})
+            inverseJoinColumns = @JoinColumn(name = "muscle_id")
     )
-    private List<Muscle> trainedMuscles;
+    private Set<Muscle> trainedMuscles;
+
 }

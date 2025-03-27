@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.example.backend.record.ExerciseDTO;
+import com.example.backend.record.MachineDTO;
 import com.example.backend.mapper.MachineMapper;
 import com.example.backend.model.Exercise;
 import com.example.backend.model.Machine;
@@ -9,9 +11,7 @@ import com.example.backend.repo.MachineRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class MachineService {
@@ -29,20 +29,32 @@ public class MachineService {
         return repo.findAll();
     }
 
+//    public List<MachineDTO> getAllMachinesDTO() {
+//        return repo.findAll().stream().map(mapper::toMachineDTO).toList();
+//    }
+
     public Machine getMachineById(Long id) {
         return repo.findById(id).orElse(null);
     }
 
+//    public MachineDTO getMachineDTOById(Long id) {
+//        return mapper.toMachineDTO(Objects.requireNonNull(repo.findById(id).orElse(null)));
+//    }
+
     public Machine getMachineByName(String name) {
         return repo.findByName(name);
     }
+
+//    public MachineDTO getMachineDTOByName(String name) {
+//        return mapper.toMachineDTO(repo.findByName(name));
+//    }
 
     public void createMachine(String name, String description, String imageUrl, Set<Muscle> trainedMuscles, Set<Exercise> exercises) {
         Machine machine = new Machine();
         machine.setName(name);
         machine.setDescription(description);
         machine.setImageUrl(imageUrl);
-        machine.setTrainedMuscles(trainedMuscles.stream().toList());
+        machine.setTrainedMuscles(trainedMuscles);
         machine.setExercises(exercises);
 
         repo.save(machine);
@@ -56,16 +68,33 @@ public class MachineService {
         return repo.findDistinctByNameIn(names);
     }
 
-    public List<Machine> getMachinesFromSuggestions(List<MachineSuggestion> suggestions) {
-        return suggestions.stream().map(mapper::toMachine).toList();
+    public List<MachineDTO> getMachinesDTOByNames(List<String> names) {
+        return repo.findDistinctByNameIn(names).stream().map(mapper::toMachineDTO).toList();
     }
 
-    public List<Machine> searchMachines(String query) {
+    public List<MachineDTO> getMachinesFromSuggestions(List<MachineSuggestion> suggestions) {
+        return suggestions.stream().map(
+                suggestion -> {
+                    Machine machine = mapper.toMachine(suggestion);
+                    return mapper.toMachineDTO(machine);
+                }
+        ).toList();
+    }
+
+    public List<MachineDTO> searchMachines(String query) {
 
         Set<Machine> machineSet = new HashSet<>();
         machineSet.addAll(repo.findByNameContaining(query));
         machineSet.addAll(repo.findByDescriptionContaining(query));
 
-        return List.copyOf(machineSet);
+        return List.copyOf(machineSet).stream().map(mapper::toMachineDTO).toList();
+    }
+
+    public Set<Exercise> getMachineExercises(Long id) {
+        return Objects.requireNonNull(repo.findById(id).orElse(null)).getExercises();
+    }
+
+    public Set<Muscle> getMachineMuscles(Long id) {
+        return Objects.requireNonNull(repo.findById(id).orElse(null)).getTrainedMuscles();
     }
 }

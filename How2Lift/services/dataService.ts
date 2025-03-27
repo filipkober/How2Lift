@@ -1,3 +1,4 @@
+import { Cachable } from '@/types/cache';
 import { defaultSettings, SettingsType } from '@/types/settings';
 // import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,6 +18,25 @@ class DataService {
     public resetSettings(): void {
         AsyncStorage.removeItem('settings');
         AsyncStorage.setItem('settings', JSON.stringify(defaultSettings));
+    }
+
+    public saveCache<T>(data: Cachable<T>): void {
+        AsyncStorage.setItem("__cache_"+data.id, JSON.stringify(data));
+    }
+    
+    public async getCache<T>(id: string): Promise<Cachable<T> | null> {
+        const data = await AsyncStorage.getItem("__cache_"+id);
+        return data ? JSON.parse(data) : null;
+    }
+
+    public clearCache(): void {
+        AsyncStorage.getAllKeys().then(keys => {
+            keys.forEach(key => {
+                if(key.startsWith("__cache_")) {
+                    AsyncStorage.removeItem(key);
+                }
+            });
+        });
     }
 }
 

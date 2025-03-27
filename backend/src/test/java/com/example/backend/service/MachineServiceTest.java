@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.record.MachineDTO;
 import com.example.backend.mapper.MachineMapper;
 import com.example.backend.model.Exercise;
 import com.example.backend.model.Machine;
@@ -164,11 +165,11 @@ public class MachineServiceTest {
         when(machineMapper.toMachine(suggestion)).thenReturn(cableMachine);
 
         // Act
-        List<Machine> result = machineService.getMachinesFromSuggestions(suggestions);
+        List<MachineDTO> result = machineService.getMachinesFromSuggestions(suggestions);
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals("Cable Machine", result.get(0).getName());
+        assertEquals("Cable Machine", result.getFirst().name());
         verify(machineMapper, times(1)).toMachine(suggestion);
     }
 }

@@ -171,13 +171,13 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover, butto
 }
 
 /* Suggestions List */
-.exercise-suggestions {
+.exercise-suggestions, .machine-suggestions {
     list-style: none;
     padding: 0;
     margin-top: 15px;
 }
 
-.exercise-suggestion {
+.exercise-suggestion, .machine-suggestion {
     background: #e9ecef;
     padding: 10px;
     margin: 5px 0;
@@ -197,12 +197,12 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover, butto
     font-style: italic;
 }
 
-.exercise-suggestion ul {
+.exercise-suggestion ul, .machine-suggestion ul {
     margin-bottom: 1rem;
 }
 
 /* Add Button for Suggestions */
-.exercise-suggestion button {
+.exercise-suggestion button, .machine-suggestion button {
     background: #007BFF;
     color: white;
     border: none;
@@ -212,7 +212,7 @@ button#get-muscle-suggestions:hover, button#get-machine-suggestions:hover, butto
     transition: background 0.3s ease;
 }
 
-.exercise-suggestion button:hover {
+.exercise-suggestion button:hover, .machine-suggestion button:hover {
     background: #0056b3;
 }
 

@@ -1,9 +1,11 @@
 package com.example.backend.controller;
 
+import com.example.backend.mapper.MuscleMapper;
+import com.example.backend.record.ExerciseDTO;
 import com.example.backend.mapper.ExerciseMapper;
-import com.example.backend.model.Exercise;
+import com.example.backend.model.RepType;
 import com.example.backend.record.ExerciseSearchResult;
-import com.example.backend.record.MachineSearchResult;
+import com.example.backend.record.MuscleDTO;
 import com.example.backend.service.ExerciseService;
 import com.example.backend.service.MachineService;
 import com.example.backend.service.MuscleService;
@@ -14,13 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 @Controller
 public class ExerciseController {
 
+    private final MuscleMapper muscleMapper;
     @Value("${upload.password}")
     private String uploadPassword;
 
@@ -30,11 +32,12 @@ public class ExerciseController {
     private final ExerciseMapper exerciseMapper;
 
     @Autowired
-    public ExerciseController(ExerciseService exerciseService, MuscleService muscleService, MachineService machineService, ExerciseMapper exerciseMapper) {
+    public ExerciseController(ExerciseService exerciseService, MuscleService muscleService, MachineService machineService, ExerciseMapper exerciseMapper, MuscleMapper muscleMapper) {
         this.exerciseService = exerciseService;
         this.muscleService = muscleService;
         this.machineService = machineService;
         this.exerciseMapper = exerciseMapper;
+        this.muscleMapper = muscleMapper;
     }
 
     @GetMapping("/forms/exercises")
@@ -52,20 +55,16 @@ public class ExerciseController {
     }
 
     @PostMapping("/forms/exercises")
-    public String handleExerciseUpload(String name, String description, String videoUrl, @RequestParam("steps") List<String> steps, @RequestParam("commonMistakes") List<String> commonMistakes, @RequestParam("selectedMuscles") List<Long> selectedMuscles, Long machine, String password) {
+    public String handleExerciseUpload(String name, String description, String videoUrl, @RequestParam("steps") List<String> steps, @RequestParam("commonMistakes") List<String> commonMistakes, @RequestParam("selectedMuscles") List<Long> selectedMuscles, Long machine, String password, String repType) {
 
         if (!password.equals(uploadPassword))
             return "redirect:/forms/exercises";
 
-        System.out.println(selectedMuscles);
-
         var trainedMuscles = new HashSet<>(muscleService.getMusclesByIds(selectedMuscles));
-
-        System.out.println(trainedMuscles);
 
         var usedInMachine = machineService.getMachineById(machine);
 
-        exerciseService.createExercise(name, description, steps, commonMistakes, videoUrl, trainedMuscles, usedInMachine);
+        exerciseService.createExercise(name, description, steps, commonMistakes, videoUrl, trainedMuscles, usedInMachine, RepType.valueOf(repType));
         return "redirect:/forms/exercises";
     }
 
@@ -77,7 +76,13 @@ public class ExerciseController {
 
     @GetMapping("/exercises/{id}")
     @ResponseBody
-    public ResponseEntity<Exercise> getExercise(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(exerciseService.getExerciseById(id));
+    public ResponseEntity<ExerciseDTO> getExercise(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(exerciseService.getExerciseDTOById(id));
+    }
+
+    @GetMapping("/exercises/{id}/muscles")
+    @ResponseBody
+    public ResponseEntity<List<MuscleDTO>> getMusclesForExercise(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(exerciseService.getMusclesForExercise(id).stream().map(muscleMapper::toMuscleDTO).toList());
     }
 }
