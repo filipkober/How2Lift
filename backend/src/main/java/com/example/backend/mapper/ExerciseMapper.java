@@ -44,6 +44,7 @@ public class ExerciseMapper {
 
         HashSet<Long> muscleIds = new HashSet<>();
         var muscles = exercise.getTrainedMuscles();
+        System.out.println(muscles);
         if (muscles != null) {
             for (Muscle muscle : muscles) {
                 muscleIds.add(muscle.getId());

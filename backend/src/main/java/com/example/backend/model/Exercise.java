@@ -1,13 +1,18 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.Set;
 
-@Data
 @Table(name = "exercise")
 @Entity
+@Getter
+@Setter
 public class Exercise {
 
     @Id
@@ -31,8 +36,10 @@ public class Exercise {
 
     @ManyToOne
     @JoinColumn(name = "machine_id")
+    @JsonIgnore
     private Machine machine;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "exercise_muscle",

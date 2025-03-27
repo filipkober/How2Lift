@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.mapper.MuscleMapper;
 import com.example.backend.record.ExerciseDTO;
 import com.example.backend.mapper.ExerciseMapper;
 import com.example.backend.model.Exercise;
@@ -7,6 +8,7 @@ import com.example.backend.model.Machine;
 import com.example.backend.model.Muscle;
 import com.example.backend.model.RepType;
 import com.example.backend.record.ExerciseSuggestion;
+import com.example.backend.record.MuscleDTO;
 import com.example.backend.repo.ExerciseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,13 @@ public class ExerciseService {
 
     private final ExerciseRepo repo;
     private final ExerciseMapper mapper;
+    private final MuscleMapper muscleMapper;
 
     @Autowired
-    public ExerciseService(ExerciseRepo repo, ExerciseMapper mapper) {
+    public ExerciseService(ExerciseRepo repo, ExerciseMapper mapper, MuscleMapper muscleMapper) {
         this.repo = repo;
         this.mapper = mapper;
+        this.muscleMapper = muscleMapper;
     }
 
     public List<Exercise> getAllExercises() {
@@ -85,5 +89,9 @@ public class ExerciseService {
 
     public ExerciseDTO getExerciseDTOById(Long id) {
         return mapper.toExerciseDTO(Objects.requireNonNull(repo.findById(id).orElse(null)));
+    }
+
+    public Set<Muscle> getMusclesForExercise(Long id) {
+        return Objects.requireNonNull(repo.findById(id).orElse(null)).getTrainedMuscles();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.record.ExerciseDTO;
 import com.example.backend.record.MachineDTO;
 import com.example.backend.mapper.MachineMapper;
 import com.example.backend.model.Exercise;
@@ -10,9 +11,7 @@ import com.example.backend.repo.MachineRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class MachineService {
@@ -89,5 +88,13 @@ public class MachineService {
         machineSet.addAll(repo.findByDescriptionContaining(query));
 
         return List.copyOf(machineSet).stream().map(mapper::toMachineDTO).toList();
+    }
+
+    public Set<Exercise> getMachineExercises(Long id) {
+        return Objects.requireNonNull(repo.findById(id).orElse(null)).getExercises();
+    }
+
+    public Set<Muscle> getMachineMuscles(Long id) {
+        return Objects.requireNonNull(repo.findById(id).orElse(null)).getTrainedMuscles();
     }
 }

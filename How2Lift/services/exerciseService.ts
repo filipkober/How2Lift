@@ -2,6 +2,7 @@ import { MachineSearchResult } from "@/types/machine";
 import { requestService } from "./requestService";
 import { Exercise, ExerciseSearchResult } from "@/types/exercise";
 import { videoToImage } from "@/util/videoToImage";
+import { Muscle } from "@/types/muscle";
 
 type GetAllType = Omit<MachineSearchResult, 'imageUrl'> & { videoUrl: string };
 
@@ -50,4 +51,21 @@ export class ExerciseService {
         }
         return null;
     }
+
+    public async getMusclesByExerciseId(id: number): Promise<Muscle[]> {
+        const response: Muscle[] = await requestService.handleRequest({
+            url: `/exercises/${id}/muscles`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: null
+        });
+        return response;
+    }
 }
+
+const globalExerciseService = global as unknown as { exerciseService: ExerciseService };
+
+export const exerciseService = globalExerciseService.exerciseService || new ExerciseService();

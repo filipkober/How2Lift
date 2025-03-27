@@ -1,9 +1,11 @@
 package com.example.backend.controller;
 
+import com.example.backend.mapper.MuscleMapper;
 import com.example.backend.record.ExerciseDTO;
 import com.example.backend.mapper.ExerciseMapper;
 import com.example.backend.model.RepType;
 import com.example.backend.record.ExerciseSearchResult;
+import com.example.backend.record.MuscleDTO;
 import com.example.backend.service.ExerciseService;
 import com.example.backend.service.MachineService;
 import com.example.backend.service.MuscleService;
@@ -20,6 +22,7 @@ import java.util.List;
 @Controller
 public class ExerciseController {
 
+    private final MuscleMapper muscleMapper;
     @Value("${upload.password}")
     private String uploadPassword;
 
@@ -29,11 +32,12 @@ public class ExerciseController {
     private final ExerciseMapper exerciseMapper;
 
     @Autowired
-    public ExerciseController(ExerciseService exerciseService, MuscleService muscleService, MachineService machineService, ExerciseMapper exerciseMapper) {
+    public ExerciseController(ExerciseService exerciseService, MuscleService muscleService, MachineService machineService, ExerciseMapper exerciseMapper, MuscleMapper muscleMapper) {
         this.exerciseService = exerciseService;
         this.muscleService = muscleService;
         this.machineService = machineService;
         this.exerciseMapper = exerciseMapper;
+        this.muscleMapper = muscleMapper;
     }
 
     @GetMapping("/forms/exercises")
@@ -74,5 +78,11 @@ public class ExerciseController {
     @ResponseBody
     public ResponseEntity<ExerciseDTO> getExercise(@PathVariable("id") Long id) {
         return ResponseEntity.ok(exerciseService.getExerciseDTOById(id));
+    }
+
+    @GetMapping("/exercises/{id}/muscles")
+    @ResponseBody
+    public ResponseEntity<List<MuscleDTO>> getMusclesForExercise(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(exerciseService.getMusclesForExercise(id).stream().map(muscleMapper::toMuscleDTO).toList());
     }
 }
