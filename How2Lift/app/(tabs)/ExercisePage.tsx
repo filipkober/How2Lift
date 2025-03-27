@@ -1,6 +1,9 @@
 import Divider from "@/components/default/Divider";
+import ExerciseLog from "@/components/default/ExerciseLog";
+import ExerciseLogModal from "@/components/default/ExerciseLogModal";
+import { dataService } from "@/services/dataService";
 import { ExerciseService } from "@/services/exerciseService";
-import { Exercise } from "@/types/exercise";
+import { Exercise, ExerciseLogData, ExerciseLogItem, RepType } from "@/types/exercise";
 import { videoToImage } from "@/util/videoToImage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
@@ -14,6 +17,8 @@ const ExercisePage = ({ navigation, route }: any) => {
   const { exerciseId } = route.params;
 
   const [exercise, setExercise] = useState<Exercise | null>(null);
+  const [exerciseLog, setExerciseLog] = useState<ExerciseLogItem[]>([]);
+  const [useLbs, setUseLbs] = useState(false);
   const exerciseService = new ExerciseService();
 
   useEffect(() => {
@@ -24,10 +29,40 @@ const ExercisePage = ({ navigation, route }: any) => {
         return;
       }
       setExercise(fetchedExercise);
+
+      const fetchedLog = await fetchedExercise.getLog();
+      setExerciseLog(fetchedLog);
     };
 
     fetchExercise();
   }, [exerciseId]);
+
+      useEffect(() => {
+          dataService.getSettings().then(settings => {
+              setUseLbs(settings.useLbs);
+          });
+      }, []);
+
+  const handleLogItemUpdate = async (updatedItem: ExerciseLogItem) => {
+    if(!exercise) return;
+    await exercise.updateLogItem(updatedItem);
+    const updatedLog = await exercise.getLog();
+    setExerciseLog(updatedLog);
+  };
+
+  const handleLogItemRemove = async (itemId: string) => {
+    if(!exercise) return;
+    await exercise.removeLogItem(itemId);
+    const updatedLog = await exercise.getLog();
+    setExerciseLog(updatedLog);
+  };
+
+  const handleLogItemAdd = async (newItem: ExerciseLogData) => {
+    if(!exercise) return;
+    await exercise.addLogItem(newItem);
+    const updatedLog = await exercise.getLog();
+    setExerciseLog(updatedLog);
+  };
 
   return (
     <SafeAreaView
@@ -71,9 +106,11 @@ const ExercisePage = ({ navigation, route }: any) => {
           <Divider className="mt-2" />
           <View className="flex flex-col w-full p-4">
             <Text className="text-3xl font-bold mb-2 text-left">My log:</Text>
-            {/* TODO: add log */}
+            <ExerciseLog log={exerciseLog} useLbs={useLbs} />
           </View>
-          {/* TODO: add register new log modal */}
+          <ExerciseLogModal handleLogItemAdd={handleLogItemAdd} useLbs={useLbs} 
+          repType={exercise?.repType || RepType.WEIGHT} 
+          />
       </ScrollView>
     </SafeAreaView>
   );

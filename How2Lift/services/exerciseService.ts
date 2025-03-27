@@ -47,7 +47,7 @@ export class ExerciseService {
             body: null
         });
         if (response) {
-            return response as Exercise;
+            return new Exercise(response);
         }
         return null;
     }
@@ -62,7 +62,7 @@ export class ExerciseService {
             },
             body: null
         });
-        return response;
+        return response.map(muscle => new Muscle(muscle));
     }
 }
 

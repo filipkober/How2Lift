@@ -20,7 +20,8 @@ module.exports = {
         secondary_dark: '#227181',
         accent_dark: '#11E0EE',
         background_dark: '#0D2F35',
-        text_dark: '#EAE9FC'
+        text_dark: '#EAE9FC',
+        border: "#adb5bd",
       },
       fontFamily: {
         quicksand: ["Quicksand-Medium", "sans-serif"],
