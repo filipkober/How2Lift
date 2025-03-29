@@ -1,3 +1,5 @@
+import { fetch } from 'expo/fetch';
+
 type RequestServiceRequest = {
     url: string,
     method: string,
@@ -5,7 +7,7 @@ type RequestServiceRequest = {
     body: any
 }
 
-const BACKEND_URL = "http://localhost:8080";
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:8080'
 
 class RequestService {
     

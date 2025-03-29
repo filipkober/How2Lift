@@ -4,12 +4,11 @@ import ExerciseLogModal from "@/components/default/ExerciseLogModal";
 import { dataService } from "@/services/dataService";
 import { ExerciseService } from "@/services/exerciseService";
 import { Exercise, ExerciseLogData, ExerciseLogItem, RepType } from "@/types/exercise";
-import { videoToImage } from "@/util/videoToImage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Platform, SafeAreaView, StatusBar, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import Video from "react-native-video";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -65,6 +64,7 @@ const ExercisePage = ({ navigation, route }: any) => {
   };
 
   return (
+    <GestureHandlerRootView>
     <SafeAreaView
       className="flex h-full flex-col bg-black w-full"
       style={{
@@ -77,7 +77,7 @@ const ExercisePage = ({ navigation, route }: any) => {
         ><MaterialCommunityIcons name="arrow-left" size={38} className="mr-2" />{exercise?.name || "Loading..."}</Text>
         <Divider className="my-2" />
         <View className="flex flex-col w-full h-[35vh]">
-            {exercise && <Video
+            {exercise?.videoUrl && <Video
             source={{ uri: exercise?.videoUrl || "" }}
             style={{
               width: '100%',
@@ -113,6 +113,7 @@ const ExercisePage = ({ navigation, route }: any) => {
           />
       </ScrollView>
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
