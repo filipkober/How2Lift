@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Platform, SafeAreaView, StatusBar, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Video from "react-native-video";
-import VideoPlayer from 'react-native-video-player';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const ExercisePage = ({ navigation, route }: any) => {
   const { exerciseId } = route.params;

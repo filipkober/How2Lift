@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Modal, View, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import "@/styles/ExerciseLogModal.css";
 
 interface ModalDataProps {
@@ -169,18 +169,18 @@ export default function ExerciseLogModal({ handleLogItemAdd, useLbs, repType }: 
               </View>
             </View>
             <ModalContent />
-
-            {showDateTimePicker && (
-              <DateTimePicker
-                value={selectedDate}
+              <DateTimePickerModal
+                className="absolute z-10"
                 mode="date"
-                display="default"
-                onChange={(event, date) => {
-                  setSelectedDate(date || selectedDate);
+                display="calendar"
+                onCancel={() => setShowDateTimePicker(false)}
+                onConfirm={(date) => {
+                  setSelectedDate(date);
                   setShowDateTimePicker(false);
                 }}
+                isVisible={showDateTimePicker}
+                date={selectedDate}
               />
-            )}
             </View>
             <View className="flex flex-row mt-auto w-full border-t-2 border-border">
               <View className="flex-1">
