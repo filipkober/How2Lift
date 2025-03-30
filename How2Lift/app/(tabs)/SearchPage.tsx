@@ -82,7 +82,6 @@ const SearchPage = () => {
   }, [])
 
   const switchList = (listType: ListType) => {
-    console.log(listType)
     setSelectedList(listType)
     if(listType == ListType.EXERCISES)
       setFilteredExercises(exercises.sort((a, b) => a.name.localeCompare(b.name)))

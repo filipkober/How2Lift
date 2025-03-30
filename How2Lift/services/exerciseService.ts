@@ -20,8 +20,11 @@ export class ExerciseService {
         const responseAdapted: ExerciseSearchResult[] = await Promise.all(
             response.map(async (element) => {
                 let imageUrl = null;
-                if(element.videoUrl) {
-                    imageUrl = element.videoUrl+'/thumbnail'
+                if (element.videoUrl?.indexOf('http://localhost') !== -1) {
+                    element.videoUrl = element.videoUrl ? element.videoUrl?.replace(/http:\/\/localhost:[0-9]+/, process.env.EXPO_PUBLIC_BACKEND_URL || "") : "";
+                }
+                if (element.videoUrl) {
+                    imageUrl = element.videoUrl + '/thumbnail';
                 }
                 return {
                     id: element.id,

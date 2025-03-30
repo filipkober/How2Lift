@@ -3,7 +3,7 @@ import { exerciseService, ExerciseService } from "@/services/exerciseService"
 import { Machine } from "./machine"
 import { Muscle } from "./muscle"
 import { dataService } from '@/services/dataService';
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'react-native-uuid';
 
 export enum RepType {
     BODYWEIGHT = "BODYWEIGHT",
@@ -83,12 +83,17 @@ export class Exercise {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.videoUrl = videoUrl;
         this.steps = steps;
         this.commonMistakes = commonMistakes;
         this.machineId = machineId;
         this.trainedMuscleIds = trainedMuscleIds;
         this.repType = repType;
+
+        if(videoUrl?.indexOf('http://localhost') !== -1) {
+            this.videoUrl = videoUrl ? videoUrl?.replace(/http:\/\/localhost:[0-9]+/, process.env.EXPO_PUBLIC_BACKEND_URL || "") : null;
+        } else {
+            this.videoUrl = videoUrl;
+        }
     }
 
     getMachine = async (): Promise<Machine | null> => {
@@ -103,11 +108,11 @@ export class Exercise {
         return dataService.getExerciseLogByExerciseId(this.id);
     }
 
-    addLogItem = async (data: ExerciseLogData): Promise<void> => {
+    public async addLogItem(data: ExerciseLogData, date?: Date): Promise<void> {
         return dataService.addExerciseLogItem({
-            id: uuidv4(),
+            id: uuid.v4(),
             exerciseId: this.id,
-            date: new Date(),
+            date: date || new Date(),
             ...data
         });
     }
