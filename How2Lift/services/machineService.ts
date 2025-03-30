@@ -1,7 +1,7 @@
 import { Machine, MachineSearchResult } from "@/types/machine";
 import { requestService } from "./requestService";
-import { Exercise } from "@/types/exercise";
-import { Muscle } from "@/types/muscle";
+import { Exercise, ExerciseProps } from "@/types/exercise";
+import { Muscle, MuscleProps } from "@/types/muscle";
 
 export class MachineService {
     public async getAllMachines(): Promise<MachineSearchResult[]> {
@@ -30,7 +30,7 @@ export class MachineService {
         });
 
         if (response) {
-            return response as Machine;
+            return new Machine(response);
         }
         return null;
     }
@@ -46,7 +46,7 @@ export class MachineService {
             body: null
         });
 
-        return response as Exercise[];
+        return response.map((e: ExerciseProps) => new Exercise(e)) as Exercise[];
     }
 
     public async getMusclesByMachineId(id: number): Promise<Muscle[]> {
@@ -60,7 +60,7 @@ export class MachineService {
             body: null
         });
 
-        return response as Muscle[];
+        return response.map((m: MuscleProps) => new Muscle(m)) as Muscle[];
     }
 }
 

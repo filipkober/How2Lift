@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.exception.NotVideoException;
 import com.example.backend.service.StorageService;
+import com.example.backend.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -11,16 +12,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Objects;
 
 @Controller
 @RequestMapping("/videos")
 public class VideoController {
     private final StorageService storageService;
+    private final ThumbnailService thumbnailService;
 
     @Autowired
-    public VideoController(StorageService storageService) {
+    public VideoController(StorageService storageService, ThumbnailService thumbnailService) {
         this.storageService = storageService;
+        this.thumbnailService = thumbnailService;
     }
 
     @RequestMapping("/{filename:.+}")
@@ -47,5 +51,30 @@ public class VideoController {
                 .header("Content-Length", String.valueOf(length))
                 .header("Content-Range", "bytes 0-" + (length - 1) + "/" + length)
                 .body(file);
+    }
+
+    @RequestMapping("/{filename:.+}/thumbnail")
+    public ResponseEntity<byte[]> serveThumbnail(@PathVariable String filename) throws IOException {
+        var file = storageService.loadAsResource(filename);
+        if(file == null)
+            return ResponseEntity.notFound().build();
+
+        var videoPath = storageService.load(filename);
+        var thumbnailBase64 = thumbnailService.convertToBase64(videoPath.toAbsolutePath().toString());
+        if(thumbnailBase64 == null)
+            return ResponseEntity.notFound().build();
+
+        // Remove the data URI prefix if present
+        if (thumbnailBase64.startsWith("data:image/jpeg;base64,")) {
+            thumbnailBase64 = thumbnailBase64.substring("data:image/jpeg;base64,".length());
+        }
+
+        // Decode base64 to binary
+        byte[] imageBytes = Base64.getDecoder().decode(thumbnailBase64);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "image/jpeg")
+                .header("Content-Length", String.valueOf(imageBytes.length))
+                .body(imageBytes);
     }
 }

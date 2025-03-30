@@ -1,7 +1,6 @@
 import { MachineSearchResult } from "@/types/machine";
 import { requestService } from "./requestService";
 import { Exercise, ExerciseSearchResult } from "@/types/exercise";
-import { videoToImage } from "@/util/videoToImage";
 import { Muscle } from "@/types/muscle";
 
 type GetAllType = Omit<MachineSearchResult, 'imageUrl'> & { videoUrl: string };
@@ -22,8 +21,7 @@ export class ExerciseService {
             response.map(async (element) => {
                 let imageUrl = null;
                 if(element.videoUrl) {
-                    const imageFile = await videoToImage(element.videoUrl);
-                    imageUrl = URL.createObjectURL(imageFile);
+                    imageUrl = element.videoUrl+'/thumbnail'
                 }
                 return {
                     id: element.id,
@@ -47,7 +45,7 @@ export class ExerciseService {
             body: null
         });
         if (response) {
-            return response as Exercise;
+            return new Exercise(response);
         }
         return null;
     }
@@ -62,7 +60,7 @@ export class ExerciseService {
             },
             body: null
         });
-        return response;
+        return response.map(muscle => new Muscle(muscle));
     }
 }
 

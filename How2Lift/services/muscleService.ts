@@ -6,9 +6,9 @@ import { Cachable } from "@/types/cache";
 
 export class MuscleService {
     public async getAllMuscles(): Promise<Muscle[]> {
-        const cachedMuscles: Muscle[] | undefined = await cacheService.get('muscles');
+        const cachedMuscles: MuscleProps[] | undefined = await cacheService.get('muscles');
         if (cachedMuscles) {
-            return cachedMuscles;
+            return cachedMuscles.map((element: MuscleProps) => new Muscle(element));
         }
 
 

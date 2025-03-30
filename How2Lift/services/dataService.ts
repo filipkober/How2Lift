@@ -1,4 +1,5 @@
 import { Cachable } from '@/types/cache';
+import { ExerciseLogItem } from '@/types/exercise';
 import { defaultSettings, SettingsType } from '@/types/settings';
 // import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,6 +38,42 @@ class DataService {
                 }
             });
         });
+    }
+
+    public async getExerciseLog(): Promise<ExerciseLogItem[]> {
+        const data = await AsyncStorage.getItem('exerciseLog');
+        return data ? JSON.parse(data) : [];
+    }
+
+    public async getExerciseLogByExerciseId(exerciseId: number): Promise<ExerciseLogItem[]> {
+        const log = await this.getExerciseLog();
+        return log.filter(item => item.exerciseId === exerciseId);
+    }
+
+    public async saveExerciseLog(log: ExerciseLogItem[]): Promise<void> {
+        await AsyncStorage.setItem('exerciseLog', JSON.stringify(log));
+    }
+
+    public async addExerciseLogItem(item: ExerciseLogItem): Promise<void> {
+        const log = await this.getExerciseLog();
+        log.push(item);
+        await this.saveExerciseLog(log);
+    }
+
+    public async clearExerciseLog(): Promise<void> {
+        await AsyncStorage.setItem('exerciseLog', JSON.stringify([]));
+    }
+
+    public async removeExerciseLogItem(itemId: string): Promise<void> {
+        const log = await this.getExerciseLog();
+        const updatedLog = log.filter(item => item.id !== itemId);
+        await this.saveExerciseLog(updatedLog);
+    }
+
+    public async updateExerciseLogItem(updatedItem: ExerciseLogItem): Promise<void> {
+        const log = await this.getExerciseLog();
+        const updatedLog = log.map(item => item.id === updatedItem.id ? updatedItem : item);
+        await this.saveExerciseLog(updatedLog);
     }
 }
 
