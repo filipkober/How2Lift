@@ -3,6 +3,7 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootParamList } from "@/app/navigation/navigationTypes";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type SearchBarProps = {
   exerciseName? : string;
@@ -57,11 +58,7 @@ const ExerciseListItem = ({ exerciseName, info, image=null, exerciseId }: Search
       onPress={OpenExercisePage}
       className="w-[15vw] h-[20vw] flex justify-center items-center"
     >
-      <Image
-        source={{ uri: "../../assets/images/icons/ar_black.png" }}
-        resizeMode="cover"
-        className="w-full h-full object-contain"
-      />
+      <MaterialCommunityIcons name="arrow-right" size={48} color="black" />
     </TouchableOpacity>
   </View>
   );

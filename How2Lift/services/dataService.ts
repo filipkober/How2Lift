@@ -47,7 +47,12 @@ class DataService {
 
     public async getExerciseLogByExerciseId(exerciseId: number): Promise<ExerciseLogItem[]> {
         const log = await this.getExerciseLog();
-        return log.filter(item => item.exerciseId === exerciseId);
+        return log.filter(item => item.exerciseId === exerciseId).map(item => {
+            return {
+                ...item,
+                date: new Date(item.date),
+            };
+        })
     }
 
     public async saveExerciseLog(log: ExerciseLogItem[]): Promise<void> {
