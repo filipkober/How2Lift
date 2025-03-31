@@ -3,6 +3,7 @@ package com.example.backend.service;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ import java.util.Base64;
 public class ThumbnailService {
 
     private final FFmpeg ffmpeg;
+    @Value("${linux.ffmpeg.path}")
+    private String linuxFFmpegPath;
 
     public ThumbnailService() throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
@@ -27,7 +30,7 @@ public class ThumbnailService {
         if (os.contains("win")) {
             binaryPath = "binaries/windows/ffmpeg.exe";
         } else {
-            binaryPath = "binaries/linux/ffmpeg";
+            binaryPath = linuxFFmpegPath;
         }
 
         // Load FFmpeg from resources
