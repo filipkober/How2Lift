@@ -23,16 +23,13 @@ public class ThumbnailService {
 
     public ThumbnailService(@Value("${linux.ffmpeg.path}") String linuxFFmpegPath) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
-        String binaryPath;
         if (os.contains("win")) {
-            binaryPath = "binaries/windows/ffmpeg.exe";
+            String binaryPath = "binaries/windows/ffmpeg.exe";
+            File ffmpegFile = extractResource(binaryPath);
+            this.ffmpeg = new FFmpeg(ffmpegFile.getAbsolutePath());
         } else {
-            binaryPath = linuxFFmpegPath;
+            this.ffmpeg = new FFmpeg(linuxFFmpegPath);
         }
-
-        // Load FFmpeg from resources
-        File ffmpegFile = extractResource(binaryPath);
-        this.ffmpeg = new FFmpeg(ffmpegFile.getAbsolutePath());
     }
 
     private File extractResource(String resourcePath) throws IOException {
