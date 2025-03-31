@@ -16,6 +16,10 @@ import java.util.List;
 @RequestMapping("/ai")
 public class AIController {
 
+    public static class PasswordRequest {
+        public String password;
+    }
+
     private final OpenAIService openAIService;
 
     @Value("${upload.password}")
@@ -35,27 +39,27 @@ public class AIController {
     }
 
     @PostMapping("/suggest/muscles")
-    public ResponseEntity<List<String>> suggestMuscles(String password) {
+    public ResponseEntity<List<String>> suggestMuscles(@RequestBody PasswordRequest request) {
 
-        if(!password.equals(uploadPassword))
+        if(!request.password.equals(uploadPassword))
             return ResponseEntity.status(403).build();
 
         return ResponseEntity.ok(openAIService.suggestNewMuscleNames());
     }
 
     @PostMapping("/suggest/machines")
-    public ResponseEntity<List<MachineDTO>> suggestMachines(String password) {
+    public ResponseEntity<List<MachineDTO>> suggestMachines(@RequestBody PasswordRequest request) {
 
-        if(!password.equals(uploadPassword))
+        if(!request.password.equals(uploadPassword))
             return ResponseEntity.status(403).build();
 
         return ResponseEntity.ok(openAIService.suggestNewMachines());
     }
 
     @PostMapping("/suggest/exercises")
-    public ResponseEntity<List<ExerciseDTO>> suggestExercises(String password) {
+    public ResponseEntity<List<ExerciseDTO>> suggestExercises(@RequestBody PasswordRequest request) {
 
-        if(!password.equals(uploadPassword))
+        if(!request.password.equals(uploadPassword))
             return ResponseEntity.status(403).build();
 
         return ResponseEntity.ok(openAIService.suggestNewExercises());
