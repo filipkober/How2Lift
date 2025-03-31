@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
@@ -10,14 +9,10 @@ import MusclesPage from './MusclesPage';
 import ScanPage from './ScanPage';
 import SearchPage from './SearchPage';
 import SettingsPage from './SettingsPage';
-import PrivacyPolicyPage from './PrivacyPolicyPage';
-import ResetDataPage from './ResetDataPage';
-import ExercisePage from './ExercisePage';
 
 
 SplashScreen.preventAutoHideAsync();
 const Tabs = createBottomTabNavigator(); //<TabsParamList>
-const Stack = createNativeStackNavigator();
 
 //stylizuj to olo, jeśli chcesz lepsze tło do navbara
 const screenOptions = {
@@ -29,6 +24,7 @@ const screenOptions = {
     right: 0,
     left: 0,
     borderTopWidth: 0,
+    shadowOpacity: 0,
     elevation: 0,
     height: 60,
     backgroundColor: "#000",
@@ -40,7 +36,7 @@ interface ScreenDimensions {
   height: number;
 }
 
-function TabsNavigator()
+export default function TabsLayout()
 {
   //const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
   //const rW = (screenWidth * 25) / 100;
@@ -77,7 +73,7 @@ function TabsNavigator()
             title: 'Exercises',
             tabBarIcon: ({focused})=>(
               <View className='items-center'>
-                <Ionicons className='' size={focused? 42: 40} name={focused ? 'barbell' : 'barbell-outline'} color={focused? 'aqua' :'white'}/>
+                <Ionicons className='mt-4' size={focused? 42: 40} name={focused ? 'barbell' : 'barbell-outline'} color={focused? 'aqua' :'white'}/>
               </View>
             )
           }}/>
@@ -91,9 +87,9 @@ function TabsNavigator()
               <View className='items-center'>
                 {!focused?
                 // eksperyment
-                <Ionicons className='' size={36} name={'body'} color={"white"}/>
+                <Ionicons className='mt-4' size={36} name={'body'} color={"white"}/>
                 :
-                <MaterialCommunityIcons  className='' size={42} name={'weight-lifter'} color={"aqua"}/>
+                <MaterialCommunityIcons  className='mt-4' size={42} name={'weight-lifter'} color={"aqua"}/>
                 }
                 {/* <Text style={{ color: focused ? 'aqua' : 'white' }}>Muscles</Text> */}
               </View>
@@ -109,7 +105,7 @@ function TabsNavigator()
             tabBarIcon: ({focused})=>(
               <View
               style={{ width: screenDimensions.width/9+35, height: screenDimensions.width/9+35 }} /*losowa funkcja liniowa bo czemu by nie */
-              className={`items-center bg-gray-600 rounded-t-full content-center flex p-4 justify-center`}>
+              className={`items-center bg-gray-600 rounded-t-full content-center flex p-4 justify-center mt-4`}>
               {/* ${Platform.OS == "ios" ? 'w-[4.5rem] h-[4.5rem]' : 'w-[5rem] h-[5rem]'} */}
                 <Image
                   source={focused?
@@ -142,7 +138,7 @@ function TabsNavigator()
             title: 'Search',
             tabBarIcon: ({focused})=>(
               <View className='items-center'>
-                <Ionicons className='' size={focused? 40: 38} name={focused ? 'search-sharp' : 'search-sharp'} color={focused? 'aqua' :'white'}/>
+                <Ionicons className='mt-4' size={focused? 40: 38} name={focused ? 'search-sharp' : 'search-sharp'} color={focused? 'aqua' :'white'}/>
               </View>
             )
           }}/>
@@ -153,23 +149,12 @@ function TabsNavigator()
             title: 'Settings',
             tabBarIcon: ({focused})=>(
               <View className='items-center'>
-                <Ionicons className='' size={focused? 40: 38} name={focused ? 'options' : 'options-outline'} color={focused? 'aqua' :'white'}/>
+                <Ionicons className='mt-4' size={focused? 40: 38} name={focused ? 'options' : 'options-outline'} color={focused? 'aqua' :'white'}/>
               </View>
             )
           }}/>
 
         </Tabs.Navigator>
     </>
-  );
-}
-
-export default function App() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Tabs" component={TabsNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyPage} options={{headerShown: false}}/>
-      <Stack.Screen name="ResetData" component={ResetDataPage} options={{headerShown: false}}/>
-      <Stack.Screen name="Exercise" component={ExercisePage} options={{headerShown: false}} initialParams={{ exerciseId: 0 }}/>
-    </Stack.Navigator>
   );
 }
