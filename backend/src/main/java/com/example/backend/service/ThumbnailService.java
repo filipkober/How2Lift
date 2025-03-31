@@ -20,18 +20,13 @@ import java.util.Base64;
 public class ThumbnailService {
 
     private final FFmpeg ffmpeg;
-    @Value("${linux.ffmpeg.path}")
-    private String linuxFFmpegPath;
 
-    public ThumbnailService() throws IOException {
+    public ThumbnailService(@Value("${linux.ffmpeg.path}") String linuxFFmpegPath) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
         String binaryPath;
-
         if (os.contains("win")) {
             binaryPath = "binaries/windows/ffmpeg.exe";
         } else {
-            System.out.println("Linux OS detected");
-            System.out.println(linuxFFmpegPath);
             binaryPath = linuxFFmpegPath;
         }
 
