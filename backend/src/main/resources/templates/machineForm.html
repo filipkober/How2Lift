@@ -128,11 +128,19 @@
     const button = document.querySelector("#get-machine-suggestions");
 
     button.addEventListener('click', () => {
+
+        const password = form.querySelector('input[name="password"]').value;
+
+        const body = {
+            password: password
+        };
+
         fetch('/ai/suggest/machines', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(body)
         }).then(response => response.json())
             .then(data => {
                 machineSuggestions = data;

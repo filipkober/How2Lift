@@ -4,6 +4,7 @@ import com.example.backend.record.ExerciseDTO;
 import com.example.backend.record.MachineDTO;
 import com.example.backend.service.OpenAIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import java.util.List;
 public class AIController {
 
     private final OpenAIService openAIService;
+
+    @Value("${upload.password}")
+    private String uploadPassword;
 
     @Autowired
     public AIController(OpenAIService openAIService) {
@@ -31,17 +35,29 @@ public class AIController {
     }
 
     @PostMapping("/suggest/muscles")
-    public ResponseEntity<List<String>> suggestMuscles() {
+    public ResponseEntity<List<String>> suggestMuscles(@RequestParam("password") String password) {
+
+        if(!password.equals(uploadPassword))
+            return ResponseEntity.status(403).build();
+
         return ResponseEntity.ok(openAIService.suggestNewMuscleNames());
     }
 
     @PostMapping("/suggest/machines")
-    public ResponseEntity<List<MachineDTO>> suggestMachines() {
+    public ResponseEntity<List<MachineDTO>> suggestMachines(@RequestParam("password") String password) {
+
+        if(!password.equals(uploadPassword))
+            return ResponseEntity.status(403).build();
+
         return ResponseEntity.ok(openAIService.suggestNewMachines());
     }
 
     @PostMapping("/suggest/exercises")
-    public ResponseEntity<List<ExerciseDTO>> suggestExercises() {
+    public ResponseEntity<List<ExerciseDTO>> suggestExercises(@RequestParam("password") String password) {
+
+        if(!password.equals(uploadPassword))
+            return ResponseEntity.status(403).build();
+
         return ResponseEntity.ok(openAIService.suggestNewExercises());
     }
 }
