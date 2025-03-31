@@ -5,8 +5,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
+import ExercisePage from './ExercisePage';
 import ExercisesPage from './ExercisesPage';
 import MusclesPage from './MusclesPage';
+import PrivacyPolicyPage from './PrivacyPolicyPage';
+import ResetDataPage from './ResetDataPage';
 import ScanPage from './ScanPage';
 import SearchPage from './SearchPage';
 import SettingsPage from './SettingsPage';
@@ -77,7 +80,7 @@ function TabsNavigator()
             title: 'Exercises',
             tabBarIcon: ({focused})=>(
               <View className='items-center'>
-                <Ionicons className='' size={focused? 42: 40} name={focused ? 'barbell' : 'barbell-outline'} color={focused? 'aqua' :'white'}/>
+                <Ionicons className='mt-4' size={focused? 42: 40} name={focused ? 'barbell' : 'barbell-outline'} color={focused? 'aqua' :'white'}/>
               </View>
             )
           }}/>
@@ -91,9 +94,9 @@ function TabsNavigator()
               <View className='items-center'>
                 {!focused?
                 // eksperyment
-                <Ionicons className='' size={36} name={'body'} color={"white"}/>
+                <Ionicons className='mt-4' size={36} name={'body'} color={"white"}/>
                 :
-                <MaterialCommunityIcons  className='' size={42} name={'weight-lifter'} color={"aqua"}/>
+                <MaterialCommunityIcons  className='mt-4' size={42} name={'weight-lifter'} color={"aqua"}/>
                 }
                 {/* <Text style={{ color: focused ? 'aqua' : 'white' }}>Muscles</Text> */}
               </View>
@@ -109,7 +112,7 @@ function TabsNavigator()
             tabBarIcon: ({focused})=>(
               <View
               style={{ width: screenDimensions.width/9+35, height: screenDimensions.width/9+35 }} /*losowa funkcja liniowa bo czemu by nie */
-              className={`items-center bg-gray-600 rounded-t-full content-center flex p-4 justify-center`}>
+              className={`items-center bg-gray-600 rounded-t-full content-center flex p-4 justify-center mt-4`}>
               {/* ${Platform.OS == "ios" ? 'w-[4.5rem] h-[4.5rem]' : 'w-[5rem] h-[5rem]'} */}
                 <Image
                   source={focused?
@@ -142,7 +145,7 @@ function TabsNavigator()
             title: 'Search',
             tabBarIcon: ({focused})=>(
               <View className='items-center'>
-                <Ionicons className='' size={focused? 40: 38} name={focused ? 'search-sharp' : 'search-sharp'} color={focused? 'aqua' :'white'}/>
+                <Ionicons className='mt-4' size={focused? 40: 38} name={focused ? 'search-sharp' : 'search-sharp'} color={focused? 'aqua' :'white'}/>
               </View>
             )
           }}/>
@@ -153,7 +156,7 @@ function TabsNavigator()
             title: 'Settings',
             tabBarIcon: ({focused})=>(
               <View className='items-center'>
-                <Ionicons className='' size={focused? 40: 38} name={focused ? 'options' : 'options-outline'} color={focused? 'aqua' :'white'}/>
+                <Ionicons className='mt-4' size={focused? 40: 38} name={focused ? 'options' : 'options-outline'} color={focused? 'aqua' :'white'}/>
               </View>
             )
           }}/>
