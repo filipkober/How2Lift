@@ -35,7 +35,7 @@ public class AIController {
     }
 
     @PostMapping("/suggest/muscles")
-    public ResponseEntity<List<String>> suggestMuscles(@RequestParam("password") String password) {
+    public ResponseEntity<List<String>> suggestMuscles(String password) {
 
         if(!password.equals(uploadPassword))
             return ResponseEntity.status(403).build();
@@ -44,7 +44,7 @@ public class AIController {
     }
 
     @PostMapping("/suggest/machines")
-    public ResponseEntity<List<MachineDTO>> suggestMachines(@RequestParam("password") String password) {
+    public ResponseEntity<List<MachineDTO>> suggestMachines(String password) {
 
         if(!password.equals(uploadPassword))
             return ResponseEntity.status(403).build();
@@ -53,7 +53,7 @@ public class AIController {
     }
 
     @PostMapping("/suggest/exercises")
-    public ResponseEntity<List<ExerciseDTO>> suggestExercises(@RequestParam("password") String password) {
+    public ResponseEntity<List<ExerciseDTO>> suggestExercises(String password) {
 
         if(!password.equals(uploadPassword))
             return ResponseEntity.status(403).build();
