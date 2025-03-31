@@ -1,10 +1,11 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type SearchBarProps = {
   machineName? : string;
   info? : string;
-  image? : { uri: string } | null;
+  image? : string | null;
 };
 
 const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
@@ -21,7 +22,7 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
       {/* Left Image - Fixed Width 20vw */}
       <View className="w-[20vw] h-[20vw] p-1 overflow-hidden">
         <Image
-          source={image?.uri ? image : placeholderImage}
+          source={image ? { uri: image } : placeholderImage}
           resizeMode="cover"
           className="w-full h-full rounded-md overflow-hidden"
         />
@@ -52,11 +53,7 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
         onPress={OpenMachinePage}
         className="w-[15vw] h-[20vw] flex justify-center items-center"
       >
-        <Image
-          source={{ uri: "../../assets/images/icons/ar_black.png" }}  //help, expo nie widzi tego na telefonie
-          resizeMode="cover"
-          className="w-full h-full object-contain"
-        />
+        <MaterialCommunityIcons name="arrow-right" size={48} color="black" />
       </TouchableOpacity>
     </View>
   );

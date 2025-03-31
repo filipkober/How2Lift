@@ -1,0 +1,264 @@
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Exercise Form</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+
+<h1>Exercise Form</h1>
+
+<div th:if="${message}" class="message-container">
+    <h2 th:text="${message}"/>
+</div>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data" action="/forms/exercises" class="form">
+        <table class="form-table">
+            <tr><td>Exercise name:</td><td><input type="text" name="name" /></td></tr>
+            <tr><td>Exercise description:</td><td><input type="text" name="description" /></td></tr>
+            <tr>
+                <td>Steps:</td>
+                <td>
+                    <div id="steps-container">
+                        <div class="list-item">
+                            <input type="text" name="steps[]" placeholder="Enter a step" />
+                            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-item" onclick="addItem('steps-container', 'steps[]')">+ Add Step</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Common Mistakes:</td>
+                <td>
+                    <div id="mistakes-container">
+                        <div class="list-item">
+                            <input type="text" name="commonMistakes[]" placeholder="Enter a common mistake" />
+                            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-item" onclick="addItem('mistakes-container', 'commonMistakes[]')">+ Add Mistake</button>
+                </td>
+            </tr>
+            <tr><td>Video url:</td><td><input type="text" name="videoUrl" id="videoInput" /></td></tr>
+            <tr><td>Video preview:</td><td><video id="preview" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" width="400" height="200" controls></video></td></tr>
+            <tr><td>Trained muscles:</td><td><select multiple="multiple" name="selectedMuscles[]">
+                <option th:each="muscle : ${muscles}"
+                        th:value="${muscle.id}"
+                        th:text="${muscle.name}"></option>
+            </select></td></tr>
+            <tr><td>Available in machine:</td><td><select name="machine">
+                <option th:each="machine : ${machines}"
+                        th:value="${machine.getId()}"
+                        th:text="${machine.getName()}"></option>
+            </select></td></tr>
+            <tr><td>Rep type:</td><td><select name="repType">
+                <option value="WEIGHT">Weight</option>
+                <option value="TIME">Time</option>
+                <option value="BODYWEIGHT">Body weight</option>
+            </select></td></tr>
+            <tr><td>Super secret password </td><td><input type="password" name="password" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+<!--            <input type="hidden" name="steps" id="stepsInput" />-->
+<!--            <input type="hidden" name="commonMistakes" id="mistakesInput" />-->
+        </table>
+    </form>
+</div>
+
+<div class="data-list-container">
+    <h2>Existing exercises</h2>
+    <ul class="data-list">
+        <li th:each="exercise : ${exercises}">
+            <a th:text="${exercise.getName()}" th:href="${'/exercises/' + exercise.getId()}" target="_blank" />
+        </li>
+    </ul>
+</div>
+
+<div class="suggestions-container">
+    <h2>Exercise suggestions</h2>
+    <button id="get-exercise-suggestions">Suggest! ✨</button>
+    <ul class="exercise-suggestions" id="exercise-suggestions"></ul>
+    <button id="clear-suggestions">Clear suggestions</button>
+</div>
+
+<script>
+    function addItem(containerId, inputName) {
+        const container = document.getElementById(containerId);
+        const newItem = document.createElement('div');
+        newItem.className = 'list-item';
+        newItem.innerHTML = `
+            <input type="text" name="${inputName}" placeholder="${inputName.includes('steps') ? 'Enter a step' : 'Enter a common mistake'}" />
+            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+        `;
+        container.appendChild(newItem);
+        
+        // updateHiddenInputs();
+    }
+
+    function removeItem(button) {
+        const itemDiv = button.parentElement;
+        const container = itemDiv.parentElement;
+        if (container.children.length > 1) {
+            container.removeChild(itemDiv);
+        } else {
+            itemDiv.querySelector('input').value = '';
+        }
+    }
+
+    const i = document.querySelector("#videoInput");
+    const p = document.querySelector("#preview");
+    const suggestionsList = document.querySelector("#exercise-suggestions");
+
+    let exerciseSuggestions = [];
+
+    i.addEventListener('focusout', () => {
+        p.src = i.value;
+    });
+
+    const createSuggestion = (exerciseSuggestion) => {
+        const li = document.createElement('li');
+        li.classList.add('exercise-suggestion');
+
+        const nameP = document.createElement('p');
+        nameP.classList.add('exercise-suggestion-name');
+        nameP.innerText = exerciseSuggestion.name;
+
+        const descriptionP = document.createElement('p');
+        descriptionP.innerText = exerciseSuggestion.description;
+
+        // Create steps section with list
+        const stepsP = document.createElement('p');
+        stepsP.innerText = "Steps:";
+        
+        const stepsList = document.createElement('ul');
+        stepsList.classList.add('suggestion-steps-list');
+        exerciseSuggestion.steps.forEach(step => {
+            const stepLi = document.createElement('li');
+            stepLi.innerText = step;
+            stepsList.appendChild(stepLi);
+        });
+
+        // Create common mistakes section with list
+        const mistakesP = document.createElement('p');
+        mistakesP.innerText = "Common Mistakes:";
+        
+        const mistakesList = document.createElement('ul');
+        mistakesList.classList.add('suggestion-mistakes-list');
+        exerciseSuggestion.commonMistakes.forEach(mistake => {
+            const mistakeLi = document.createElement('li');
+            mistakeLi.innerText = mistake;
+            mistakesList.appendChild(mistakeLi);
+        });
+
+        const musclesText = document.createElement('p');
+        musclesText.classList.add('exercise-suggestion-muscles');
+        musclesText.innerText = "Trained muscles: ";
+
+        const musclesList = document.createElement('ul');
+        musclesList.classList.add('exercise-muscles-list');
+        exerciseSuggestion.trainedMuscleIds.forEach(muscleId => {
+            const muscleLi = document.createElement('li');
+            muscleLi.innerText = document.querySelector('option[value="' + muscleId + '"]').innerText;
+            musclesList.appendChild(muscleLi);
+        });
+
+        const repTypeP = document.createElement('p');
+        repTypeP.innerText = `Rep type: ${exerciseSuggestion.repType}`;
+
+        const addButton = document.createElement('button');
+        addButton.innerText = 'Add to form';
+        addButton.addEventListener('click', () => {
+            document.querySelector('input[name="name"]').value = exerciseSuggestion.name;
+            document.querySelector('input[name="description"]').value = exerciseSuggestion.description;
+            document.querySelector('select[name="repType"]').value = exerciseSuggestion.repType;
+            
+            // Clear existing steps and add new ones
+            const stepsContainer = document.getElementById('steps-container');
+            stepsContainer.innerHTML = '';
+            exerciseSuggestion.steps.forEach((step) => {
+                const stepItem = document.createElement('div');
+                stepItem.className = 'list-item';
+                stepItem.innerHTML = `
+                    <input type="text" name="steps[]" value="${step}" />
+                    <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                `;
+                stepsContainer.appendChild(stepItem);
+            });
+            
+            // Clear existing mistakes and add new ones
+            const mistakesContainer = document.getElementById('mistakes-container');
+            mistakesContainer.innerHTML = '';
+            exerciseSuggestion.commonMistakes.forEach((mistake) => {
+                const mistakeItem = document.createElement('div');
+                mistakeItem.className = 'list-item';
+                mistakeItem.innerHTML = `
+                    <input type="text" name="commonMistakes[]" value="${mistake}" />
+                    <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+                `;
+                mistakesContainer.appendChild(mistakeItem);
+            });
+            
+            document.querySelector('select[name="machine"]').value = exerciseSuggestion.machineId
+
+            // Select trained muscles
+            const muscleSelect = document.querySelector('select[name="selectedMuscles[]"]');
+            Array.from(muscleSelect.options).forEach(option => {
+                option.selected = exerciseSuggestion.trainedMuscleIds.includes(parseInt(option.value));
+            });
+
+            const newLocalStorage = exerciseSuggestions.filter(suggestion => suggestion.name !== exerciseSuggestion.name);
+            localStorage.setItem('exerciseSuggestions', JSON.stringify(newLocalStorage));
+
+            li.remove();
+        });
+
+        li.appendChild(nameP);
+        li.appendChild(descriptionP);
+        li.appendChild(stepsP);
+        li.appendChild(stepsList);
+        li.appendChild(mistakesP);
+        li.appendChild(mistakesList);
+        li.appendChild(musclesText);
+        li.appendChild(musclesList);
+        li.appendChild(repTypeP);
+        li.appendChild(addButton);
+        suggestionsList.appendChild(li);
+    };
+
+    document.querySelector("#get-exercise-suggestions").addEventListener('click', () => {
+
+        const uploadPassword = document.querySelector('input[name="password"]').value;
+
+        const body = {
+            uploadPassword: uploadPassword
+        };
+
+        fetch('/ai/suggest/exercises', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(response => response.json())
+            .then(data => {
+                data.forEach(createSuggestion);
+                exerciseSuggestions = data;
+            });
+    });
+
+    const suggestionsFromLocalStorage = localStorage.getItem('exerciseSuggestions');
+    if (suggestionsFromLocalStorage) {
+        const lSExerciseSuggestions = JSON.parse(suggestionsFromLocalStorage);
+        exerciseSuggestions = lSExerciseSuggestions;
+        lSExerciseSuggestions.forEach(createSuggestion);
+    }
+
+    document.querySelector("#clear-suggestions").addEventListener('click', () => {
+        suggestionsList.innerHTML = '';
+    });
+</script>
+
+</body>
+</html>

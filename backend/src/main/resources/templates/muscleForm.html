@@ -1,0 +1,122 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Muscle Form</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+
+<h1>Muscle Form</h1>
+
+<div th:if="${message}" class="message-container">
+    <h2 th:text="${message}"/>
+</div>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data" action="/forms/muscles" class="form">
+        <table class="form-table">
+            <tr><td>Muscle name:</td><td><input type="text" name="name" /></td></tr>
+            <tr><td>Super secret password </td><td><input type="password" name="password" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
+
+<div class="data-list-container">
+    <h2>Existing muscles</h2>
+    <ul class="data-list">
+        <li th:each="muscle : ${muscles}">
+            <a th:href="${'/muscles/' + muscle.getId()}" th:text="${muscle.getName()}" target="_blank" />
+        </li>
+    </ul>
+</div>
+
+<div class="suggestions-container">
+    <h2>Muscle suggestions</h2>
+    <div>
+        <label for="super-secret-password">Super secret password</label>
+        <input type="password" id="super-secret-password" placeholder="Super secret password" />
+    </div>
+    <button id="get-muscle-suggestions">Suggest! ✨</button>
+    <ul class="muscle-suggestions">
+    </ul>
+    <button id="clear-suggestions">Clear suggestions</button>
+</div>
+
+<script>
+    const button = document.querySelector("#get-muscle-suggestions");
+    const suggestions = document.querySelector(".muscle-suggestions");
+    const clearButton = document.querySelector("#clear-suggestions");
+
+    const createSuggestion = (muscle) => {
+        const li = document.createElement('li');
+        li.classList.add('muscle-suggestion');
+        const span = document.createElement('span');
+        span.innerText = muscle;
+        const addButton = document.createElement('button');
+        addButton.innerText = 'Add';
+        addButton.addEventListener('click', () => {
+            const password = document.querySelector("#super-secret-password").value;
+            const formData = new URLSearchParams();
+            formData.append("name", muscle);
+            formData.append("password", password);
+            fetch('/forms/muscles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            }).then(response => {
+                if (response.status === 200) {
+                    fetch('/muscles').then(r => r.json().then(data => {
+                        const muscleId = data.find(m => m.name === muscle).id;
+
+                        const muscles = document.querySelector('.data-list');
+                        const newMuscle = document.createElement('li');
+                        newMuscle.innerHTML = `<a href="/muscles/${muscleId}" target="_blank">${muscle}</a>`;
+                        muscles.appendChild(newMuscle);
+                        li.remove();
+                    }))
+                }
+            })
+        });
+        li.appendChild(span);
+        li.appendChild(addButton);
+        suggestions.appendChild(li);
+    }
+
+    button.addEventListener('click', () => {
+
+        const password = document.querySelector("#super-secret-password").value;
+
+        const body = {
+            password: password
+        };
+
+        fetch('/ai/suggest/muscles', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(response => response.json())
+            .then(data => {
+                suggestions.innerHTML = '';
+                localStorage.setItem('suggestions', JSON.stringify(data));
+                data.forEach(createSuggestion);
+            });
+    });
+
+    const suggestionsFromLocalStorage = localStorage.getItem('suggestions');
+    if (suggestionsFromLocalStorage) {
+        const data = JSON.parse(suggestionsFromLocalStorage);
+        data.forEach(createSuggestion);
+    }
+
+    clearButton.addEventListener('click', () => {
+        suggestions.innerHTML = '';
+        localStorage.removeItem('suggestions');
+    });
+</script>
+
+</body>
+</html>
