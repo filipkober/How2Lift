@@ -42,17 +42,17 @@ class DataService {
 
     public async getExerciseLog(): Promise<ExerciseLogItem[]> {
         const data = await AsyncStorage.getItem('exerciseLog');
-        return data ? JSON.parse(data) : [];
-    }
-
-    public async getExerciseLogByExerciseId(exerciseId: number): Promise<ExerciseLogItem[]> {
-        const log = await this.getExerciseLog();
-        return log.filter(item => item.exerciseId === exerciseId).map(item => {
+        return data ? JSON.parse(data).map((item:any) => {
             return {
                 ...item,
                 date: new Date(item.date),
             };
-        })
+        }) : [];
+    }
+
+    public async getExerciseLogByExerciseId(exerciseId: number): Promise<ExerciseLogItem[]> {
+        const log = await this.getExerciseLog();
+        return log.filter(item => item.exerciseId === exerciseId)
     }
 
     public async saveExerciseLog(log: ExerciseLogItem[]): Promise<void> {
