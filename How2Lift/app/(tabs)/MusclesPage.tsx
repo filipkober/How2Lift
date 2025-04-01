@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
-import { Animated, Dimensions, ImageBackground, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Animated, Dimensions, Image, ImageBackground, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 enum VisibleSide {
   FRONT,
@@ -59,10 +59,7 @@ const MusclesPage = () => {
     }
   }
 
-  // Centralized image management with proper typin
-
-  // Create a lookup array for accessing images by ID
-  const MUSCLE_IMAGESById = [
+  const MUSCLE_IMAGESById = useMemo(() => [
     MUSCLE_IMAGES.front.abdominals,
     MUSCLE_IMAGES.front.biceps,
     MUSCLE_IMAGES.front.brain,
@@ -78,8 +75,8 @@ const MusclesPage = () => {
     MUSCLE_IMAGES.back.gluteus,
     MUSCLE_IMAGES.back.hamstrings,
     MUSCLE_IMAGES.back.trapezius,
-    MUSCLE_IMAGES.back.triceps,
-  ];
+    MUSCLE_IMAGES.back.triceps
+  ], [MUSCLE_IMAGES]);
 
   //ids can be duplicates
   const MUSCLES = useMemo(() => [
@@ -181,7 +178,6 @@ const MusclesPage = () => {
                 }}
               />
           </View>
-          
           <View className="flex w-full h-full bg-background flex-1 justify-start items-center pt-4">
             <Text
               className='font-quicksand_bold text-center'
@@ -190,12 +186,10 @@ const MusclesPage = () => {
               Click the muscle you want to exercise
             </Text>
             <ImageBackground
-                source={(selectedMuscle == null) ?
-                  ((selectedSide == VisibleSide.FRONT) ?
-                    MUSCLE_IMAGES.front.human :
-                    MUSCLE_IMAGES.back.human) :
-                    MUSCLE_IMAGESById[selectedMuscle.id]
-                }
+                source={(selectedSide == VisibleSide.FRONT) ?
+                MUSCLE_IMAGES.front.human :
+                MUSCLE_IMAGES.back.human
+              }
                 className="w-full h-full flex items-center justify-center"
                 style={{
                   width: (screenHeight-40)*0.4, //ar = 794:1588 = 0.5
@@ -208,6 +202,23 @@ const MusclesPage = () => {
                   setImageSize({ width, height });
                 }}
               >
+              <Image
+                source={(selectedMuscle == null) ?
+                  ((selectedSide == VisibleSide.FRONT) ?
+                    MUSCLE_IMAGES.front.human :
+                    MUSCLE_IMAGES.back.human) :
+                    MUSCLE_IMAGESById[selectedMuscle.id]
+                }
+                  className="w-full h-full flex items-center justify-center"
+                  style={{
+                    width: (screenHeight-40)*0.4,
+                    height: (screenHeight-40)*0.8,
+                    marginBottom: 2,
+                  }}
+                  resizeMode="contain"
+                >
+                
+              </Image>
               {imageSize.width > 0 &&
               MUSCLES.map((m, index) => {
                 if(m.side != selectedSide) return null;

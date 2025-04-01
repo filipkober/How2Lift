@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { Pressable, View, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Pressable, StyleSheet, View } from "react-native";
 
 interface Props {
     className?: string;
@@ -28,6 +27,7 @@ checkbox: {
 checkboxChecked: {
     backgroundColor: "#3ACAD4",
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25), inset -2px -2px 2px rgba(0, 0, 0, 0.25)",
+    borderRadius: "15%",
     transitionDuration: "120ms",
     transitionTimingFunction: "linear"
 },

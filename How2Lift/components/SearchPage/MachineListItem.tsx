@@ -2,6 +2,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
+
 type SearchBarProps = {
   machineName? : string;
   info? : string;
@@ -9,14 +10,11 @@ type SearchBarProps = {
 };
 
 const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
-
-  //const placeholderImage = {uri: 'https://legacy.reactjs.org/logo-og.png'};
-  const placeholderImage = {uri: '../../assets/images/example1.jpg'};
+  const placeholderImage = require('../../assets/images/example1.jpg');
 
   const OpenMachinePage = () => {
       console.log("opened machine page")
   }
-
   return (
     <View className="overflow-hidden flex flex-row w-full h-auto rounded-[10px] shadow-sm border-2 border-gray-700 bg-white items-center">
       {/* Left Image - Fixed Width 20vw */}
