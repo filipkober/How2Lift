@@ -64,7 +64,7 @@ public class OpenAIService implements AIService {
         var currentMachineNames = machineService.getAllMachineNames();
         var allMuscleNames = muscleService.getAllMuscleNames();
         List<MachineSuggestion> suggestions = chatClient.prompt()
-                .user(u -> u.text("Suggest new machine names that could be added to the database, the existing ones are: {machines}; The muscles available in the database are: {muscles}. Include all applicable")
+                .user(u -> u.text("Suggest new machine names that could be added to the database, the existing ones are: {machines}; The muscles available in the database are: {muscles}. Include all applicable. You must include muscles, don't leave them blank")
                         .param("machines", currentMachineNames)
                         .param("muscles", allMuscleNames)
                 )
@@ -79,7 +79,7 @@ public class OpenAIService implements AIService {
         var allMuscleNames = muscleService.getAllMuscleNames();
         var allMachineNames = machineService.getAllMachineNames();
         List<ExerciseSuggestion> suggestions = chatClient.prompt()
-                .user(u -> u.text("Suggest new exercise names that could be added to the database, the existing ones are: {exercises}; The muscles available in the database are: {muscles}; The machines available in the database are: {machines}. Include all applicable")
+                .user(u -> u.text("Suggest new exercise names that could be added to the database, the existing ones are: {exercises}; The muscles available in the database are: {muscles}; The machines available in the database are: {machines}. Include all applicable. You must include muscles and machines, don't leave them blank")
                         .param("exercises", currentExerciseNames)
                         .param("muscles", allMuscleNames)
                         .param("machines", allMachineNames)
