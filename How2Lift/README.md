@@ -2,7 +2,7 @@
 
 ## Overview
 
-How2Lift is a mobile application that helps users identify gym equipment and learn proper exercise techniques. The application uses camera recognition to scan gym equipment and provide detailed information.
+How2Lift is a mobile application that helps users identify gym equipment and learn proper exercise techniques. The application uses camera recognition to scan gym equipment and provide detailed information, exercise tutorials, and tracking capabilities.
 
 ## Technology Stack
 
@@ -11,6 +11,9 @@ How2Lift is a mobile application that helps users identify gym equipment and lea
 - **Styling**: NativeWind (TailwindCSS for React Native)
 - **Icons**: Expo Vector Icons
 - **Camera**: Expo Camera
+- **Video**: Expo AV for exercise tutorials
+- **Storage**: AsyncStorage for local data persistence
+- **Fonts**: Custom fonts including Quicksand
 
 ## Project Structure
 
@@ -20,6 +23,9 @@ How2Lift is a mobile application that helps users identify gym equipment and lea
 - `components/` - Reusable UI components
 - `assets/` - Images, fonts, and other static files
 - `styles/` - Global styles
+- `services/` - API client services and data management
+- `types/` - TypeScript type definitions
+- `mocks/` - Mock data for development
 
 ## Key Features
 
@@ -27,13 +33,16 @@ How2Lift is a mobile application that helps users identify gym equipment and lea
 2. **Exercise Library**: Browse exercises by category
 3. **Muscle-based Navigation**: Find exercises by muscle groups
 4. **Search Functionality**: Look up machines and exercises
+5. **Exercise Logging**: Track your workout progress
+6. **Video Tutorials**: View proper exercise techniques
+7. **Exercise Details**: Get step-by-step instructions and common mistakes to avoid
 
 ## Installation & Setup
 
 ### Prerequisites
 
 - Node.js (v18 or newer)
-- npm or yarn
+- npm or yarn or pnpm
 - Expo CLI
 - Android Studio (for Android development) or Xcode (for iOS development)
 
@@ -44,9 +53,18 @@ How2Lift is a mobile application that helps users identify gym equipment and lea
 
    ```bash
    npm install
+   # or
+   pnpm install
    ```
 
-3. Start the development server:
+3. Set up environment variables:
+   - Create a `.env` file with the following:
+
+   ```env
+   EXPO_PUBLIC_BACKEND_URL=http://your-backend-url:8080
+   ```
+
+4. Start the development server:
 
    ```bash
    npm start
@@ -54,7 +72,7 @@ How2Lift is a mobile application that helps users identify gym equipment and lea
    npx expo start
    ```
 
-4. Use the Expo Go app to run on a physical device, or press 'a' for Android emulator or 'i' for iOS simulator
+5. Use the Expo Go app to run on a physical device, or press 'a' for Android emulator or 'i' for iOS simulator
 
 ### Project Scripts
 
@@ -72,15 +90,16 @@ How2Lift is a mobile application that helps users identify gym equipment and lea
 How2Lift/
 ├── app/                    # Application screens and navigation
 │   ├── (tabs)/             # Tab-based screens
-│   │   ├── exercises.tsx   # Exercise library screen
-│   │   ├── muscles.tsx     # Muscle groups screen
-│   │   ├── scan.tsx        # Camera scanning screen
-│   │   ├── search.tsx      # Search functionality
-│   │   └── settings.tsx    # App settings
+│   │   ├── ExercisePage.tsx  # Exercise details screen
+│   │   ├── ExercisesPage.tsx # Exercise library screen
+│   │   ├── MusclesPage.tsx   # Muscle groups screen
+│   │   ├── ScanPage.tsx      # Camera scanning screen
+│   │   ├── SearchPage.tsx    # Search functionality
+│   │   └── SettingsPage.tsx  # App settings
 │   └── _layout.tsx         # Root navigation layout
 ├── assets/                 # Static assets
 │   ├── images/             # Image files
-│   └── fonts/              # Custom fonts
+│   └── fonts/              # Custom fonts (Quicksand)
 ├── components/             # Reusable UI components
 │   ├── common/             # Common UI elements
 │   ├── exercise/           # Exercise-related components
@@ -89,10 +108,40 @@ How2Lift/
 ├── utils/                  # Utility functions
 ├── hooks/                  # Custom React hooks
 ├── services/               # API and other services
+│   ├── dataService.ts      # Local data management
+│   ├── exerciseService.ts  # Exercise API client
+│   ├── machineService.ts   # Machine API client
+│   ├── muscleService.ts    # Muscle API client
+│   ├── requestService.ts   # HTTP request handling
+│   └── cacheService.ts     # Data caching
 ├── types/                  # TypeScript type definitions
+│   ├── exercise.ts         # Exercise types and classes
+│   ├── machine.ts          # Machine types and classes
+│   ├── muscle.ts           # Muscle types and classes
+│   └── cache.ts            # Cache related types
+├── mocks/                  # Mock data
 ├── constants/              # App constants
 └── app.json                # Expo configuration
 ```
+
+## Data Models
+
+### Main Entities
+
+- **Machine**: Represents gym equipment with associated exercises and muscles
+- **Exercise**: Represents workout exercises with steps, videos, and logging capabilities
+- **Muscle**: Represents muscle groups that are targeted by exercises
+
+## Services Architecture
+
+The app uses a service layer to communicate with the backend:
+
+- **machineService**: Handles machine-related API calls
+- **exerciseService**: Handles exercise-related API calls
+- **muscleService**: Handles muscle-related API calls
+- **dataService**: Manages local data storage and exercise logs
+- **requestService**: Handles HTTP requests to the backend
+- **cacheService**: Caches frequently used data for better performance
 
 ## Camera & Recognition Features
 
@@ -107,12 +156,15 @@ The scanning feature uses the device camera to recognize gym equipment:
 - Local component state for UI components
 - React Context for global state management
 - AsyncStorage for persistent data
+- Caching for frequently used data
 
 ## API Integration
 
 The app connects to a backend API for:
 
-- Exercise data
+- Exercise data and details
+- Machine information
+- Muscle group classifications
 - Equipment recognition
 
 ## Testing
@@ -136,9 +188,19 @@ expo build:ios      # For iOS
 expo publish
 ```
 
+## Styling Approach
+
+The app uses NativeWind (TailwindCSS for React Native) with custom configuration:
+
+- Custom colors for consistent theming
+- Custom font families (Quicksand)
+- Responsive design adapting to different device sizes
+
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
 4. Submit a pull request
+
+For detailed contribution guidelines, see the [CONTRIBUTING.md](../CONTRIBUTING.md) file.

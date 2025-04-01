@@ -36,6 +36,194 @@ Response:
 ]
 ```
 
+### Machine Endpoints
+
+#### Get All Machines
+
+```txt
+GET /machines
+```
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Leg Press",
+    "muscleNames": ["Quadriceps", "Hamstrings"],
+    "imageUrl": "http://localhost:8080/files/legpress.png"
+  },
+  {
+    "id": 2,
+    "name": "Lat Pulldown Machine",
+    "muscleNames": ["Lats", "Biceps", "Shoulders"],
+    "imageUrl": "http://localhost:8080/files/latpulldown.png"
+  }
+]
+```
+
+#### Get Machine by ID
+
+```txt
+GET /machines/{id}
+```
+
+Parameters:
+
+- `id` - Machine ID
+
+Response:
+
+```json
+{
+  "id": 1,
+  "name": "Leg Press",
+  "description": "A machine for training leg muscles",
+  "imageUrl": "http://localhost:8080/files/legpress.png",
+  "exerciseIds": [1, 2, 3],
+  "trainedMuscleIds": [1, 2]
+}
+```
+
+#### Get Exercises by Machine ID
+
+```txt
+GET /machines/{id}/exercises
+```
+
+Parameters:
+
+- `id` - Machine ID
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Standard Leg Press",
+    "description": "Basic leg press movement",
+    "videoUrl": "http://localhost:8080/files/standard-leg-press.mp4",
+    "steps": ["Sit on the machine", "Place feet on platform", "Push the platform"],
+    "commonMistakes": ["Locking knees", "Using too much weight"],
+    "machineId": 1,
+    "trainedMuscleIds": [1, 2],
+    "repType": "STANDARD"
+  }
+]
+```
+
+#### Get Muscles by Machine ID
+
+```txt
+GET /machines/{id}/muscles
+```
+
+Parameters:
+
+- `id` - Machine ID
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Quadriceps"
+  },
+  {
+    "id": 2,
+    "name": "Hamstrings"
+  }
+]
+```
+
+### Exercise Endpoints
+
+#### Get All Exercises
+
+```txt
+GET /exercises
+```
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Standard Leg Press",
+    "muscleNames": ["Quadriceps", "Hamstrings"],
+    "videoUrl": "http://localhost:8080/files/standard-leg-press.mp4"
+  },
+  {
+    "id": 2,
+    "name": "Wide Leg Press",
+    "muscleNames": ["Quadriceps", "Hamstrings", "Glutes"],
+    "videoUrl": "http://localhost:8080/files/wide-leg-press.mp4"
+  }
+]
+```
+
+#### Get Exercise by ID
+
+```txt
+GET /exercises/{id}
+```
+
+Parameters:
+
+- `id` - Exercise ID
+
+Response:
+
+```json
+{
+  "id": 1,
+  "name": "Standard Leg Press",
+  "description": "Basic leg press movement",
+  "videoUrl": "http://localhost:8080/files/standard-leg-press.mp4",
+  "steps": [
+    "Sit on the machine",
+    "Place feet on platform",
+    "Push the platform"
+  ],
+  "commonMistakes": [
+    "Locking knees",
+    "Using too much weight"
+  ],
+  "machineId": 1,
+  "trainedMuscleIds": [1, 2],
+  "repType": "STANDARD"
+}
+```
+
+#### Get Muscles by Exercise ID
+
+```txt
+GET /exercises/{id}/muscles
+```
+
+Parameters:
+
+- `id` - Exercise ID
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Quadriceps"
+  },
+  {
+    "id": 2,
+    "name": "Hamstrings"
+  }
+]
+```
+
 ### File Management
 
 #### Get File
@@ -51,6 +239,20 @@ Parameters:
 Response:
 
 - Binary file data with appropriate content type
+
+#### Get Video Thumbnail
+
+```txt
+GET /files/{filename}/thumbnail
+```
+
+Parameters:
+
+- `filename` - Name of the video file
+
+Response:
+
+- Binary image data (thumbnail of the video)
 
 ### AI Features
 
@@ -161,9 +363,13 @@ Response:
 These endpoints are for admin use and provide HTML forms:
 
 - `GET /forms/muscles` - Manage muscle groups
+- `POST /forms/muscles` - Add new muscle groups
 - `GET /forms/machines` - Manage machines
+- `POST /forms/machines` - Add new machines
 - `GET /forms/exercises` - Manage exercises
+- `POST /forms/exercises` - Add new exercises
 - `GET /files` - Manage file uploads
+- `POST /files` - Upload a new file
 
 ## Error Handling
 
@@ -190,3 +396,57 @@ Error response format:
 ## Authentication
 
 Most endpoints require password authentication for write operations. This is typically provided via a `password` parameter for form submissions.
+
+## Data Models
+
+### Machine
+
+```json
+{
+  "id": 1,
+  "name": "Leg Press",
+  "description": "A machine for training leg muscles",
+  "imageUrl": "http://localhost:8080/files/legpress.png",
+  "exerciseIds": [1, 2, 3],
+  "trainedMuscleIds": [1, 2]
+}
+```
+
+### Exercise
+
+```json
+{
+  "id": 1,
+  "name": "Standard Leg Press",
+  "description": "Basic leg press movement",
+  "videoUrl": "http://localhost:8080/files/standard-leg-press.mp4",
+  "steps": ["Sit on the machine", "Place feet on platform", "Push the platform"],
+  "commonMistakes": ["Locking knees", "Using too much weight"],
+  "machineId": 1,
+  "trainedMuscleIds": [1, 2],
+  "repType": "STANDARD"
+}
+```
+
+### Muscle
+
+```json
+{
+  "id": 1,
+  "name": "Quadriceps"
+}
+```
+
+### Exercise Log Item
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "exerciseId": 1,
+  "date": "2023-10-15T10:30:00Z",
+  "weight": 100,
+  "reps": 12,
+  "sets": 3,
+  "note": "Felt strong today"
+}
+```
