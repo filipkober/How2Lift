@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ const Tabs = createBottomTabNavigator(); //<TabsParamList>
 const Stack = createNativeStackNavigator();
 
 //stylizuj to olo, jeśli chcesz lepsze tło do navbara
-const screenOptions = {
+const screenOptions: BottomTabNavigationOptions = {
   tabBarShowLabel: false,
   headerShown: false,
   tabBarStyle: {
@@ -28,11 +28,20 @@ const screenOptions = {
     bottom: 0,
     right: 0,
     left: 0,
-    borderTopWidth: 0,
-    elevation: 0,
+    // borderTopWidth: 0,
+    elevation: 60,
     height: 60,
     backgroundColor: "#000",
-  } as const
+  } as const,
+  tabBarIconStyle: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  tabBarItemStyle: {
+    marginTop: -20,
+  },
 };
 
 interface ScreenDimensions {
