@@ -1,5 +1,5 @@
 import ScanIndicator from "@/components/ScanPage/ScanIndicator";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import { ImageBackground, Platform, StatusBar, Text, TouchableOpacity, View } from "react-native";

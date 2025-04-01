@@ -29,26 +29,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class MachineControllerTest {
-
-    @Mock
-    private MachineService machineService;
-
-    @Mock
-    private MuscleService muscleService;
-
-    @Mock
-    private ExerciseService exerciseService;
-
-    @InjectMocks
-    private MachineController machineController;
-
-    private MockMvc mockMvc;
-    private List<Muscle> muscles;
-    private List<Machine> machines;
-    private String uploadPassword = "test-password";
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(machineController).build();
-    }
+//
+//    @Mock
+//    private MachineService machineService;
+//
+//    @Mock
+//    private MuscleService muscleService;
+//
+//    @Mock
+//    private ExerciseService exerciseService;
+//
+//    @InjectMocks
+//    private MachineController machineController;
+//
+//    private MockMvc mockMvc;
+//    private List<Muscle> muscles;
+//    private List<Machine> machines;
+//    private String uploadPassword = "test-password";
+//
+//    @BeforeEach
+//    void setUp() {
+//        mockMvc = MockMvcBuilders.standaloneSetup(machineController).build();
+//    }
 }

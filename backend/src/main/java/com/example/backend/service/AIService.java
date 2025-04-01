@@ -1,10 +1,10 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Machine;
+import com.example.backend.record.MachineDTO;
 import org.springframework.core.io.Resource;
 
 import java.util.List;
 
 public interface AIService {
-    List<Machine> identifyMachines(Resource imageResource);
+    List<MachineDTO> identifyMachines(Resource imageResource);
 }

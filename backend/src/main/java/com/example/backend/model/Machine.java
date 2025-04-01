@@ -1,11 +1,15 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Table(name = "machine")
 @Entity
 public class Machine {
@@ -19,8 +23,10 @@ public class Machine {
     private String imageUrl;
 
     @OneToMany(mappedBy = "machine")
+    @JsonIgnore
     private Set<Exercise> exercises;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "machine_muscle",
@@ -28,4 +34,5 @@ public class Machine {
             inverseJoinColumns = @JoinColumn(name = "muscle_id")
     )
     private Set<Muscle> trainedMuscles;
+
 }

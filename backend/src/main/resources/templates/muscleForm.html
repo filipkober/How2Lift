@@ -85,11 +85,19 @@
     }
 
     button.addEventListener('click', () => {
+
+        const password = document.querySelector("#super-secret-password").value;
+
+        const body = {
+            password: password
+        };
+
         fetch('/ai/suggest/muscles', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(body)
         }).then(response => response.json())
             .then(data => {
                 suggestions.innerHTML = '';
