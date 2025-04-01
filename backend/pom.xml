@@ -119,6 +119,14 @@
                     <jvmArguments>
                         --enable-preview
                     </jvmArguments>
+                    <addResources>true</addResources>
+                    <classifier>module</classifier>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
