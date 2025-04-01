@@ -1,11 +1,36 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Animated, Dimensions, ImageBackground, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 enum VisibleSide {
   FRONT,
   BACK
 }
+
+const MUSCLE_IMAGES = {
+  front: {
+    abdominals: require('../../assets/images/MusclesPage/front/abdominals.png'),
+    biceps: require('../../assets/images/MusclesPage/front/biceps.png'),
+    brain: require('../../assets/images/MusclesPage/front/brain.png'),
+    deltoid: require('../../assets/images/MusclesPage/front/deltoid.png'),
+    forearms: require('../../assets/images/MusclesPage/front/forearms.png'),
+    gastrocnemius: require('../../assets/images/MusclesPage/front/gastrocnemius.png'),
+    pectoralis: require('../../assets/images/MusclesPage/front/pectoralis.png'),
+    quadriceps: require('../../assets/images/MusclesPage/front/quadriceps.png'),
+    trapezius: require('../../assets/images/MusclesPage/front/trapezius.png'),
+    human: require('../../assets/images/MusclesPage/human_front.png'),
+  },
+  back: {
+    back: require('../../assets/images/MusclesPage/back/back.png'),
+    forearms: require('../../assets/images/MusclesPage/back/forearms.png'),
+    gastrocnemius: require('../../assets/images/MusclesPage/back/gastrocnemius.png'),
+    gluteus: require('../../assets/images/MusclesPage/back/gluteus.png'),
+    hamstrings: require('../../assets/images/MusclesPage/back/hamstrings.png'),
+    trapezius: require('../../assets/images/MusclesPage/back/trapezius.png'),
+    triceps: require('../../assets/images/MusclesPage/back/triceps.png'),
+    human: require('../../assets/images/MusclesPage/human_back.png'),
+  }
+};
 
 const MusclesPage = () => {
   //This must be here
@@ -33,29 +58,31 @@ const MusclesPage = () => {
       });
     }
   }
-  const images = [
-    require('../../assets/images/MusclesPage/front/abdominals.png'),
-    require('../../assets/images/MusclesPage/front/biceps.png'),
-    require('../../assets/images/MusclesPage/front/brain.png'),
-    require('../../assets/images/MusclesPage/front/deltoid.png'),
-    require('../../assets/images/MusclesPage/front/forearms.png'),
-    require('../../assets/images/MusclesPage/front/gastrocnemius.png'),
-    require('../../assets/images/MusclesPage/front/pectoralis.png'),
-    require('../../assets/images/MusclesPage/front/quadriceps.png'),
-    require('../../assets/images/MusclesPage/front/trapezius.png'),
 
-    require('../../assets/images/MusclesPage/back/back.png'),
-    require('../../assets/images/MusclesPage/back/forearms.png'),
-    require('../../assets/images/MusclesPage/back/gastrocnemius.png'),
-    require('../../assets/images/MusclesPage/back/gluteus.png'),
-    require('../../assets/images/MusclesPage/back/hamstrings.png'),
-    require('../../assets/images/MusclesPage/back/trapezius.png'),
-    require('../../assets/images/MusclesPage/back/triceps.png'),
-    require('../../assets/images/MusclesPage/human_front.png'),
-    require('../../assets/images/MusclesPage/human_back.png'),
+  // Centralized image management with proper typin
+
+  // Create a lookup array for accessing images by ID
+  const MUSCLE_IMAGESById = [
+    MUSCLE_IMAGES.front.abdominals,
+    MUSCLE_IMAGES.front.biceps,
+    MUSCLE_IMAGES.front.brain,
+    MUSCLE_IMAGES.front.deltoid,
+    MUSCLE_IMAGES.front.forearms,
+    MUSCLE_IMAGES.front.gastrocnemius,
+    MUSCLE_IMAGES.front.pectoralis,
+    MUSCLE_IMAGES.front.quadriceps,
+    MUSCLE_IMAGES.front.trapezius,
+    MUSCLE_IMAGES.back.back,
+    MUSCLE_IMAGES.back.forearms,
+    MUSCLE_IMAGES.back.gastrocnemius,
+    MUSCLE_IMAGES.back.gluteus,
+    MUSCLE_IMAGES.back.hamstrings,
+    MUSCLE_IMAGES.back.trapezius,
+    MUSCLE_IMAGES.back.triceps,
   ];
+
   //ids can be duplicates
-  const MUSCLES = [
+  const MUSCLES = useMemo(() => [
       new Muscle(0, "Abdominals", 50, 39, 18, 20, VisibleSide.FRONT),
       new Muscle(1, "Biceps",  27, 32, 10, 10, VisibleSide.FRONT),
       new Muscle(1, "Biceps",  73, 32, 10, 10, VisibleSide.FRONT),
@@ -82,7 +109,7 @@ const MusclesPage = () => {
       new Muscle(14, "Trapezius", 50, 17, 35, 7, VisibleSide.BACK),
       new Muscle(15, "Triceps", 28, 31, 12, 12, VisibleSide.BACK),
       new Muscle(15, "Triceps", 72, 31, 12, 12, VisibleSide.BACK),
-  ];
+  ], []);
 
   const IMAGE_WIDTH = 1588; //default size
   const IMAGE_HEIGHT = 794;
@@ -165,9 +192,9 @@ const MusclesPage = () => {
             <ImageBackground
                 source={(selectedMuscle == null) ?
                   ((selectedSide == VisibleSide.FRONT) ?
-                    require('../../assets/images/MusclesPage/human_front.png') :
-                    require('../../assets/images/MusclesPage/human_back.png')) :
-                    images[selectedMuscle.id]?.uri || require('../../assets/images/MusclesPage/human_front.png')
+                    MUSCLE_IMAGES.front.human :
+                    MUSCLE_IMAGES.back.human) :
+                    MUSCLE_IMAGESById[selectedMuscle.id]
                 }
                 className="w-full h-full flex items-center justify-center"
                 style={{
