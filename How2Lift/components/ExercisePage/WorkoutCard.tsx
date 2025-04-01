@@ -1,26 +1,57 @@
 import React, { useState } from "react";
-//import { ExerciseLogItem } from "types";
-
-const WorkoutCard = (props: any) => {
+import {ExerciseLogItem, RepType, WeightData} from "../../types/exercise";
+import { View, Text, Pressable } from "react-native";
+interface Props {
+    logItem: ExerciseLogItem
+}
+const WorkoutCard = ({logItem}:Props) => {
   const [showDetails, setShowDetails] = useState(false);
-
-  return (
-    <div
-      className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer"
-      onClick={() => setShowDetails(!showDetails)}
-    >
-      <p className="text-sm text-gray-600">{props.exercie_data.date}</p>
-      <h2 className="text-lg font-semibold mt-1">{props.exercie_data.title}</h2>
-
-      {showDetails && (
-        <div className="flex items-end mt-2">
-          <span className="text-2xl font-bold">{props.exercie_data.reps}x</span>
-          <span className="text-2xl font-bold mx-2">{props.exercie_data.weight}</span>
-          <span className="text-xl text-gray-600">kg</span>
-        </div>
-      )}
-    </div>
-  );
+switch (logItem.repType) {
+    case RepType.BODYWEIGHT:
+        return (
+            <Pressable onPress={() => setShowDetails(!showDetails)}>
+                <View className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer">
+                <Text className="text-sm text-gray-600">{logItem.date.toLocaleDateString("pl-PL")}</Text>
+                <Text className="text-lg font-semibold mt-1">{logItem.exerciseId}</Text>
+                {showDetails && (
+                <View className="flex items-end mt-2">
+                  <Text className="text-2xl font-bold">{logItem.reps}x</Text>
+                </View>
+             )}
+            </View>
+            </Pressable> 
+          );
+    case RepType.TIME:
+        return (
+            <Pressable onPress={() => setShowDetails(!showDetails)}>
+                <View className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer">
+                <Text className="text-sm text-gray-600">{logItem.date.toLocaleDateString("pl-PL")}</Text>
+                <Text className="text-lg font-semibold mt-1">{logItem.exerciseId}</Text>
+                {showDetails && (
+                <View className="flex items-end mt-2">
+                  <Text className="text-2xl font-bold">{logItem.duration}s</Text>
+                </View>
+             )}
+            </View>
+            </Pressable> 
+          );
+    case RepType.WEIGHT:
+        return (
+            <Pressable onPress={() => setShowDetails(!showDetails)}>
+                <View className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer">
+                <Text className="text-sm text-gray-600">{logItem.date.toLocaleDateString("pl-PL")}</Text>
+                <Text className="text-lg font-semibold mt-1">{logItem.exerciseId}</Text>
+                {showDetails && (
+                <View className="flex flex-row items-end mt-2">
+                  <Text className="text-2xl font-bold">{logItem.reps}x</Text>
+                  <Text className="text-2xl font-bold mx-2">{logItem.weight}</Text>
+                  <Text className="text-xl text-gray-600">kg</Text>
+                </View>
+             )}
+            </View>
+            </Pressable> 
+          );
+}
 };
 
 export default WorkoutCard;
