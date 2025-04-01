@@ -30,7 +30,7 @@ export type ExerciseProps = {
     repType: RepType;
 }
 
-type ExerciseLogDetails = {
+export type ExerciseLogDetails = {
     id: string,
     exerciseId: number,
     date: Date,
