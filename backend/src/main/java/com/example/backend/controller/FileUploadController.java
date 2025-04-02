@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.io.IOException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/files")
 public class FileUploadController {
 
     @Value("${upload.password}")
@@ -28,8 +29,8 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/files")
-    public String listUploadedFiles(Model model) throws IOException {
+    @GetMapping
+    public String listUploadedFiles(Model model) {
 
         model.addAttribute("files", storageService.loadAll().map(
                         path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
@@ -39,7 +40,7 @@ public class FileUploadController {
         return "uploadForm";
     }
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping("/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
@@ -51,7 +52,7 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/files")
+    @PostMapping
     public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("password") String password) {
 
         if (!password.equals(uploadPassword))
@@ -63,7 +64,7 @@ public class FileUploadController {
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+    public ResponseEntity<?> handleStorageFileNotFound() {
         return ResponseEntity.notFound().build();
     }
 

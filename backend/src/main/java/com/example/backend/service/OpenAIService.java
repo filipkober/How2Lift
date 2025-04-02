@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Exercise;
-import com.example.backend.model.Machine;
+import com.example.backend.record.ExerciseDTO;
 import com.example.backend.record.ExerciseSuggestion;
+import com.example.backend.record.MachineDTO;
 import com.example.backend.record.MachineSuggestion;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.ListOutputConverter;
@@ -39,16 +39,16 @@ public class OpenAIService implements AIService {
     }
 
     @Override
-    public List<Machine> identifyMachines(Resource imageResource) {
+    public List<MachineDTO> identifyMachines(Resource imageResource) {
         var allMachineNames = machineService.getAllMachineNames();
         List<String> identifiedMachineNames = chatClient.prompt()
                 .user(u -> u.text("Identify the exercise machines or equipment in the provided image, according to the following possibilities: {machines}")
                         .param("machines", allMachineNames)
-                        .media(MimeTypeUtils.IMAGE_PNG, imageResource))
+                        .media(MimeTypeUtils.IMAGE_JPEG, imageResource))
                 .call()
                 .entity(new ListOutputConverter(new DefaultConversionService()));
 
-        return machineService.getMachinesByNames(identifiedMachineNames);
+        return machineService.getMachinesDTOByNames(identifiedMachineNames);
     }
 
     public List<String> suggestNewMuscleNames(){
@@ -60,11 +60,11 @@ public class OpenAIService implements AIService {
                 .entity(new ListOutputConverter(new DefaultConversionService()));
     }
 
-    public List<Machine> suggestNewMachines() {
+    public List<MachineDTO> suggestNewMachines() {
         var currentMachineNames = machineService.getAllMachineNames();
         var allMuscleNames = muscleService.getAllMuscleNames();
         List<MachineSuggestion> suggestions = chatClient.prompt()
-                .user(u -> u.text("Suggest new machine names that could be added to the database, the existing ones are: {machines}; The muscles available in the database are: {muscles}. Include all applicable")
+                .user(u -> u.text("Suggest new machine names that could be added to the database, the existing ones are: {machines}; The muscles available in the database are: {muscles}. Include all applicable. You must include muscles, don't leave them blank")
                         .param("machines", currentMachineNames)
                         .param("muscles", allMuscleNames)
                 )
@@ -74,12 +74,12 @@ public class OpenAIService implements AIService {
         return machineService.getMachinesFromSuggestions(suggestions);
     }
 
-    public List<Exercise> suggestNewExercises() {
+    public List<ExerciseDTO> suggestNewExercises() {
         var currentExerciseNames = exerciseService.getAllExerciseNames();
         var allMuscleNames = muscleService.getAllMuscleNames();
         var allMachineNames = machineService.getAllMachineNames();
         List<ExerciseSuggestion> suggestions = chatClient.prompt()
-                .user(u -> u.text("Suggest new exercise names that could be added to the database, the existing ones are: {exercises}; The muscles available in the database are: {muscles}; The machines available in the database are: {machines}. Include all applicable")
+                .user(u -> u.text("Suggest new exercise names that could be added to the database, the existing ones are: {exercises}; The muscles available in the database are: {muscles}; The machines available in the database are: {machines}. Include all applicable. You must include muscles and machines, don't leave them blank")
                         .param("exercises", currentExerciseNames)
                         .param("muscles", allMuscleNames)
                         .param("machines", allMachineNames)

@@ -1,8 +1,16 @@
 import ExerciseListItem from '@/components/SearchPage/ExerciseListItem'
 import MachineListItem from '@/components/SearchPage/MachineListItem'
 import SearchBar from '@/components/SearchPage/SearchBar'
-import React, { useState } from 'react'
+import mockExercises from '@/mocks/exercises'
+import mockMachines from '@/mocks/machines'
+import { ExerciseService } from '@/services/exerciseService'
+import { MachineService } from '@/services/machineService'
+import { ExerciseSearchResult } from '@/types/exercise'
+import { MachineSearchResult } from '@/types/machine'
+import { useRoute } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
 import { Animated, Dimensions, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import { SearchRouteProp } from '../navigation/navigationTypes'
 
 type Machine = {
   id: number,
@@ -13,6 +21,7 @@ type Machine = {
   }
 }
 
+//to chyba nieaktualne
 type Exercise = {
   id: number,
   name: string,
@@ -22,65 +31,138 @@ type Exercise = {
   }
 }
 
+enum ListType {
+  MACHINES,
+  EXERCISES
+}
+
 
 const SearchPage = () => {
 
+  const route = useRoute<SearchRouteProp>();
   const screenWidth = Dimensions.get('window').width;
   const [animation] = useState(new Animated.Value(0));
-  const [selectedList, setSelectedList] = useState<number>(0); //0 - machines 1 - exercises
-  const [machines, setMachines] = useState<Machine[]>([
-    { id: 0, name: "Treadmill", info: "Cardio, Legs", image: { uri: "https://images.unsplash.com/photo-1591940765155-0604537032a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dHJlYWRtaWxsfGVufDB8fDB8fHww" }},
-    { id: 1, name: "Leg Press Machine", info: "Quadriceps, Hamstrings, Glutes", image: { uri: "https://media.tenor.com/NDFafSQfq_kAAAAM/leg-press-machine.gif" }},
-    { id: 2, name: "Lat Pulldown Machine", info: "Lats, Biceps, Shoulders", image: { uri: "https://media.tenor.com/VfwPJrw6tTEAAAAM/pulley-puxada-neutra.gif" }},
-    { id: 3, name: "Cable Machine", info: "Chest, Shoulders, Triceps, Back", image: { uri: "https://media.tenor.com/HDD-1xSyxn4AAAAM/workout-time.gif" }},
-    { id: 4, name: "Smith Machine", info: "Full Body, Squats, Presses", image: { uri: "https://media.tenor.com/eCXs6gZigQcAAAAM/incline-smith-bar-press.gif" }},
-    { id: 5, name: "Seated Row Machine", info: "Upper Back, Lats, Biceps", image: { uri: "https://media.tenor.com/ft6FHrqty-8AAAAM/remada-pronada-maquina.gif" }},
-    { id: 6, name: "Leg Curl Machine", info: "Hamstrings", image: { uri: "https://media1.tenor.com/m/veCnXWNXGI4AAAAd/femur-breaker-scp.gif" }},
-    { id: 7, name: "Bench Press Machine", info: "Chest, Shoulders, Triceps", image: { uri: "https://media.tenor.com/vFJSvh8AvhAAAAAM/a1.gif" }},
-    { id: 8, name: "Abdominal Crunch Machine Pro stuer ultra max", info: "Abs, Core", image: { uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Trebuchet_Castelnaud.jpg/300px-Trebuchet_Castelnaud.jpg" }},
-    { id: 9, name: "Pec Deck Machine", info: "Chest, Shoulders", image: { uri: "https://media.tenor.com/fUmzZiU_imsAAAAM/6reverse-machine-fly.gif" }},
-    { id: 10, name: "Torture Rack", info: "", image: { uri: ""}}
-  ])
-  const [exercises, setExercises] = useState<Machine[]>([
-    { id: 10, name: "test1", info: "testus", image: { uri: "https://legacy.reactjs.org/logo-og.png"}},
-    { id: 11, name: "test2", info: "testus", image: { uri: "https://legacy.reactjs.org/logo-og.png"}},
-    { id: 12, name: "", info: "", image: { uri: ""}}
-  ])
 
-  const [filteredData, setFiltredData] = useState<Machine[] | Exercise[]>(machines.sort((a, b) => a.name.localeCompare(b.name)))
+  const [filteredMachineIds, setFilteredMachineIds] = useState<number[]>([]);
 
-  const Search = (query: string) => {
-    console.log("search query: "+query)
-    var data: Machine[] | Exercise[] = []
-    if(selectedList == 0)
+  const [query, setQuery] = useState('');
+
+  const [selectedList, setSelectedList] = useState<ListType>(ListType.MACHINES); //0 - machines 1 - exercises
+  const machineService = new MachineService()
+  const exerciseService = new ExerciseService()
+  const [machines, setMachines] = useState<MachineSearchResult[]>(mockMachines)
+  const [exercises, setExercises] = useState<ExerciseSearchResult[]>(mockExercises)
+  const [filteredMachines, setFilteredMachines] = useState<MachineSearchResult[]>(
+    machines.sort((a, b) => a.name.localeCompare(b.name)))
+  const [filteredExercises, setFilteredExercises] = useState<ExerciseSearchResult[]>(
+    exercises.sort((a, b) => a.name.localeCompare(b.name)))
+
+  const muscleForSearch = route?.params?.muscleName || null;
+
+  const handleQueryChange = (text: string) => {
+    setQuery(text);
+  };
+
+  const Search = () => {
+    //query distillation
+    let refinedQuery = query
+    let queryMuscles: string[] = []
+    if(query.includes("|"))
     {
-      data = machines.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
+      const crudeQuery = query.trim().toLowerCase().split("|")
+      queryMuscles = crudeQuery[0].split(",").map((m) => m.trim()).filter(m => m != null && m !== "");
+      refinedQuery = crudeQuery[1].trim() || ""
+    }
+    if(selectedList == ListType.MACHINES)
+    {
+      const data = machines.filter((item) =>
+        item.name.toLowerCase().includes(refinedQuery.toLowerCase())
+        && queryMuscles.every((m) =>
+          item.muscleNames.some((muscle) => muscle.toLowerCase() === m))
       )
       data.sort((a, b) => a.name.localeCompare(b.name))
+      setFilteredMachines(data);
     }
     else
     {
-      data = exercises.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
+      const data = exercises.filter((item) =>
+        item.name.toLowerCase().includes(refinedQuery.toLowerCase())
+        && queryMuscles.every((m) =>
+          item.muscleNames.some((muscle) => muscle.toLowerCase() === m))
       )
       data.sort((a, b) => a.name.localeCompare(b.name))
+      setFilteredExercises(data);
     }
-    setFiltredData(data)
   }
 
-  const switchList = (index: number) => {
-    console.log(index)
-    setSelectedList(index)
-    if(index==1)
-      setFiltredData(exercises.sort((a, b) => a.name.localeCompare(b.name)))
+  useEffect(() => {
+    Search();
+  }, [query]);
+  useEffect(() => {
+    Search();
+  }, [exercises,machines]);
+
+  useEffect(() => {
+    if(muscleForSearch == null || muscleForSearch == "")
+    {
+      setQuery("");
+    }
     else
-      setFiltredData(machines.sort((a, b) => a.name.localeCompare(b.name)))
+    {
+      setQuery(muscleForSearch+"|");
+    }
+  },[muscleForSearch])
+
+  useEffect(() => {
+    machineService.getAllMachines().then((ms) => {
+      setMachines(ms)
+      setFilteredMachines(ms.sort((a, b) => a.name.localeCompare(b.name)));
+    }).catch(error => {
+      console.error("Failed to fetch machines:", error);
+    });
+    exerciseService.getAllExercises().then((es) => {
+      setExercises(es)
+      setFilteredExercises(es.sort((a, b) => a.name.localeCompare(b.name)));
+    }).catch(error => {
+      console.error("Failed to fetch exercises:", error);
+    });
+  }, [])
+
+  useEffect(() => {
+    if(route.params?.machineIds) {
+      setFilteredMachineIds(route.params.machineIds);
+      switchList(ListType.EXERCISES)
+    }
+  }, [route.params])
+
+  const switchList = (listType: ListType) => {
+    setSelectedList(listType)
+    if(listType == ListType.EXERCISES)
+    {
+      setExercises([...exercises].sort((a, b) => a.name.localeCompare(b.name)));
+    }
+    else
+    {
+      setMachines([...machines].sort((a, b) => a.name.localeCompare(b.name)));
+    }
     Animated.spring(animation, {
-      toValue: index * screenWidth/2,
+      toValue: (listType == ListType.EXERCISES ? 1 : 0) * screenWidth / 2,
       useNativeDriver: false,
     }).start();
   };
+
+  useEffect(() => {
+    if (filteredMachineIds.length === 0) {
+      setFilteredExercises(exercises.sort((a, b) => a.name.localeCompare(b.name)));
+      return;
+    }
+    setFilteredExercises(fe => fe.filter(e => filteredMachineIds.includes(e.machineId)));
+  }, [filteredMachineIds, exercises])
+
+  const filterExercises = (machineId: number) => {
+    setFilteredMachineIds([machineId]);
+    switchList(ListType.EXERCISES)
+  }
 
 
   return (
@@ -93,13 +175,13 @@ const SearchPage = () => {
           <View className='w-full h-[40px] bg-secondary flex flex-row '>
             <TouchableOpacity
               className='w-[50%] h-full p-2 items-center justify-center flex'
-              onPress={() => switchList(0)}
+              onPress={() => switchList(ListType.MACHINES)}
             >
               <Text className='text-[20px] font-quicksand_bold'>Machines</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className='w-[50%] h-full p-2 items-center justify-center flex'
-              onPress={() => switchList(1)}
+              onPress={() => switchList(ListType.EXERCISES)}
             >
               <Text className='text-[20px] font-quicksand_bold'>Exercises</Text>
             </TouchableOpacity>
@@ -120,21 +202,26 @@ const SearchPage = () => {
           </View>
           {/* scrollbar */}
           <View className='w-full h-auto justify-start px-4 py-2 space-y-2 bg-secondary shadow-md'>
-            <SearchBar onSearch={Search} height={36} onChangeText={Search}/>
+            <SearchBar value={query} onSearch={Search} height={36} onChangeText={handleQueryChange}/>
           </View>
           {/* data container */}
           <ScrollView className='w-full h-full px-4 py-2 space-y-2' contentContainerStyle={{ backgroundColor: "#00000000" }}>
+            {filteredMachineIds.length > 0 && (
+              <TouchableOpacity onPress={() => setFilteredMachineIds([])} className='w-full h-auto bg-secondary rounded-md p-2 mb-2'>
+                <Text className='text-[20px] font-quicksand_bold text-red-600'>Clear filter</Text>
+              </TouchableOpacity>
+            )}
             {
-              (selectedList == 0)? (
-                filteredData.map(m => (
+              (selectedList == ListType.MACHINES)? (
+                filteredMachines.map(m => (
                   <View className='py-1 w-full h-auto' key={m.id}>
-                    <MachineListItem machineName={m.name} image={m.image} info={m.info}/>
+                    <MachineListItem machineName={m.name} image={m.imageUrl} info={m.muscleNames.join(", ")} setFilter={() => filterExercises(m.id)}/>
                   </View>
                 ))
               ) : (
-                filteredData.map(m => (
-                  <View className='py-1 w-full h-auto' key={m.id}>
-                    <ExerciseListItem exerciseName={m.name} image={m.image} info={m.info}/>
+                filteredExercises.map(e => (
+                  <View className='py-1 w-full h-auto' key={e.id}>
+                    <ExerciseListItem exerciseName={e.name} image={e.imageUrl} info={e.muscleNames.join(", ")} exerciseId={e.id} />
                   </View>
                 ))
               )

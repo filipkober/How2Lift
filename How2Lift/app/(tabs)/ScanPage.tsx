@@ -1,5 +1,6 @@
 import ScanIndicator from "@/components/ScanPage/ScanIndicator";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { machineService } from "@/services/machineService";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import { ImageBackground, Platform, StatusBar, Text, TouchableOpacity, View } from "react-native";
@@ -22,17 +23,21 @@ const ScanPage = ({ navigation }: any) => {
 
   const TakePhoto = async () =>
   {
-    console.log("Take photo")
     if(cameraRef.current)
     {
-      console.log("cameraRef exists")
       const options = {
         quality: 1,
         base64: true,
       }
       const newPhoto = await cameraRef.current.takePictureAsync(options);
-      console.log(newPhoto)
       setPhoto(newPhoto);
+      if(newPhoto) {
+        const result = await machineService.scanMachine(newPhoto);
+        ResetPhoto();
+        navigation.navigate("Search", {
+          machineIds: result.map((item: any) => item.id),
+        })
+      }
     }
   }
   
@@ -44,7 +49,6 @@ const ScanPage = ({ navigation }: any) => {
 
   const toggleCameraFacing = () =>
   {
-    console.log(`swapped ${facing}`)
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 

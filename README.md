@@ -11,9 +11,11 @@ How2Lift aims to simplify gym workouts by providing users with appropriate exerc
 ### Frontend
 
 - React Native with Expo framework
-- NativeWind for styling
+- NativeWind for styling (TailwindCSS for React Native)
 - Expo Router for navigation
 - TypeScript
+- Expo Camera for equipment scanning
+- AsyncStorage for local data persistence
 
 ### Backend
 
@@ -21,6 +23,7 @@ How2Lift aims to simplify gym workouts by providing users with appropriate exerc
 - PostgreSQL database
 - Spring AI with OpenAI integration
 - Spring Data JPA
+- RESTful API architecture
 
 ## Project Structure
 
@@ -32,6 +35,7 @@ Contains the Spring Boot backend application responsible for:
 - Exercise recommendations logic
 - User data management
 - API endpoints
+- File management for exercise videos and images
 
 ### `/How2Lift`
 
@@ -39,8 +43,18 @@ Contains the React Native frontend application including:
 
 - User interface components
 - Camera integration for equipment scanning
-- Exercise visualization
+- Exercise visualization and logging
+- Exercise and machine search functionality
 - User profile management
+
+## Key Features
+
+- **Machine Recognition**: Scan gym equipment to identify it
+- **Exercise Library**: Access a comprehensive database of exercises
+- **Muscle Group Navigation**: Browse exercises by muscle groups
+- **Exercise Logging**: Track workout progress
+- **Video Tutorials**: Watch proper exercise techniques
+- **Personalized Recommendations**: Get exercise suggestions based on available equipment
 
 ## Getting Started
 
@@ -76,6 +90,13 @@ cd backend
 # Start the Spring Boot application
 ./mvnw spring-boot:run
 ```
+
+## Project Documentation
+
+- [API Documentation](docs/API_DOCUMENTATION.md) - Details on backend endpoints
+- [Architecture](docs/ARCHITECTURE.md) - System architecture overview
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to the project
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community guidelines
 
 ## Branching Strategy
 

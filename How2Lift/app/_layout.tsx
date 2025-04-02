@@ -10,7 +10,6 @@ import LoadingPage from './LoadingPage';
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
-
 export default function RootLayout() {
     
   const [fontsLoaded] = useFonts({

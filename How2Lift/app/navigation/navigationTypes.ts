@@ -1,5 +1,6 @@
+import { Exercise } from './../../types/exercise';
 
-import { NavigatorScreenParams } from '@react-navigation/native';
+import { NavigationProp, NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 
 export type TabsParamList = {
     Exercises: undefined;
@@ -7,9 +8,22 @@ export type TabsParamList = {
     Scan: undefined;
     Search: undefined;
     Settings: undefined;
+    PrivacyPolicy: undefined;
+    Exercise: { exercise: Exercise };
 };
 
 export type RootParamList = {
   '(tabs)': NavigatorScreenParams<TabsParamList>;
   LoadingPage: undefined;
+  Exercise: {
+    exerciseId: number
+  };
+  Search: {
+    muscleName: string
+    muscleId: number
+    machineIds?: number[]
+  };
 };
+
+export type SearchNavigationProp = NavigationProp<RootParamList, 'Search'>;
+export type SearchRouteProp = RouteProp<RootParamList, 'Search'>;
