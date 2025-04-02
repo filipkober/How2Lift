@@ -8,32 +8,32 @@ interface Props {
     setChecked: (checked: boolean) => void;
 }
 
-const styles = StyleSheet.create({
-checkboxContainer: {
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
-    width: 150,
-    marginTop: 5,
-    marginInline: 5,
-},
-checkbox: {
-    backgroundColor: "#227181",
-    boxShadow: "inset 4px 4px 8px rgba(0, 0, 0, 0.25)",
-    borderRadius: "15%",
-    transitionDuration: "120ms",
-    transitionTimingFunction: "linear",
-},
-checkboxChecked: {
-    backgroundColor: "#3ACAD4",
-    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25), inset -2px -2px 2px rgba(0, 0, 0, 0.25)",
-    borderRadius: size * 0.15,
-    transitionDuration: "120ms",
-    transitionTimingFunction: "linear"
-},
-})
-
 export default function Checkbox({ className, size = 48, setChecked, checked }: Props) {
+
+    const styles = StyleSheet.create({
+        checkboxContainer: {
+            justifyContent: "flex-start",
+            alignItems: "center",
+            flexDirection: "row",
+            width: 150,
+            marginTop: 5,
+            marginInline: 5,
+        },
+        checkbox: {
+            backgroundColor: "#227181",
+            boxShadow: "inset 4px 4px 8px rgba(0, 0, 0, 0.25)",
+            borderRadius: "15%",
+            transitionDuration: "120ms",
+            transitionTimingFunction: "linear",
+        },
+        checkboxChecked: {
+            backgroundColor: "#3ACAD4",
+            boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25), inset -2px -2px 2px rgba(0, 0, 0, 0.25)",
+            borderRadius: size * 0.15,
+            transitionDuration: "120ms",
+            transitionTimingFunction: "linear"
+        },
+        })
 
   return (
     <View className={`checkbox-container ${className}`}>
