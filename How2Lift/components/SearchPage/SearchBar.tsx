@@ -1,27 +1,27 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
 type SearchBarProps = {
-  onSearch: (query: string) => void;
-  onChangeText: (query: string) => void;
+  value: string;
+  onSearch: () => void;
+  onChangeText: (text: string) => void;
   placeholder?: string;
   height?: number;
 };
 
-const SearchBar = ({ onSearch, onChangeText, placeholder = "Search...", height = 40 }: SearchBarProps) => {
-  const [query, setQuery] = useState("");
-  const handleSearch = () => {
-    if (query.trim().length > 0)
-    {
-      onSearch(query);
-    }
-  };
+const SearchBar = ({ value, onSearch, onChangeText, placeholder = "Search...", height = 40 }: SearchBarProps) => {
+  
+  // const handleSearch = () => {
+  //   if (value.trim().length > 0)
+  //   {
+  //     onSearch(value);
+  //   }
+  // };
 
-  const handleTextChange = (text: string) => {
-    setQuery(text)
-    onChangeText(text);
-  };
+  // const handleTextChange = (text: string) => {
+  //   onChangeText(text);
+  // };
 
   return (
     <View className="flex flex-row w-[100%] px-1 h-auto rounded-[10px] shadow-sm border-solid border-2 border-gray-700 bg-white justify-between items-center">
@@ -30,12 +30,12 @@ const SearchBar = ({ onSearch, onChangeText, placeholder = "Search...", height =
         style={{ fontSize: height / 2, height: height, flex: 1 }} //dynamic
         placeholder={placeholder}
         placeholderTextColor="#B0B0B0"
-        value={query}
-        onChangeText={(text) =>{handleTextChange(text)}}
-        onSubmitEditing={handleSearch}
+        value={value}
+        onChangeText={onChangeText}
+        onSubmitEditing={onSearch}
       />
       <TouchableOpacity
-        onPress={handleSearch}
+        onPress={onSearch}
         className="bg-transparent flex justify-center items-center"
         style={{ height: height, width: height }}
       >
