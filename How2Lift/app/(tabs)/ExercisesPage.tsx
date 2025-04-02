@@ -1,26 +1,38 @@
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ExerciseLogItem, RepType} from "../../types/exercise";
 import WorkoutCard from "@/components/ExercisePage/WorkoutCard";
 import { Button, Platform, SafeAreaView, StatusBar, Text, View } from "react-native";
 import { dataService } from "@/services/dataService";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
-const ExercisesPage = ({ navigation }: any) => {
-  dataService.getExerciseLog().then(log => {console.log(log)})
+const ExercisesPage = () => {
+  const navigation = useNavigation();
   const [exerciseLog, setExerciseLog] = useState<ExerciseLogItem[]>([]);
-  useEffect(() => {dataService.getExerciseLog().then(log => {setExerciseLog(log)})},[])
-  const exer_data: ExerciseLogItem  = {id:"1", repType: RepType.WEIGHT ,date: new Date("2024-09-14"), exerciseId: 1, reps:12, weight: 40}
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", async () => {
+      const log = await dataService.getExerciseLog();
+      setExerciseLog(log);
+    }
+    );
+    return unsubscribe;
+  }, [navigation]);
   return (
+    <GestureHandlerRootView className="h-full w-full bg-background">
     <SafeAreaView
       className="flex justify-center h-full flex-col bg-black w-full"
       style={{
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
-      <View className="flex justify-start flex-col items-center  bg-background w-full h-full">
-        {exerciseLog.map(logItem => <WorkoutCard logItem = {logItem} key={logItem.id}/>)}
-      </View>
+      <ScrollView className="w-full h-full  bg-background">
+        <View className="flex justify-start flex-col items-center w-full h-full">
+          <Text className="text-4xl text-black font-quicksand_bold my-4">Workout Log</Text>
+          {exerciseLog.map(logItem => <WorkoutCard logItem = {logItem} key={logItem.id}/>)}
+        </View>
+      </ScrollView>
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

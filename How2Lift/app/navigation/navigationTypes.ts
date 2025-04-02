@@ -21,6 +21,7 @@ export type RootParamList = {
   Search: {
     muscleName: string
     muscleId: number
+    machineIds?: number[]
   };
 };
 

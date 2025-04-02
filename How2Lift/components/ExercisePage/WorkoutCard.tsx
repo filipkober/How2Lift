@@ -12,7 +12,7 @@ switch (logItem.repType) {
             <Pressable onPress={() => setShowDetails(!showDetails)}>
                 <View className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer">
                 <Text className="text-sm text-gray-600">{logItem.date.toLocaleDateString("pl-PL")}</Text>
-                <Text className="text-lg font-semibold mt-1">{logItem.exerciseId}</Text>
+                <Text className="text-lg font-semibold mt-1">{logItem.exerciseName}</Text>
                 {showDetails && (
                 <View className="flex items-end mt-2">
                   <Text className="text-2xl font-bold">{logItem.reps}x</Text>
@@ -26,7 +26,7 @@ switch (logItem.repType) {
             <Pressable onPress={() => setShowDetails(!showDetails)}>
                 <View className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer">
                 <Text className="text-sm text-gray-600">{logItem.date.toLocaleDateString("pl-PL")}</Text>
-                <Text className="text-lg font-semibold mt-1">{logItem.exerciseId}</Text>
+                <Text className="text-lg font-semibold mt-1">{logItem.exerciseName}</Text>
                 {showDetails && (
                 <View className="flex items-end mt-2">
                   <Text className="text-2xl font-bold">{logItem.duration}s</Text>
@@ -40,7 +40,7 @@ switch (logItem.repType) {
             <Pressable onPress={() => setShowDetails(!showDetails)}>
                 <View className="bg-white shadow-md rounded-xl p-4 w-80 border border-gray-300 cursor-pointer mb-1">
                 <Text className="text-sm text-gray-600">{logItem.date.toLocaleDateString("pl-PL")}</Text>
-                <Text className="text-lg font-semibold mt-1">{logItem.exerciseId}</Text>
+                <Text className="text-lg font-semibold mt-1">{logItem.exerciseName}</Text>
                 {showDetails && (
                 <View className="flex flex-row items-end mt-2">
                   <Text className="text-2xl font-bold">{logItem.reps}x</Text>

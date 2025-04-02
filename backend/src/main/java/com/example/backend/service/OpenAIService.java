@@ -44,7 +44,7 @@ public class OpenAIService implements AIService {
         List<String> identifiedMachineNames = chatClient.prompt()
                 .user(u -> u.text("Identify the exercise machines or equipment in the provided image, according to the following possibilities: {machines}")
                         .param("machines", allMachineNames)
-                        .media(MimeTypeUtils.IMAGE_PNG, imageResource))
+                        .media(MimeTypeUtils.IMAGE_JPEG, imageResource))
                 .call()
                 .entity(new ListOutputConverter(new DefaultConversionService()));
 

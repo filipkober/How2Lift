@@ -9,8 +9,8 @@ const ResetDataPage = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const router = useRouter();
 
-    const onResetData = () => {
-        dataService.resetSettings();
+    const onResetData = async () => {
+        await dataService.resetAllSettingsAndCache();
         RNRestart.restart();
     }
 
