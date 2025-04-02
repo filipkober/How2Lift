@@ -43,6 +43,8 @@ const SearchPage = () => {
   const screenWidth = Dimensions.get('window').width;
   const [animation] = useState(new Animated.Value(0));
 
+  const [filteredMachineIds, setFilteredMachineIds] = useState<number[]>([]);
+
   const [query, setQuery] = useState('');
 
   const [selectedList, setSelectedList] = useState<ListType>(ListType.MACHINES); //0 - machines 1 - exercises
@@ -145,6 +147,10 @@ const SearchPage = () => {
       useNativeDriver: false,
     }).start();
   };
+
+  useEffect(() => {
+    setFilteredExercises(fe => fe.filter(e => filteredMachineIds.includes(e.machineId)));
+  }, [filteredMachineIds])
 
 
   return (

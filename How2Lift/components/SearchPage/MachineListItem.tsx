@@ -39,7 +39,6 @@ const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"
-          adjustsFontSizeToFit
           className="font-quicksand text-[3.5vw] w-full"
         >
           {info || "Shoulders, Back, Somatosensory cortex"}

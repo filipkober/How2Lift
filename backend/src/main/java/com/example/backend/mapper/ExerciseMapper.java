@@ -37,7 +37,7 @@ public class ExerciseMapper {
     }
 
     public ExerciseSearchResult toExerciseSearchResult(Exercise exercise) {
-        return new ExerciseSearchResult(exercise.getId(), exercise.getName(), exercise.getVideoUrl(), exercise.getTrainedMuscles().stream().map(Muscle::getName).toList());
+        return new ExerciseSearchResult(exercise.getId(), exercise.getName(), exercise.getVideoUrl(), exercise.getTrainedMuscles().stream().map(Muscle::getName).toList(), exercise.getMachine().getId());
     }
 
     public ExerciseDTO toExerciseDTO(Exercise exercise) {

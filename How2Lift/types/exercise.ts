@@ -15,7 +15,8 @@ export type ExerciseSearchResult = {
     id: number,
     name: string,
     imageUrl: string | null,
-    muscleNames: string[]
+    muscleNames: string[],
+    machineId: number,
 }
 
 export type ExerciseProps = {
