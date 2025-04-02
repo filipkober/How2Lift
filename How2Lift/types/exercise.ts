@@ -34,6 +34,7 @@ export type ExerciseProps = {
 export type ExerciseLogDetails = {
     id: string,
     exerciseId: number,
+    exerciseName: string,
     date: Date,
 }
 
@@ -113,6 +114,7 @@ export class Exercise {
         return dataService.addExerciseLogItem({
             id: uuid.v4(),
             exerciseId: this.id,
+            exerciseName: this.name,
             date: date || new Date(),
             ...data
         });

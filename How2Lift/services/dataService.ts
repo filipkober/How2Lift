@@ -16,9 +16,9 @@ class DataService {
         AsyncStorage.setItem('settings', JSON.stringify(updatedSettings));
     }
 
-    public resetSettings(): void {
-        AsyncStorage.removeItem('settings');
-        AsyncStorage.setItem('settings', JSON.stringify(defaultSettings));
+    public async resetSettings(): Promise<void> {
+        await AsyncStorage.removeItem('settings');
+        await AsyncStorage.setItem('settings', JSON.stringify(defaultSettings));
     }
 
     public saveCache<T>(data: Cachable<T>): void {
@@ -30,13 +30,12 @@ class DataService {
         return data ? JSON.parse(data) : null;
     }
 
-    public clearCache(): void {
-        AsyncStorage.getAllKeys().then(keys => {
-            keys.forEach(key => {
-                if(key.startsWith("__cache_")) {
-                    AsyncStorage.removeItem(key);
-                }
-            });
+    public async clearCache(): Promise<void> {
+        const keys = await AsyncStorage.getAllKeys();
+        keys.forEach(key => {
+            if(key.startsWith("__cache_")) {
+                AsyncStorage.removeItem(key);
+            }
         });
     }
 
@@ -47,7 +46,7 @@ class DataService {
                 ...item,
                 date: new Date(item.date),
             };
-        }) : [];
+        }).sort((a: ExerciseLogItem, b: ExerciseLogItem) => b.date.getTime() - a.date.getTime()) : [];
     }
 
     public async getExerciseLogByExerciseId(exerciseId: number): Promise<ExerciseLogItem[]> {
@@ -79,6 +78,12 @@ class DataService {
         const log = await this.getExerciseLog();
         const updatedLog = log.map(item => item.id === updatedItem.id ? updatedItem : item);
         await this.saveExerciseLog(updatedLog);
+    }
+
+    public async resetAllSettingsAndCache(): Promise<void> {
+        await this.resetSettings();
+        await this.clearExerciseLog();
+        await this.clearCache();
     }
 }
 

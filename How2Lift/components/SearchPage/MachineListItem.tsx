@@ -7,13 +7,14 @@ type SearchBarProps = {
   machineName? : string;
   info? : string;
   image? : string | null;
+  setFilter: () => void;
 };
 
-const MachineListItem = ({ machineName, info, image=null }: SearchBarProps) => {
+const MachineListItem = ({ machineName, info, image=null, setFilter }: SearchBarProps) => {
   const placeholderImage = require('../../assets/images/example1.jpg');
 
   const OpenMachinePage = () => {
-      console.log("opened machine page")
+      setFilter();
   }
   return (
     <View className="overflow-hidden flex flex-row w-full h-auto rounded-[10px] shadow-sm border-2 border-gray-700 bg-white items-center">

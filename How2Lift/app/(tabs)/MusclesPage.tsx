@@ -55,7 +55,6 @@ const MusclesPage = () => {
       this.sy = sy; //size y in %
       this.side = side;
       this.action = action || (() => {
-        console.log(`${id} Clicked: ${name} pos: ${px} ${py}`)
         setSelectedMuscle(this)
       });
     }
@@ -140,10 +139,6 @@ const MusclesPage = () => {
   const switchList = (listType: VisibleSide) => {
     setSelectedMuscle(null)
     setSelectedSide(listType)
-    if(listType == VisibleSide.FRONT)
-    {
-      console.log("test")
-    }
     Animated.spring(animation, {
       toValue: (listType == VisibleSide.BACK ? 1 : 0) * screenWidth / 2,
       useNativeDriver: false,
