@@ -3,7 +3,7 @@ import { requestService } from "./requestService";
 import { Exercise, ExerciseSearchResult } from "@/types/exercise";
 import { Muscle } from "@/types/muscle";
 
-type GetAllType = Omit<MachineSearchResult, 'imageUrl'> & { videoUrl: string };
+type GetAllType = Omit<ExerciseSearchResult, 'imageUrl'> & { videoUrl: string };
 
 export class ExerciseService {
     public async getAllExercises(): Promise<ExerciseSearchResult[]> {
@@ -30,7 +30,8 @@ export class ExerciseService {
                     id: element.id,
                     name: element.name,
                     imageUrl: imageUrl,
-                    muscleNames: element.muscleNames
+                    muscleNames: element.muscleNames,
+                    machineId: element.machineId,
                 };
             })
         );

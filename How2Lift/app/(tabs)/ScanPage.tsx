@@ -1,4 +1,5 @@
 import ScanIndicator from "@/components/ScanPage/ScanIndicator";
+import { machineService } from "@/services/machineService";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
@@ -30,6 +31,13 @@ const ScanPage = ({ navigation }: any) => {
       }
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
+      if(newPhoto) {
+        const result = await machineService.scanMachine(newPhoto);
+        ResetPhoto();
+        navigation.navigate("Search", {
+          machineIds: result.map((item: any) => item.id),
+        })
+      }
     }
   }
   

@@ -1,7 +1,9 @@
-import { Machine, MachineSearchResult } from "@/types/machine";
+import { Machine, MachineProps, MachineSearchResult } from "@/types/machine";
 import { requestService } from "./requestService";
 import { Exercise, ExerciseProps } from "@/types/exercise";
 import { Muscle, MuscleProps } from "@/types/muscle";
+import { CameraCapturedPicture } from "expo-camera";
+import { fetch } from "expo/fetch";
 
 export class MachineService {
     public async getAllMachines(): Promise<MachineSearchResult[]> {
@@ -61,6 +63,36 @@ export class MachineService {
         });
 
         return response.map((m: MuscleProps) => new Muscle(m)) as Muscle[];
+    }
+
+    public async scanMachine(image: CameraCapturedPicture): Promise<Machine[]> {
+        try {
+            const formData = new FormData();
+
+        if (image.uri) {
+            formData.append('file', {
+                uri: image.uri,
+                name: 'image.jpg',
+                type: 'image/jpeg'
+            } as any);
+
+        }
+
+        const response = await requestService.handleRequest({
+            url: '/ai/machines',
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'multipart/form-data'
+            },
+            body: formData
+        })
+
+        return response.map((m: MachineProps) => new Machine(m)) as Machine[];
+        } catch (error) {
+            console.error('Error scanning machine:', error);
+            throw error;
+        }
     }
 }
 

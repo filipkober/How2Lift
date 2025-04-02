@@ -64,7 +64,6 @@ const SearchPage = () => {
   };
 
   const Search = () => {
-    console.log("Searching for: ", query)
     //query distillation
     let refinedQuery = query
     let queryMuscles: string[] = []
@@ -74,7 +73,6 @@ const SearchPage = () => {
       queryMuscles = crudeQuery[0].split(",").map((m) => m.trim()).filter(m => m != null && m !== "");
       refinedQuery = crudeQuery[1].trim() || ""
     }
-    console.log("Q: ", refinedQuery," M: ", queryMuscles)
     if(selectedList == ListType.MACHINES)
     {
       const data = machines.filter((item) =>
@@ -87,7 +85,6 @@ const SearchPage = () => {
     }
     else
     {
-      console.log(exercises)
       const data = exercises.filter((item) =>
         item.name.toLowerCase().includes(refinedQuery.toLowerCase())
         && queryMuscles.every((m) =>
@@ -106,7 +103,6 @@ const SearchPage = () => {
   }, [exercises,machines]);
 
   useEffect(() => {
-    console.log("Muscle for search: ", muscleForSearch)
     if(muscleForSearch == null || muscleForSearch == "")
     {
       setQuery("");
@@ -132,6 +128,13 @@ const SearchPage = () => {
     });
   }, [])
 
+  useEffect(() => {
+    if(route.params?.machineIds) {
+      setFilteredMachineIds(route.params.machineIds);
+      switchList(ListType.EXERCISES)
+    }
+  }, [route.params])
+
   const switchList = (listType: ListType) => {
     setSelectedList(listType)
     if(listType == ListType.EXERCISES)
@@ -149,8 +152,17 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
+    if (filteredMachineIds.length === 0) {
+      setFilteredExercises(exercises.sort((a, b) => a.name.localeCompare(b.name)));
+      return;
+    }
     setFilteredExercises(fe => fe.filter(e => filteredMachineIds.includes(e.machineId)));
-  }, [filteredMachineIds])
+  }, [filteredMachineIds, exercises])
+
+  const filterExercises = (machineId: number) => {
+    setFilteredMachineIds([machineId]);
+    switchList(ListType.EXERCISES)
+  }
 
 
   return (
@@ -163,13 +175,13 @@ const SearchPage = () => {
           <View className='w-full h-[40px] bg-secondary flex flex-row '>
             <TouchableOpacity
               className='w-[50%] h-full p-2 items-center justify-center flex'
-              onPress={() => switchList(0)}
+              onPress={() => switchList(ListType.MACHINES)}
             >
               <Text className='text-[20px] font-quicksand_bold'>Machines</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className='w-[50%] h-full p-2 items-center justify-center flex'
-              onPress={() => switchList(1)}
+              onPress={() => switchList(ListType.EXERCISES)}
             >
               <Text className='text-[20px] font-quicksand_bold'>Exercises</Text>
             </TouchableOpacity>
@@ -194,11 +206,16 @@ const SearchPage = () => {
           </View>
           {/* data container */}
           <ScrollView className='w-full h-full px-4 py-2 space-y-2' contentContainerStyle={{ backgroundColor: "#00000000" }}>
+            {filteredMachineIds.length > 0 && (
+              <TouchableOpacity onPress={() => setFilteredMachineIds([])} className='w-full h-auto bg-secondary rounded-md p-2 mb-2'>
+                <Text className='text-[20px] font-quicksand_bold text-red-600'>Clear filter</Text>
+              </TouchableOpacity>
+            )}
             {
               (selectedList == ListType.MACHINES)? (
                 filteredMachines.map(m => (
                   <View className='py-1 w-full h-auto' key={m.id}>
-                    <MachineListItem machineName={m.name} image={m.imageUrl} info={m.muscleNames.join(", ")}/>
+                    <MachineListItem machineName={m.name} image={m.imageUrl} info={m.muscleNames.join(", ")} setFilter={() => filterExercises(m.id)}/>
                   </View>
                 ))
               ) : (

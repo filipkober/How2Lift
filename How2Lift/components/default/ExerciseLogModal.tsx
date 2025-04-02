@@ -64,13 +64,15 @@ function ModalWeightData({
   const handleRepsChange = (text: string) => {
     setRepsText(text);
     const reps = text === "" ? 0 : parseInt(text) || 0;
-    setData({ ...assertedData, reps });
+    const weight = weightText === "" ? 0 : parseFloat(weightText) || 0;
+    setData({ ...assertedData, weight, reps });
   };
 
   const handleWeightChange = (text: string) => {
     setWeightText(text);
     const weight = text === "" ? 0 : parseFloat(text) || 0;
-    setData({ ...assertedData, weight });
+    const reps = repsText === "" ? 0 : parseInt(repsText) || 0;
+    setData({ ...assertedData, weight, reps });
   };
 
   return (
