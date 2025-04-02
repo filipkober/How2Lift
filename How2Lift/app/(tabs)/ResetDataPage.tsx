@@ -1,9 +1,9 @@
 import { dataService } from '@/services/dataService'
-import React, { useState } from 'react'
-import { Platform, SafeAreaView, StatusBar, View, Text, TouchableOpacity, Modal, Alert } from 'react-native'
-import RNRestart from 'react-native-restart'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import React, { useState } from 'react'
+import { Modal, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import RNRestart from 'react-native-restart'
 
 const ResetDataPage = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -33,7 +33,7 @@ const ResetDataPage = () => {
         style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}}
       >
         <View className="flex w-full h-full bg-background p-6">
-          <Text 
+          <Text
             className="text-2xl text-blue-500 mb-4"
             onPress={() => router.back()}
           >

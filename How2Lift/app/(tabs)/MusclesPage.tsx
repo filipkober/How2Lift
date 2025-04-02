@@ -1,6 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { Animated, Dimensions, Image, ImageBackground, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { SearchNavigationProp } from '../navigation/navigationTypes';
 
 enum VisibleSide {
   FRONT,
@@ -108,6 +110,10 @@ const MusclesPage = () => {
       new Muscle(15, "Triceps", 72, 31, 12, 12, VisibleSide.BACK),
   ], []);
 
+ 
+
+  const navigation = useNavigation<SearchNavigationProp>();
+  
   const IMAGE_WIDTH = 1588; //default size
   const IMAGE_HEIGHT = 794;
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 }); //relative size
@@ -236,7 +242,10 @@ const MusclesPage = () => {
                 <TouchableOpacity
                   className="flex-row items-center justify-between pl-4 py-2 rounded-lg border border-gray-400 bg-white shadow-md"
                   style={{ minWidth: 180, maxHeight: 50 }}
-                  onPress={() => console.log('not implemented yet')}
+                  onPress={() => {
+                    //change to search page
+                    navigation.navigate('Search', { muscleName: selectedMuscle.name, muscleId: selectedMuscle.id });
+                  }}
                 >
                 <Text className="text-lg font-semibold text-black">{selectedMuscle.name}</Text>
                 <MaterialCommunityIcons name="chevron-right" size={48} color="black" className="ml-auto" />

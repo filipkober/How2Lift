@@ -45,7 +45,7 @@ const SettingsPage = () => {
           <Checkbox checked={settings.superSecretSettings} setChecked={(checked: boolean) => {
             handleSaveSettings({ superSecretSettings: checked });
           }} />
-          <Text className='text-text text-4xl m-4'>Super secret settings</Text>
+          <Text className='text-text text-4xl m-4'>Secret sculpture</Text>
         </View>
         <Text className='text-4xl text-text ml-4 my-2'>Information</Text>
       <Divider />
