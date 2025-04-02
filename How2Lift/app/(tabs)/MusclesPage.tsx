@@ -1,3 +1,4 @@
+import { dataService } from '@/services/dataService';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import React, { useMemo, useState } from 'react';
@@ -21,6 +22,7 @@ const MUSCLE_IMAGES = {
     quadriceps: require('../../assets/images/MusclesPage/front/quadriceps.png'),
     trapezius: require('../../assets/images/MusclesPage/front/trapezius.png'),
     human: require('../../assets/images/MusclesPage/human_front.png'),
+    secret: require('../../assets/images/MusclesPage/front/stkvq.png')
   },
   back: {
     back: require('../../assets/images/MusclesPage/back/back.png'),
@@ -55,11 +57,29 @@ const MusclesPage = () => {
       this.sy = sy; //size y in %
       this.side = side;
       this.action = action || (() => {
-        setSelectedMuscle(this)
+        const getSuperSecretSettings = async () => {
+          try {
+            const settings = await dataService.getSettings();
+            setSecretSetting(settings.superSecretSettings);
+            if (name === "Brain" && settings.superSecretSettings === true)
+            {
+              setSelectedMuscle(MUSCLES[MUSCLES.length - 1]);
+            }
+            else
+            {
+              setSelectedMuscle(this);
+            }
+          }
+          catch (error)
+          {
+            console.error('Failed to fetch settings:', error);
+          }
+        };
+        getSuperSecretSettings();
       });
     }
   }
-
+  const [secretSetting, setSecretSetting] = useState(false);
   const MUSCLE_IMAGESById = useMemo(() => [
     MUSCLE_IMAGES.front.abdominals,
     MUSCLE_IMAGES.front.biceps,
@@ -76,7 +96,8 @@ const MusclesPage = () => {
     MUSCLE_IMAGES.back.gluteus,
     MUSCLE_IMAGES.back.hamstrings,
     MUSCLE_IMAGES.back.trapezius,
-    MUSCLE_IMAGES.back.triceps
+    MUSCLE_IMAGES.back.triceps,
+    MUSCLE_IMAGES.front.secret,
   ], [MUSCLE_IMAGES]);
 
   //ids can be duplicates
@@ -107,9 +128,8 @@ const MusclesPage = () => {
       new Muscle(14, "Trapezius", 50, 17, 35, 7, VisibleSide.BACK),
       new Muscle(15, "Triceps", 28, 31, 12, 12, VisibleSide.BACK),
       new Muscle(15, "Triceps", 72, 31, 12, 12, VisibleSide.BACK),
+      new Muscle(16, "Brain", 50, 9, 20, 12, VisibleSide.FRONT),
   ], []);
-
- 
 
   const navigation = useNavigation<SearchNavigationProp>();
   
@@ -222,7 +242,7 @@ const MusclesPage = () => {
               </Image>
               {imageSize.width > 0 &&
               MUSCLES.map((m, index) => {
-                if(m.side != selectedSide) return null;
+                if(m.side != selectedSide || m.id == 16) return null;
                 return (
                   <TouchableOpacity key={index} style={getButtonStyle(m)} onPress={m.action} />
                 )
