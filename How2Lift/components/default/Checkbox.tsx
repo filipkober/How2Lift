@@ -27,7 +27,7 @@ checkbox: {
 checkboxChecked: {
     backgroundColor: "#3ACAD4",
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25), inset -2px -2px 2px rgba(0, 0, 0, 0.25)",
-    borderRadius: "15%",
+    borderRadius: size * 0.15,
     transitionDuration: "120ms",
     transitionTimingFunction: "linear"
 },
