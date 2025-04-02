@@ -157,7 +157,7 @@ const SearchPage = () => {
       return;
     }
     setFilteredExercises(fe => fe.filter(e => filteredMachineIds.includes(e.machineId)));
-  }, [filteredMachineIds])
+  }, [filteredMachineIds, exercises])
 
   const filterExercises = (machineId: number) => {
     setFilteredMachineIds([machineId]);

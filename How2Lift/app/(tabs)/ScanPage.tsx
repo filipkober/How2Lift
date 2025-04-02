@@ -33,6 +33,7 @@ const ScanPage = ({ navigation }: any) => {
       setPhoto(newPhoto);
       if(newPhoto) {
         const result = await machineService.scanMachine(newPhoto);
+        ResetPhoto();
         navigation.navigate("Search", {
           machineIds: result.map((item: any) => item.id),
         })
